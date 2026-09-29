@@ -151,7 +151,7 @@ export function EvidencePage() {
                   aria-current={sel === c.tema ? 'true' : undefined}
                   onClick={() => setSel(c.tema)}
                   className={cn(
-                    'flex w-full items-center gap-2 rounded-lg px-2 py-0.5 text-left text-xs leading-tight xl:py-1',
+                    'flex w-full items-center gap-2 rounded-lg px-2 py-0.5 text-left text-xs leading-tight',
                     sel === c.tema ? 'bg-primary-50 font-bold text-primary-900' : 'font-medium text-ink hover:bg-lightBg',
                   )}
                 >

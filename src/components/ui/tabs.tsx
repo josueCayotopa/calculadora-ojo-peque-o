@@ -41,7 +41,7 @@ export function Tabs({ tabs, activo, onCambiar, label, className, panelClassName
 
   return (
     <div className={cn('flex min-h-0 flex-col', className)}>
-      <div role="tablist" aria-label={label} className="flex shrink-0 gap-0 overflow-x-auto overflow-y-hidden border-b border-gray-200 xl:gap-1">
+      <div role="tablist" aria-label={label} className="flex shrink-0 overflow-x-auto overflow-y-hidden border-b border-gray-200">
         {tabs.map((t, i) => {
           const sel = t.id === actual.id;
           return (
