@@ -1,24 +1,23 @@
 # Validación clínica — Clasificación del Ojo Pequeño
 
-> Documento generado automáticamente desde `src/config/evidencia.json` (revisión 2026-09-28) para las reglas v2.0.0.
+> Documento generado automáticamente desde `src/config/evidencia.json` (revisión 2026-10-01) para las reglas v2.0.0.
 > **Herramienta de apoyo clínico. La decisión final corresponde al cirujano.**
 
 ## Metodología
 
-Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las dos referencias base (Hoffman 2015 y Yosar 2021) y con fuentes complementarias: la definición original del MAR (Auffarth 2000), una revisión de nanoftalmos (Carricondo 2018), series de microftalmos posterior y estudios de fórmulas de LIO y de manitol. Se muestra como «concuerda» cuando la fuente respalda el criterio; «parcial» cuando lo respalda con otro umbral u operador; «difiere» cuando la fuente describe algo distinto; y «sin evidencia» cuando no se encontró una fuente específica. Esta revisión no sustituye una revisión sistemática.
+Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las referencias base y complementarias disponibles, incluida una cohorte reciente de ojos extremadamente pequeños publicada en 2025. Las fuentes se distinguen por el tipo de evidencia y población estudiada; los resultados de cohortes quirúrgicas seleccionadas no se interpretan como rangos poblacionales de normalidad. Se muestra como «concuerda» cuando la fuente respalda el criterio; «parcial» cuando lo respalda con otro umbral u operador; «difiere» cuando la fuente describe algo distinto; y «sin evidencia» cuando no se encontró una fuente específica. Esta revisión no sustituye una revisión sistemática.
 
 ## Resumen
 
 | Estado | N.º de puntos |
 |---|---|
 | ✅ Concuerda | 11 |
-| 🟡 Parcial | 7 |
-| 🔴 Difiere | 5 |
+| 🟡 Parcial | 8 |
+| 🔴 Difiere | 4 |
 | ⚪ Sin evidencia | 1 |
 
 ### Puntos que requieren decisión del Dr. Silva
 
-- **Tipo I (MAR) · Longitud axial.** Con 22.2 mm, un ojo con LA entre 20.5 y 22.2 mm, CA ≤ 2.2 mm y microcórnea no se clasifica como MAR y puede quedar en zona gris. Conviene confirmar el umbral.
 - **Tipo II (MPR) · Esclera y efusión.** Un MPR con esclera gruesa o efusión igual se clasifica como II (son criterios de apoyo), pero conviene revisar la tabla.
 - **Tipo III (MS) · Cámara anterior y ángulo.** La CA < 2 mm es criterio mayor del Tipo III, así que un microftalmo simple con CA normal (como lo describe la literatura) no sería Tipo III. Conviene validarlo con el autor.
 - **Tipo V (nanoftalmos) · Grosor escleral.** 1.4 mm es más sensible y 1.7 mm más específico. Hay que confirmar si el valor de 1.4 corresponde a esclera sola o a esclera + coroides, y en qué región se mide.
@@ -28,8 +27,8 @@ Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las do
 
 | Tema | Tabla del Dr. Silva | Literatura | Estado | Implicancia |
 |---|---|---|---|---|
-| Clasificación general | 5 tipos: MAR, MPR, MS, MC y nanoftalmos. | Hoffman 2015 describe el espectro del ojo pequeño como microftalmo simple, microftalmo complejo, nanoftalmos y microftalmo anterior relativo, más el microftalmos posterior como entidad muy rara. [1] | ✅ Concuerda |  |
-| Tipo I (MAR) · Longitud axial | LA > 22.2 mm | Hoffman 2015: LA > 20.5 mm. Auffarth 2000 (definición original del MAR): LA > 20 mm. [1][3] | 🔴 Difiere | Con 22.2 mm, un ojo con LA entre 20.5 y 22.2 mm, CA ≤ 2.2 mm y microcórnea no se clasifica como MAR y puede quedar en zona gris. Conviene confirmar el umbral. |
+| Clasificación general | 5 tipos: MAR, MPR, MS, MC y nanoftalmos. | Hoffman 2015 describe el espectro del ojo pequeño como microftalmo simple, microftalmo complejo, nanoftalmos y microftalmo anterior relativo, más el microftalmos posterior como entidad muy rara. La cohorte de Hammer et al. (2025) estudió 300 ojos seleccionados para implante de LIO >30 D, con LA media 20.68 ± 0.92 mm e incluyó MAR entre sus morfologías; por ser una cohorte quirúrgica seleccionada no establece un rango normal poblacional. [1][11] | ✅ Concuerda |  |
+| Tipo I (MAR) · Longitud axial | LA > 22.2 mm (umbral operativo confirmado por el Dr. Fermín según su experiencia y práctica clínica en Perú) | El Dr. Fermín confirma que considera > 22.6 mm como referencia de LA normal y utiliza > 22.2 mm como umbral operativo para su clasificación, basándose en su experiencia y en los tamaños observados en los ojos de los pacientes que atiende en Perú. Esto documenta experiencia clínica local, no un rango normativo de toda la población peruana. Para MAR, Hoffman 2015 describe LA > 20.5 mm y Auffarth 2000, en la definición original, LA > 20 mm. La cohorte reciente de Hammer et al. (2025) incluye MAR, pero estudia ojos con LIO >30 D y no evalúa estos umbrales como límites de normalidad. [1][3][11] | 🟡 Parcial | Los valores > 22.6 mm y > 22.2 mm quedan documentados como referencias clínicas confirmadas por el Dr. Fermín, basadas en su práctica y en los tamaños observados en sus pacientes en Perú. Se conserva > 22.2 mm para el cálculo. Los cortes de Hoffman y Auffarth son definiciones publicadas distintas para MAR; la experiencia local no se presenta como estudio poblacional ni como consenso bibliográfico. |
 | Tipo I (MAR) · Cámara anterior | CA < 2.2 mm | Hoffman 2015: CA igual o menor de 2.2 mm. Auffarth 2000: CA característica de alrededor de 2 mm. [1][3] | 🟡 Parcial | Mismo umbral, distinto operador (< frente a ≤). Con CA = 2.2 mm exactos cambia el resultado. Es configurable. |
 | Tipo I (MAR) · Diámetro corneal | Microcórnea, W-W < 11 mm | Hoffman 2015: diámetro corneal < 11.0 mm. Auffarth 2000: ≤ 11 mm. [1][3] | ✅ Concuerda |  |
 | Tipo I (MAR) · Ángulo, esclera y malformaciones | Ángulo estrecho/ocluible, esclera < 1.4 mm, sin malformaciones. | Hoffman 2015: alta incidencia de glaucoma de ángulo estrecho, esclera de grosor normal y sin malformaciones anatómicas. Suele subdiagnosticarse por tener LA normal. [1] | ✅ Concuerda |  |
@@ -55,15 +54,14 @@ Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las do
 
 ## Supuestos pendientes en la configuración
 
-1. LA del MAR (Tipo I): se usa > 22.2 mm (diapositiva). La Tabla 15-1 indica > 20 mm y Hoffman 2015 > 20.5 mm.
-2. Preoperatorio del MPR (Tipo II): por definir.
-3. Los criterios mayores son una propuesta y deben validarse. En especial, exigir efusión coroidea como mayor del Tipo V hace que un nanoftalmos sin efusión se clasifique como Tipo III (la app lo advierte con una alerta).
-4. Grosor escleral del nanoftalmos: la tabla usa > 1.4 mm; la literatura suele citar > 1.7 mm (esclera + coroides, posterior).
-5. CA < 2 mm en MS y MC: Hoffman 2015 describe CA normal en el microftalmo simple y complejo.
-6. Efusión «Sí (uveal)» en MC y esclera < 1.4 mm / sin efusión en MPR: la literatura describe esclera normal en MC y engrosamiento esclerocoroideo con propensión a efusión en el microftalmos posterior.
-7. Significado de «VVxpp» (se asume vitrectomía vía pars plana) y calibre del trocar (23G en la tabla; Hoffman cita 25G).
-8. Límite inferior de LA de 14.5 mm en nanoftalmos: no se encontró fuente publicada.
-9. Los umbrales del semáforo de glaucoma maligno y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.
+1. Preoperatorio del MPR (Tipo II): por definir.
+2. Los criterios mayores son una propuesta y deben validarse. En especial, exigir efusión coroidea como mayor del Tipo V hace que un nanoftalmos sin efusión se clasifique como Tipo III (la app lo advierte con una alerta).
+3. Grosor escleral del nanoftalmos: la tabla usa > 1.4 mm; la literatura suele citar > 1.7 mm (esclera + coroides, posterior).
+4. CA < 2 mm en MS y MC: Hoffman 2015 describe CA normal en el microftalmo simple y complejo.
+5. Efusión «Sí (uveal)» en MC y esclera < 1.4 mm / sin efusión en MPR: la literatura describe esclera normal en MC y engrosamiento esclerocoroideo con propensión a efusión en el microftalmos posterior.
+6. Significado de «VVxpp» (se asume vitrectomía vía pars plana) y calibre del trocar (23G en la tabla; Hoffman cita 25G).
+7. Límite inferior de LA de 14.5 mm en nanoftalmos: no se encontró fuente publicada.
+8. Los umbrales del semáforo de glaucoma maligno y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.
 
 ## Fuentes
 
@@ -77,3 +75,4 @@ Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las do
 8. Preoperative intravenous mannitol administration and its rationale before cataract surgery. Graefes Arch Clin Exp Ophthalmol. 2024. doi:10.1007/s00417-024-06589-5 *(Revisión)*. https://link.springer.com/article/10.1007/s00417-024-06589-5
 9. Comparison of the Barrett Universal II, Kane and VRF-G formulas with existing intraocular lens calculation formulas in eyes with short axial lengths. Eye. 2022. PMID 35031707. *(Estudio comparativo)*. https://pubmed.ncbi.nlm.nih.gov/35031707/
 10. Successful management of malignant glaucoma with irido-zonulo-hyaloidotomy and complete pars plana vitrectomy. (Reporte de caso, PMC8882231). *(Reporte de caso)*. https://pmc.ncbi.nlm.nih.gov/articles/PMC8882231/
+11. Hammer M, Teich L, Friedrich M, et al. Cataract surgery in the extremely small eye: morphology, comorbidities and outcomes in 300 eyes. Br J Ophthalmol. 2025;109(8):917–924. doi:10.1136/bjo-2024-326998. *(Cohorte retrospectiva (300 ojos seleccionados para LIO >30 D))*. https://pubmed.ncbi.nlm.nih.gov/40015941/

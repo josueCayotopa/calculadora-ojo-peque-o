@@ -101,7 +101,7 @@ Opcionales en todos: `"nivel"` (`"mayor"` / `"apoyo"`), `"etiqueta"` (si se omit
 
 ### Ejemplos frecuentes
 
-**LA del MAR > 20.5 mm (Hoffman 2015)** en lugar de 22.2 (tipo `I`, primer criterio):
+**LA del MAR > 20.5 mm (Hoffman 2015)** en lugar del umbral operativo > 22.2 mm por experiencia clínica del Dr. Fermín (tipo `I`, primer criterio):
 ```json
 { "nivel": "mayor", "campo": "longitudAxial", "op": ">", "valor": 20.5 }
 ```
@@ -119,13 +119,12 @@ Opcionales en todos: `"nivel"` (`"mayor"` / `"apoyo"`), `"etiqueta"` (si se omit
 
 ## Validación con la literatura
 
-La página **Evidencia** y [docs/VALIDACION_CLINICA.md](docs/VALIDACION_CLINICA.md) comparan cada criterio y conducta con Hoffman 2015, Yosar 2021, Auffarth 2000 (definición del MAR), Carricondo 2018 (nanoftalmos), series de microftalmos posterior y estudios de fórmulas de LIO y de manitol. Resultado: 11 puntos concuerdan, 7 parcialmente, 5 difieren y 1 sin evidencia. Los 5 que difieren necesitan decisión del autor:
+La página **Evidencia** y [docs/VALIDACION_CLINICA.md](docs/VALIDACION_CLINICA.md) comparan cada criterio y conducta con Hoffman 2015, Yosar 2021, Auffarth 2000 (definición del MAR), Carricondo 2018 (nanoftalmos), la cohorte de 300 ojos pequeños de Hammer et al. (2025), series de microftalmos posterior y estudios de fórmulas de LIO y de manitol. La cohorte reciente incluye MAR, pero al ser una muestra quirúrgica seleccionada no establece valores poblacionales normales ni valida los límites locales. El Dr. Fermín confirmó que los valores de LA > 22.6 mm como referencia general y > 22.2 mm para el criterio MAR reflejan su experiencia y práctica clínica con los tamaños de ojos que observa en pacientes en Perú; se documentan como experiencia local, no como rango normativo poblacional. Resultado: 11 puntos concuerdan, 8 parcialmente, 4 difieren y 1 sin evidencia. Los puntos que difieren necesitan decisión del autor:
 
-1. **LA del MAR:** 22.2 mm en la tabla frente a > 20.5 mm (Hoffman) o > 20 mm (Auffarth, Tabla 15-1).
-2. **Efusión como criterio mayor del Tipo V:** la literatura la describe como propensión, no como requisito. Con la regla actual, un nanoftalmos sin efusión se clasifica como III (la app lo advierte con una alerta).
-3. **Esclera del nanoftalmos:** > 1.4 mm en la tabla frente a > 1.7 mm (esclera + coroides) en la literatura.
-4. **CA < 2 mm en el MS:** la literatura describe CA normal en el microftalmo simple.
-5. **Esclera/efusión del MPR:** la literatura describe engrosamiento esclerocoroideo.
+1. **Efusión como criterio mayor del Tipo V:** la literatura la describe como propensión, no como requisito. Con la regla actual, un nanoftalmos sin efusión se clasifica como III (la app lo advierte con una alerta).
+2. **Esclera del nanoftalmos:** > 1.4 mm en la tabla frente a > 1.7 mm (esclera + coroides) en la literatura.
+3. **CA < 2 mm en el MS:** la literatura describe CA normal en el microftalmo simple.
+4. **Esclera/efusión del MPR:** la literatura describe engrosamiento esclerocoroideo.
 
 El contenido está en `src/config/evidencia.json`. Tras editarlo, ejecute `npm run docs:validacion`.
 

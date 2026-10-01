@@ -1,21 +1,21 @@
 {
-  "fechaRevision": "2026-09-28",
-  "metodologia": "Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las dos referencias base (Hoffman 2015 y Yosar 2021) y con fuentes complementarias: la definición original del MAR (Auffarth 2000), una revisión de nanoftalmos (Carricondo 2018), series de microftalmos posterior y estudios de fórmulas de LIO y de manitol. Se muestra como «concuerda» cuando la fuente respalda el criterio; «parcial» cuando lo respalda con otro umbral u operador; «difiere» cuando la fuente describe algo distinto; y «sin evidencia» cuando no se encontró una fuente específica. Esta revisión no sustituye una revisión sistemática.",
+  "fechaRevision": "2026-10-01",
+  "metodologia": "Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las referencias base y complementarias disponibles, incluida una cohorte reciente de ojos extremadamente pequeños publicada en 2025. Las fuentes se distinguen por el tipo de evidencia y población estudiada; los resultados de cohortes quirúrgicas seleccionadas no se interpretan como rangos poblacionales de normalidad. Se muestra como «concuerda» cuando la fuente respalda el criterio; «parcial» cuando lo respalda con otro umbral u operador; «difiere» cuando la fuente describe algo distinto; y «sin evidencia» cuando no se encontró una fuente específica. Esta revisión no sustituye una revisión sistemática.",
   "comparaciones": [
     {
       "tema": "Clasificación general",
       "silva": "5 tipos: MAR, MPR, MS, MC y nanoftalmos.",
-      "literatura": "Hoffman 2015 describe el espectro del ojo pequeño como microftalmo simple, microftalmo complejo, nanoftalmos y microftalmo anterior relativo, más el microftalmos posterior como entidad muy rara.",
+      "literatura": "Hoffman 2015 describe el espectro del ojo pequeño como microftalmo simple, microftalmo complejo, nanoftalmos y microftalmo anterior relativo, más el microftalmos posterior como entidad muy rara. La cohorte de Hammer et al. (2025) estudió 300 ojos seleccionados para implante de LIO >30 D, con LA media 20.68 ± 0.92 mm e incluyó MAR entre sus morfologías; por ser una cohorte quirúrgica seleccionada no establece un rango normal poblacional.",
       "concordancia": "concuerda",
-      "fuentes": ["hoffman2015"]
+      "fuentes": ["hoffman2015", "hammer2025"]
     },
     {
       "tema": "Tipo I (MAR) · Longitud axial",
-      "silva": "LA > 22.2 mm",
-      "literatura": "Hoffman 2015: LA > 20.5 mm. Auffarth 2000 (definición original del MAR): LA > 20 mm.",
-      "concordancia": "difiere",
-      "comentario": "Con 22.2 mm, un ojo con LA entre 20.5 y 22.2 mm, CA ≤ 2.2 mm y microcórnea no se clasifica como MAR y puede quedar en zona gris. Conviene confirmar el umbral.",
-      "fuentes": ["hoffman2015", "auffarth2000"]
+      "silva": "LA > 22.2 mm (umbral operativo confirmado por el Dr. Fermín según su experiencia y práctica clínica en Perú)",
+      "literatura": "El Dr. Fermín confirma que considera > 22.6 mm como referencia de LA normal y utiliza > 22.2 mm como umbral operativo para su clasificación, basándose en su experiencia y en los tamaños observados en los ojos de los pacientes que atiende en Perú. Esto documenta experiencia clínica local, no un rango normativo de toda la población peruana. Para MAR, Hoffman 2015 describe LA > 20.5 mm y Auffarth 2000, en la definición original, LA > 20 mm. La cohorte reciente de Hammer et al. (2025) incluye MAR, pero estudia ojos con LIO >30 D y no evalúa estos umbrales como límites de normalidad.",
+      "concordancia": "parcial",
+      "comentario": "Los valores > 22.6 mm y > 22.2 mm quedan documentados como referencias clínicas confirmadas por el Dr. Fermín, basadas en su práctica y en los tamaños observados en sus pacientes en Perú. Se conserva > 22.2 mm para el cálculo. Los cortes de Hoffman y Auffarth son definiciones publicadas distintas para MAR; la experiencia local no se presenta como estudio poblacional ni como consenso bibliográfico.",
+      "fuentes": ["hoffman2015", "auffarth2000", "hammer2025"]
     },
     {
       "tema": "Tipo I (MAR) · Cámara anterior",
@@ -244,6 +244,12 @@
       "cita": "Successful management of malignant glaucoma with irido-zonulo-hyaloidotomy and complete pars plana vitrectomy. (Reporte de caso, PMC8882231).",
       "tipo": "Reporte de caso",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8882231/"
+    },
+    {
+      "id": "hammer2025",
+      "cita": "Hammer M, Teich L, Friedrich M, et al. Cataract surgery in the extremely small eye: morphology, comorbidities and outcomes in 300 eyes. Br J Ophthalmol. 2025;109(8):917–924. doi:10.1136/bjo-2024-326998.",
+      "tipo": "Cohorte retrospectiva (300 ojos seleccionados para LIO >30 D)",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40015941/"
     }
   ]
 }
