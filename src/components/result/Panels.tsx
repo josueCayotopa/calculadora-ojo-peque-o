@@ -12,41 +12,66 @@ import { ALERTAS_CRITICAS } from './ClassificationCard';
 
 const subtitulo = 'text-[11px] font-bold uppercase tracking-wide text-slateGray';
 
-function ListaPasos({ items }: { items: string[] }) {
+function ListaPasos({ items, destacado }: { items: string[]; destacado: boolean }) {
   return (
-    <ol className="space-y-1.5">
-      {items.map((p, i) => (
-        <li key={p} className="flex gap-2.5">
-          <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary-10 text-xs font-bold text-primary">
-            {i + 1}
-          </span>
-          <span className="pt-0.5 text-sm font-semibold text-ink">{p}</span>
+    <ul className="space-y-0.5">
+      {items.map((p) => (
+        <li key={p} className="flex gap-2">
+          <span
+            className={cn('mt-[7px] size-1.5 shrink-0 rounded-full', destacado ? 'bg-primary' : 'bg-gray-400')}
+            aria-hidden="true"
+          />
+          <span className={cn('text-sm', destacado ? 'font-semibold text-ink' : 'text-slateGray')}>{p}</span>
         </li>
       ))}
-    </ol>
+    </ul>
   );
 }
 
+/**
+ * Tratamiento de los cinco tipos (como la tabla del autor), con el tipo
+ * resultante enmarcado. En zona gris se enmarca el más cercano (referencial).
+ */
 export function Tratamiento({ evaluacion }: { evaluacion: EvaluacionCompleta }) {
   const c = evaluacion.clasificacion;
   const tipo = c.tipo ?? c.masCercanos[0];
-  const glosario = terminosUsados([...tipo.preoperatorio, ...tipo.tecnica]);
+  const tipos = clinicalConfig.tipos;
+  const glosario = terminosUsados(tipos.flatMap((t) => [...t.preoperatorio, ...t.tecnica]));
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {c.estado !== 'clasificado' && (
         <p className="rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-950">
-          Solo referencial: tratamiento del tipo más cercano (Tipo {tipo.romano}). La conducta la define el cirujano.
+          Solo referencial: se enmarca el tipo más cercano (Tipo {tipo.romano}). La conducta la define el cirujano.
         </p>
       )}
-      <div className="space-y-1.5">
-        <h3 className={subtitulo}>Preoperatorio</h3>
-        {tipo.preoperatorio.length ? <ListaPasos items={tipo.preoperatorio} /> : <p className="text-sm text-slateGray">—</p>}
-      </div>
-      <div className="space-y-1.5">
-        <h3 className={subtitulo}>Técnica quirúrgica</h3>
-        <ListaPasos items={tipo.tecnica} />
-      </div>
-      {tipo.pendiente && <p className="rounded-xl bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-950">{tipo.pendiente}</p>}
+      <ul className="space-y-2">
+        {tipos.map((t) => {
+          const resultado = t.id === tipo.id;
+          return (
+            <li
+              key={t.id}
+              aria-current={resultado ? 'true' : undefined}
+              className={cn(
+                'rounded-2xl border px-3 py-2',
+                resultado ? 'border-2 border-primary bg-primary-50 shadow-sm' : 'border-gray-200',
+              )}
+            >
+              <div className="mb-1 flex items-start justify-between gap-2">
+                <h3 className={cn('text-sm leading-tight', resultado ? 'font-black text-primary' : 'font-bold text-slateGray')}>
+                  Tipo {t.romano} · <span className={resultado ? 'text-ink' : undefined}>{t.nombre}</span>
+                </h3>
+                {resultado && (
+                  <span className="shrink-0 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                    {c.estado === 'clasificado' ? 'Resultado' : 'Más cercano'}
+                  </span>
+                )}
+              </div>
+              <ListaPasos items={[...t.preoperatorio, ...t.tecnica]} destacado={resultado} />
+              {resultado && t.pendiente && <p className="mt-1 text-xs font-semibold text-amber-900">{t.pendiente}</p>}
+            </li>
+          );
+        })}
+      </ul>
       {glosario.length > 0 && (
         <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 rounded-xl bg-lightBg p-2.5 text-xs">
           {glosario.map((g) => (

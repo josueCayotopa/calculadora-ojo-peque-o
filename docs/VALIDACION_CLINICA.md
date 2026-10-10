@@ -1,6 +1,6 @@
 # Validación clínica — Clasificación del Ojo Pequeño
 
-> Documento generado automáticamente desde `src/config/evidencia.json` (revisión 2026-10-01) para las reglas v2.0.0.
+> Documento generado automáticamente desde `src/config/evidencia.json` (revisión 2026-10-09) para las reglas v2.1.0.
 > **Herramienta de apoyo clínico. La decisión final corresponde al cirujano.**
 
 ## Metodología
@@ -43,25 +43,24 @@ Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las re
 | Tipo V (nanoftalmos) · Grosor escleral | Esclera > 1.4 mm | Hoffman 2015 y EyeWiki: esclera y coroides engrosadas, habitualmente > 1.7 mm en el polo posterior. [1][5] | 🔴 Difiere | 1.4 mm es más sensible y 1.7 mm más específico. Hay que confirmar si el valor de 1.4 corresponde a esclera sola o a esclera + coroides, y en qué región se mide. |
 | Tipo V (nanoftalmos) · Efusión coroidea como criterio mayor | Efusión: Sí (propuesto como criterio mayor) | Hoffman 2015: el nanoftalmos tiene propensión a la efusión uveal por la esclera y coroides engrosadas, y algunos ojos presentan efusión de bajo grado antes de operar. En la serie de Yosar 2021 (71 ojos con LA < 21 mm) no hubo ningún caso de efusión. [1][2] | 🔴 Difiere | Exigir efusión deja fuera a la mayoría de los nanoftalmos, que se clasificarían como Tipo III. Se recomienda que la efusión sea criterio de apoyo. Mientras tanto, la app emite una alerta cuando hay LA ≤ 20.5 mm y esclera > 1.4 mm sin efusión. |
 | Tipo V (nanoftalmos) · Resto de rasgos | CA < 2.2 mm, ángulo cerrado, cristalino intumescente, microcórnea, segmentos cortos, cuerpo ciliar anteriorizado, hipermetropía alta. | Hoffman 2015 y EyeWiki: CA estrecha (< 2.2 mm), iris convexo con ángulo estrecho, cristalino normal o engrosado y desproporcionado, posible microcórnea < 11 mm y alto riesgo de glaucoma de ángulo cerrado. La UBM ayuda a valorar la esclera y la desproporción del cristalino. [1][5][4] | ✅ Concuerda |  |
-| Manitol preoperatorio | Manitol 30–60 min antes (tipos I, III, IV y V). | Hoffman 2015: manitol y acetazolamida IV 30 min antes reducen el volumen vítreo. Una revisión de 2024 describe manitol al 20 % (100 mL) 30 a 60 min antes para bajar la PIO y profundizar la CA. [1][8] | ✅ Concuerda |  |
-| CCC con cistótomo (Tipo I) | CCC con cistótomo + Stop and Chop | Hoffman 2015: capsulorrexis con cistótomo doblado por paracentesis (o pinza microincisional) para no perder viscoelástico; el azul tripano facilita la capsulorrexis. [1] | ✅ Concuerda |  |
-| Vitrectomía por pars plana (tipos III, IV y V) | VVxpp / VVAx PP 23G | Hoffman 2015: en casos extremos, un tap vítreo o una vitrectomía limitada profundiza la cámara. Recomienda un sistema de trocar-cánula (cita 25G) por la pars plana anómala y examinar la retina periférica después. [1] | 🟡 Parcial | La técnica concuerda; el calibre (23G frente a 25G) es una elección del cirujano. |
-| IHZV (Tipo V) | VVAx PP 23G + Facochop + IHZV | La irido-zónulo-hialoido-vitrectomía está descrita como tratamiento del glaucoma maligno y puede combinarse con facoemulsificación en ojos hipermétropes con cierre angular. Hoffman 2015 señala que una iridectomía quirúrgica durante la faco facilita la hialoidotomía láser si aparece desviación del acuoso. [10][1] | 🟡 Parcial | Hay respaldo en series y casos; la evidencia de su uso profiláctico sistemático en nanoftalmos es limitada. |
-| «Sin trocar» (Tipo II) | Sin trocar | No se encontró una recomendación específica. Es coherente con un segmento anterior de dimensiones normales, sin compresión posterior del diafragma iris-cristalino.  | ⚪ Sin evidencia |  |
+| Manitol preoperatorio | Manitol 30 min antes (todos los tipos). | Hoffman 2015: manitol y acetazolamida IV 30 min antes reducen el volumen vítreo. Una revisión de 2024 describe manitol al 20 % (100 mL) 30 a 60 min antes para bajar la PIO y profundizar la CA. [1][8] | ✅ Concuerda |  |
+| Rexis con cistótomo (Tipo I) | Rexis con cistótomo + Stop and Chop | Hoffman 2015: capsulorrexis con cistótomo doblado por paracentesis (o pinza microincisional) para no perder viscoelástico; el azul tripano facilita la capsulorrexis. [1] | ✅ Concuerda |  |
+| Trocar y vitrectomía por pars plana (tipos III, IV y V) | Tipo III: solo trocar · Tipos IV y V: vitrectomía central por PP | Hoffman 2015: en casos extremos, un tap vítreo o una vitrectomía limitada profundiza la cámara. Recomienda un sistema de trocar-cánula (cita 25G) por la pars plana anómala y examinar la retina periférica después. [1] | 🟡 Parcial | La técnica concuerda; el calibre del trocar es una elección del cirujano. |
+| IHZV (Tipo V) | Vitrectomía central por PP + Rexis + Utrata + IHZV | La irido-zónulo-hialoido-vitrectomía está descrita como tratamiento del glaucoma maligno y puede combinarse con facoemulsificación en ojos hipermétropes con cierre angular. Hoffman 2015 señala que una iridectomía quirúrgica durante la faco facilita la hialoidotomía láser si aparece desviación del acuoso. [10][1] | 🟡 Parcial | Hay respaldo en series y casos; la evidencia de su uso profiláctico sistemático en nanoftalmos es limitada. |
+| Sin trocar ni vitrectomía (Tipo II) | Rexis con Utrata + Facochop | No se encontró una recomendación específica. Es coherente con un segmento anterior de dimensiones normales, sin compresión posterior del diafragma iris-cristalino.  | ⚪ Sin evidencia |  |
 | Fórmulas de LIO | (Módulo de la app) | Hoffman 2015 prefiere Hoffer Q, Holladay 2 y Haigis en ojos cortos. Estudios posteriores encuentran que Kane es la más precisa en LA < 22 mm. Yosar 2021: Kane y SRK/T fueron más precisas que Hoffer Q y Barrett Universal II. [1][2][9] | ✅ Concuerda | La app lista Kane en primer lugar. |
 | Piggyback | (Módulo de la app) | Hoffman 2015: la potencia real puede variar ± 1.0 D por encima de 30 D. Si se usa piggyback, una LIO va en el saco y la otra en el sulcus, para evitar membranas interlenticulares. [1] | 🟡 Parcial | El umbral de aviso de 30 D es una propuesta de la app. |
 | Resultados esperables | — | Yosar 2021 (71 ojos, LA mediana de 20.48 mm): 25.4 % de complicaciones, las más frecuentes el prolapso de iris, el trauma endotelial y el edema macular; sin casos de efusión uveal, desviación del acuoso, hemorragia supracoroidea ni desprendimiento de retina, y con buenos resultados visuales en general. [2] | ✅ Concuerda |  |
 
 ## Supuestos pendientes en la configuración
 
-1. Preoperatorio del MPR (Tipo II): por definir.
-2. Los criterios mayores son una propuesta y deben validarse. En especial, exigir efusión coroidea como mayor del Tipo V hace que un nanoftalmos sin efusión se clasifique como Tipo III (la app lo advierte con una alerta).
-3. Grosor escleral del nanoftalmos: la tabla usa > 1.4 mm; la literatura suele citar > 1.7 mm (esclera + coroides, posterior).
-4. CA < 2 mm en MS y MC: Hoffman 2015 describe CA normal en el microftalmo simple y complejo.
-5. Efusión «Sí (uveal)» en MC y esclera < 1.4 mm / sin efusión en MPR: la literatura describe esclera normal en MC y engrosamiento esclerocoroideo con propensión a efusión en el microftalmos posterior.
-6. Significado de «VVxpp» (se asume vitrectomía vía pars plana) y calibre del trocar (23G en la tabla; Hoffman cita 25G).
-7. Límite inferior de LA de 14.5 mm en nanoftalmos: no se encontró fuente publicada.
-8. Los umbrales del semáforo de glaucoma maligno y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.
+1. Los criterios mayores son una propuesta y deben validarse. En especial, exigir efusión coroidea como mayor del Tipo V hace que un nanoftalmos sin efusión se clasifique como Tipo III (la app lo advierte con una alerta).
+2. Grosor escleral del nanoftalmos: la tabla usa > 1.4 mm; la literatura suele citar > 1.7 mm (esclera + coroides, posterior).
+3. CA < 2 mm en MS y MC: Hoffman 2015 describe CA normal en el microftalmo simple y complejo.
+4. Efusión «Sí (uveal)» en MC y esclera < 1.4 mm / sin efusión en MPR: la literatura describe esclera normal en MC y engrosamiento esclerocoroideo con propensión a efusión en el microftalmos posterior.
+5. Significado de «Solo trocar» en el Tipo III (se asume trocar de pars plana sin vitrectomía programada) y calibre del trocar (Hoffman cita 25G).
+6. Límite inferior de LA de 14.5 mm en nanoftalmos: no se encontró fuente publicada.
+7. Los umbrales del semáforo de glaucoma maligno y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.
 
 ## Fuentes
 

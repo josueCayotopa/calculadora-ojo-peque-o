@@ -70,22 +70,23 @@ describe('Recomendación de LIO / piggyback', () => {
 describe('Checklist preoperatorio', () => {
   const textos = (input: EyeInput) => checklistPreoperatorio(input, clasificar(input, config), config).map((i) => i.texto);
 
-  it('I: manitol y CCC con cistótomo, sin vitrectomía', () => {
+  it('I: manitol y rexis con cistótomo, sin vitrectomía', () => {
     const t = textos(tipoI());
     expect(t.some((x) => x.startsWith('Manitol'))).toBe(true);
     expect(t.some((x) => x.includes('cistótomo'))).toBe(true);
-    expect(t.some((x) => /vitrector|vitrectomía 23G/.test(x))).toBe(false);
+    expect(t.some((x) => /vitrector|Trocar/.test(x))).toBe(false);
   });
 
-  it('II: sin manitol (preoperatorio pendiente) y sin trocar', () => {
+  it('II: manitol y Utrata, sin trocar ni vitrectomía', () => {
     const t = textos(tipoII());
-    expect(t.some((x) => x.startsWith('Manitol'))).toBe(false);
-    expect(t.some((x) => x.startsWith('Sin trocar'))).toBe(true);
+    expect(t.some((x) => x.startsWith('Manitol'))).toBe(true);
+    expect(t.some((x) => x.includes('Utrata'))).toBe(true);
+    expect(t.some((x) => /vitrector|Trocar/.test(x))).toBe(false);
   });
 
-  it('V: vitrectomía 23G e IHZV', () => {
+  it('V: vitrectomía central por pars plana e IHZV', () => {
     const t = textos(tipoV());
-    expect(t.some((x) => x.includes('23G'))).toBe(true);
+    expect(t.some((x) => x.includes('vitrectomía central'))).toBe(true);
     expect(t.some((x) => x.includes('IHZV'))).toBe(true);
   });
 
@@ -97,7 +98,7 @@ describe('Checklist preoperatorio', () => {
   it('en zona gris los ítems específicos son referenciales', () => {
     const input = tipoI({ longitudAxial: 22.2 });
     const items = checklistPreoperatorio(input, clasificar(input, config), config);
-    expect(items.find((i) => i.texto.startsWith('Manitol'))?.referencial).toBe(true);
+    expect(items.find((i) => i.texto.startsWith('Rexis con cistótomo'))?.referencial).toBe(true);
     expect(items.find((i) => i.texto.startsWith('Midriasis'))?.referencial).toBe(false);
   });
 });

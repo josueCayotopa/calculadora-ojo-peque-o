@@ -1,5 +1,5 @@
 {
-  "fechaRevision": "2026-10-01",
+  "fechaRevision": "2026-10-09",
   "metodologia": "Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las referencias base y complementarias disponibles, incluida una cohorte reciente de ojos extremadamente pequeños publicada en 2025. Las fuentes se distinguen por el tipo de evidencia y población estudiada; los resultados de cohortes quirúrgicas seleccionadas no se interpretan como rangos poblacionales de normalidad. Se muestra como «concuerda» cuando la fuente respalda el criterio; «parcial» cuando lo respalda con otro umbral u operador; «difiere» cuando la fuente describe algo distinto; y «sin evidencia» cuando no se encontró una fuente específica. Esta revisión no sustituye una revisión sistemática.",
   "comparaciones": [
     {
@@ -125,37 +125,37 @@
     },
     {
       "tema": "Manitol preoperatorio",
-      "silva": "Manitol 30–60 min antes (tipos I, III, IV y V).",
+      "silva": "Manitol 30 min antes (todos los tipos).",
       "literatura": "Hoffman 2015: manitol y acetazolamida IV 30 min antes reducen el volumen vítreo. Una revisión de 2024 describe manitol al 20 % (100 mL) 30 a 60 min antes para bajar la PIO y profundizar la CA.",
       "concordancia": "concuerda",
       "fuentes": ["hoffman2015", "manitol2024"]
     },
     {
-      "tema": "CCC con cistótomo (Tipo I)",
-      "silva": "CCC con cistótomo + Stop and Chop",
+      "tema": "Rexis con cistótomo (Tipo I)",
+      "silva": "Rexis con cistótomo + Stop and Chop",
       "literatura": "Hoffman 2015: capsulorrexis con cistótomo doblado por paracentesis (o pinza microincisional) para no perder viscoelástico; el azul tripano facilita la capsulorrexis.",
       "concordancia": "concuerda",
       "fuentes": ["hoffman2015"]
     },
     {
-      "tema": "Vitrectomía por pars plana (tipos III, IV y V)",
-      "silva": "VVxpp / VVAx PP 23G",
+      "tema": "Trocar y vitrectomía por pars plana (tipos III, IV y V)",
+      "silva": "Tipo III: solo trocar · Tipos IV y V: vitrectomía central por PP",
       "literatura": "Hoffman 2015: en casos extremos, un tap vítreo o una vitrectomía limitada profundiza la cámara. Recomienda un sistema de trocar-cánula (cita 25G) por la pars plana anómala y examinar la retina periférica después.",
       "concordancia": "parcial",
-      "comentario": "La técnica concuerda; el calibre (23G frente a 25G) es una elección del cirujano.",
+      "comentario": "La técnica concuerda; el calibre del trocar es una elección del cirujano.",
       "fuentes": ["hoffman2015"]
     },
     {
       "tema": "IHZV (Tipo V)",
-      "silva": "VVAx PP 23G + Facochop + IHZV",
+      "silva": "Vitrectomía central por PP + Rexis + Utrata + IHZV",
       "literatura": "La irido-zónulo-hialoido-vitrectomía está descrita como tratamiento del glaucoma maligno y puede combinarse con facoemulsificación en ojos hipermétropes con cierre angular. Hoffman 2015 señala que una iridectomía quirúrgica durante la faco facilita la hialoidotomía láser si aparece desviación del acuoso.",
       "concordancia": "parcial",
       "comentario": "Hay respaldo en series y casos; la evidencia de su uso profiláctico sistemático en nanoftalmos es limitada.",
       "fuentes": ["izhv2022", "hoffman2015"]
     },
     {
-      "tema": "«Sin trocar» (Tipo II)",
-      "silva": "Sin trocar",
+      "tema": "Sin trocar ni vitrectomía (Tipo II)",
+      "silva": "Rexis con Utrata + Facochop",
       "literatura": "No se encontró una recomendación específica. Es coherente con un segmento anterior de dimensiones normales, sin compresión posterior del diafragma iris-cristalino.",
       "concordancia": "sin_evidencia",
       "fuentes": []

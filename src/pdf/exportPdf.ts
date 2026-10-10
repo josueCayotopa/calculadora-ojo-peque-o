@@ -118,7 +118,7 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
     y += h + 2;
   }
 
-  function tabla(head: string[] | null, body: string[][], columnStyles: Record<number, object> = {}) {
+  function tabla(head: string[] | null, body: string[][], columnStyles: Record<number, object> = {}, filaDestacada?: number) {
     autoTable(doc, {
       startY: y,
       head: head ? [head.map(t)] : undefined,
@@ -128,6 +128,13 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
       headStyles: { fillColor: GRANATE, textColor: 255, fontStyle: 'bold' },
       alternateRowStyles: { fillColor: [245, 247, 250] },
       columnStyles,
+      didParseCell: (d) => {
+        if (d.section === 'body' && d.row.index === filaDestacada) {
+          d.cell.styles.fillColor = [253, 242, 242];
+          d.cell.styles.textColor = GRANATE;
+          d.cell.styles.fontStyle = 'bold';
+        }
+      },
     });
     y = finalY() + 3;
   }
@@ -210,7 +217,17 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
     parrafo(`Preoperatorio: ${tipoPlan.preoperatorio.join('; ') || '—'}`);
     parrafo(`Técnica quirúrgica: ${tipoPlan.tecnica.join(' + ')}`, { bold: true });
     if (tipoPlan.pendiente) parrafo(tipoPlan.pendiente, { color: [146, 64, 14] });
-    const glosario = terminosUsados([...tipoPlan.preoperatorio, ...tipoPlan.tecnica]);
+    const tiposCfg = clinicalConfig.tipos;
+    tabla(
+      ['Tipo', 'Tratamiento'],
+      tiposCfg.map((t) => [
+        `Tipo ${t.romano} · ${t.nombre}${t.id === tipoPlan.id ? (c.estado === 'clasificado' ? ' (resultado)' : ' (más cercano)') : ''}`,
+        [...t.preoperatorio, ...t.tecnica].join(' · '),
+      ]),
+      { 0: { cellWidth: 70 } },
+      tiposCfg.findIndex((t) => t.id === tipoPlan.id),
+    );
+    const glosario = terminosUsados(tiposCfg.flatMap((t) => [...t.preoperatorio, ...t.tecnica]));
     if (glosario.length) parrafo(glosario.map((g) => `${g.termino}: ${g.definicion}`).join(' · '), { color: GRIS, size: 8.5 });
 
     titulo('Riesgo de glaucoma maligno');

@@ -1,6 +1,6 @@
 {
-  "version": "2.0.0",
-  "fechaRevision": "2026-09-28",
+  "version": "2.1.0",
+  "fechaRevision": "2026-10-09",
   "toleranciaLimiteMm": 0.05,
   "ordenEvaluacion": ["V", "IV", "III", "II", "I"],
   "cercanosEnZonaGris": 2,
@@ -31,8 +31,8 @@
         { "campo": "segmentoAnterior", "op": "en", "valores": ["corto"] },
         { "campo": "segmentoPosterior", "op": "en", "valores": ["normal"] }
       ],
-      "preoperatorio": ["Manitol 30–60 min antes"],
-      "tecnica": ["CCC con cistótomo", "Facoemulsificación con técnica Stop and Chop"],
+      "preoperatorio": ["Manitol 30 min antes"],
+      "tecnica": ["Rexis con cistótomo", "Stop and Chop"],
       "esquema": {
         "segmentoAnterior": "corto",
         "segmentoPosterior": "normal",
@@ -83,9 +83,8 @@
           ]
         }
       ],
-      "preoperatorio": [],
-      "tecnica": ["Sin trocar"],
-      "pendiente": "Preoperatorio por definir por el autor de la clasificación.",
+      "preoperatorio": ["Manitol 30 min antes"],
+      "tecnica": ["Rexis con Utrata", "Facochop"],
       "esquema": {
         "segmentoAnterior": "normal",
         "segmentoPosterior": "corto",
@@ -116,8 +115,8 @@
         { "op": "iguales", "campos": ["segmentoAnterior", "segmentoPosterior"], "etiqueta": "Segmentos anterior/posterior proporcionales" },
         { "campo": "refraccion", "op": "en", "valores": ["hipermetropiaModerada"] }
       ],
-      "preoperatorio": ["Manitol 30–60 min antes"],
-      "tecnica": ["VVxpp", "Facochop"],
+      "preoperatorio": ["Manitol 30 min antes"],
+      "tecnica": ["Solo trocar", "Rexis + Utrata", "Facochop"],
       "esquema": {
         "segmentoAnterior": "corto",
         "segmentoPosterior": "corto",
@@ -158,8 +157,8 @@
           ]
         }
       ],
-      "preoperatorio": ["Manitol 30–60 min antes"],
-      "tecnica": ["VVxpp", "Facochop"],
+      "preoperatorio": ["Manitol 30 min antes"],
+      "tecnica": ["Vitrectomía central por PP", "Rexis + Utrata"],
       "esquema": {
         "segmentoAnterior": "corto",
         "segmentoPosterior": "corto",
@@ -199,8 +198,8 @@
         { "campo": "segmentoPosterior", "op": "en", "valores": ["corto"] },
         { "campo": "refraccion", "op": "en", "valores": ["hipermetropiaAlta"] }
       ],
-      "preoperatorio": ["Manitol 30–60 min antes"],
-      "tecnica": ["VVAx PP 23G", "Facochop", "IHZV"],
+      "preoperatorio": ["Manitol 30 min antes"],
+      "tecnica": ["Vitrectomía central por PP", "Rexis + Utrata", "IHZV"],
       "esquema": {
         "segmentoAnterior": "corto",
         "segmentoPosterior": "corto",
@@ -283,7 +282,7 @@
     }
   },
   "checklistPreoperatorio": [
-    { "texto": "Manitol IV 30–60 min antes de la cirugía (valorar función renal y cardiovascular)", "tipos": ["I", "III", "IV", "V"] },
+    { "texto": "Manitol IV 30 min antes de la cirugía (valorar función renal y cardiovascular)", "tipos": "todos" },
     { "texto": "Midriasis farmacológica máxima", "tipos": "todos" },
     {
       "texto": "Valorar iridotomía láser previa (ángulo estrecho/ocluible)",
@@ -291,12 +290,12 @@
       "condicion": { "campo": "angulo", "op": "en", "valores": ["estrecho"] }
     },
     { "texto": "Anestesia tópica asistida (con sedación)", "tipos": "todos" },
-    { "texto": "CCC con cistótomo doblado por paracentesis; considerar azul tripano y viscoelástico cohesivo", "tipos": ["I"] },
-    { "texto": "Sin trocar: no se planifica vitrectomía", "tipos": ["II"] },
-    { "texto": "Trocar-cánula y vitrector disponibles para VVxpp", "tipos": ["III", "IV"] },
-    { "texto": "Equipo de vitrectomía 23G con trocar-cánula para VVAx PP", "tipos": ["V"] },
+    { "texto": "Rexis con cistótomo doblado por paracentesis; considerar azul tripano y viscoelástico cohesivo", "tipos": ["I"] },
+    { "texto": "Pinza de Utrata para la rexis; considerar azul tripano y viscoelástico cohesivo", "tipos": ["II", "III", "IV", "V"] },
+    { "texto": "Trocar de pars plana colocado, sin vitrectomía programada", "tipos": ["III"] },
+    { "texto": "Trocar-cánula y vitrector para vitrectomía central por pars plana", "tipos": ["IV", "V"] },
     { "texto": "Planificar IHZV (irido-hialoido-zónulo-vitrectomía)", "tipos": ["V"] },
-    { "texto": "Examinar la retina periférica después de la vitrectomía por pars plana", "tipos": ["III", "IV", "V"] },
+    { "texto": "Examinar la retina periférica después de la vitrectomía por pars plana", "tipos": ["IV", "V"] },
     { "texto": "Biometría óptica y fórmula de LIO moderna (Kane, Holladay 2, Barrett UII o Hoffer QST)", "tipos": "todos" }
   ],
   "glosario": [
@@ -305,13 +304,13 @@
     { "termino": "W-W", "definicion": "Diámetro corneal horizontal blanco-blanco. Microcórnea: < 11 mm." },
     { "termino": "DE", "definicion": "Desviación estándar. «< media − 2 DE» se calcula con la media y la DE de referencia ingresadas; sin ellas, se usa LA < 21 mm." },
     { "termino": "UBM", "definicion": "Biomicroscopía ultrasónica." },
-    { "termino": "CCC", "definicion": "Capsulorrexis circular continua." },
+    { "termino": "Rexis", "definicion": "Capsulorrexis circular continua." },
+    { "termino": "Utrata", "definicion": "Pinza de capsulorrexis de Utrata." },
     { "termino": "Stop and Chop", "definicion": "Técnica de facoemulsificación: surco central y luego fragmentación (chop) de cada mitad." },
     { "termino": "Facochop", "definicion": "Facoemulsificación con técnica de chop." },
-    { "termino": "VVxpp", "definicion": "Vitrectomía vía pars plana (abreviatura por confirmar con el autor)." },
-    { "termino": "VVAx PP", "definicion": "Vitrectomía anterior por pars plana." },
+    { "termino": "Solo trocar", "definicion": "Se coloca trocar de pars plana sin realizar vitrectomía (interpretación por confirmar con el autor)." },
+    { "termino": "PP", "definicion": "Pars plana." },
     { "termino": "IHZV", "definicion": "Irido-hialoido-zónulo-vitrectomía." },
-    { "termino": "Sin trocar", "definicion": "No se coloca trocar de pars plana ni se realiza vitrectomía." },
     { "termino": "MAR / MPR / MS / MC", "definicion": "Microftalmo anterior relativo / microftalmos posterior relativo / microftalmo simple / microftalmo complejo." },
     { "termino": "Criterio mayor", "definicion": "Obligatorio: el tipo solo se asigna si se cumplen todos sus criterios mayores." },
     { "termino": "Criterio de apoyo", "definicion": "No decide el tipo; suma al porcentaje de concordancia." }
@@ -330,12 +329,11 @@
     }
   ],
   "supuestosPendientes": [
-    "Preoperatorio del MPR (Tipo II): por definir.",
     "Los criterios mayores son una propuesta y deben validarse. En especial, exigir efusión coroidea como mayor del Tipo V hace que un nanoftalmos sin efusión se clasifique como Tipo III (la app lo advierte con una alerta).",
     "Grosor escleral del nanoftalmos: la tabla usa > 1.4 mm; la literatura suele citar > 1.7 mm (esclera + coroides, posterior).",
     "CA < 2 mm en MS y MC: Hoffman 2015 describe CA normal en el microftalmo simple y complejo.",
     "Efusión «Sí (uveal)» en MC y esclera < 1.4 mm / sin efusión en MPR: la literatura describe esclera normal en MC y engrosamiento esclerocoroideo con propensión a efusión en el microftalmos posterior.",
-    "Significado de «VVxpp» (se asume vitrectomía vía pars plana) y calibre del trocar (23G en la tabla; Hoffman cita 25G).",
+    "Significado de «Solo trocar» en el Tipo III (se asume trocar de pars plana sin vitrectomía programada) y calibre del trocar (Hoffman cita 25G).",
     "Límite inferior de LA de 14.5 mm en nanoftalmos: no se encontró fuente publicada.",
     "Los umbrales del semáforo de glaucoma maligno y del aviso de piggyback, y las alertas clínicas, son propuestas de la app."
   ]
