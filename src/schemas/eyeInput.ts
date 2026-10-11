@@ -7,10 +7,8 @@ export const RANGOS = {
   laMediaReferencia: { min: 18.0, max: 28.0, unidad: 'mm' },
   laDEReferencia: { min: 0.1, max: 3.0, unidad: 'mm' },
   acd: { min: 0.5, max: 5.0, unidad: 'mm' },
-  blancoBlanco: { min: 8.0, max: 14.0, unidad: 'mm' },
   grosorCristalino: { min: 2.0, max: 7.0, unidad: 'mm' },
   grosorEscleral: { min: 0.3, max: 3.0, unidad: 'mm' },
-  potenciaLio: { min: -10, max: 70, unidad: 'D' },
 } as const;
 
 function numero(nombre: string, { min, max, unidad }: { min: number; max: number; unidad: string }) {
@@ -35,19 +33,14 @@ export const eyeInputSchema = z
     laMediaReferencia: opcional(numero('LA media de referencia', RANGOS.laMediaReferencia)),
     laDEReferencia: opcional(numero('DE de referencia', RANGOS.laDEReferencia)),
     acd: numero('Cámara anterior', RANGOS.acd),
-    blancoBlanco: numero('Diámetro blanco-blanco', RANGOS.blancoBlanco),
     grosorCristalino: opcional(numero('Grosor del cristalino', RANGOS.grosorCristalino)),
-    potenciaLio: opcional(numero('Potencia de LIO', RANGOS.potenciaLio)),
     angulo: obligatorio(['abierto', 'estrecho', 'deformado', 'cerrado'], 'Seleccione el ángulo por gonioscopía'),
     grosorEscleral: numero('Grosor escleral', RANGOS.grosorEscleral),
     efusionCoroidea: siNo('Indique si hay efusión coroidea/uveal'),
     cuerpoCiliar: obligatorio(['normal', 'anteriorizado'], 'Seleccione la posición del cuerpo ciliar'),
     cristalino: obligatorio(['normal', 'coloboma', 'intumescente'], 'Seleccione el estado del cristalino'),
-    cornea: obligatorio(['normal', 'microcornea'], 'Seleccione el estado de la córnea'),
     malformaciones: siNo('Indique si hay malformaciones anatómicas'),
-    segmentoAnterior: opcional(z.enum(['normal', 'corto'])),
-    segmentoPosterior: opcional(z.enum(['normal', 'corto'])),
-    refraccion: opcional(z.enum(['emetropia', 'hipermetropiaModerada', 'hipermetropiaAlta'])),
+    pupilaSinequiada: z.boolean().default(false),
     alteracionesRetinianas: z.object({
       retinitisPigmentaria: z.boolean().default(false),
       foveosquisis: z.boolean().default(false),

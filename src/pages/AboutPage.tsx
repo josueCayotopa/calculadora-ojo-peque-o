@@ -4,22 +4,19 @@ import { Tabs } from '@/components/ui/tabs';
 import { Referencias } from '@/components/result/Panels';
 import { EyeSchematic } from '@/components/result/EyeSchematic';
 import { clinicalConfig } from '@/config';
-import { NOMBRE_VALOR, etiquetaCriterio, formatNumero } from '@/engine';
+import { NOMBRE_VALOR, etiquetaCriterio, formatNumero, tecnicasAlternativas } from '@/engine';
 import type { Criterio } from '@/engine/types';
 
 /** Filas de la tabla: qué campo(s) muestra cada fila (mismo orden que la diapositiva). */
 const FILAS: { titulo: string; campos: string[] }[] = [
   { titulo: 'Longitud axial (LA)', campos: ['longitudAxial'] },
   { titulo: 'Cámara anterior (CA)', campos: ['acd'] },
-  { titulo: 'Microcórnea / W-W', campos: ['blancoBlanco', 'cornea'] },
   { titulo: 'Ángulo', campos: ['angulo'] },
   { titulo: 'Grosor escleral', campos: ['grosorEscleral'] },
   { titulo: 'Efusión coroidea', campos: ['efusionCoroidea'] },
   { titulo: 'Cuerpo ciliar', campos: ['cuerpoCiliar'] },
   { titulo: 'Cristalino', campos: ['cristalino'] },
   { titulo: 'Malformaciones', campos: ['malformaciones'] },
-  { titulo: 'Segmento ant. / post.', campos: ['segmentoAnterior', 'segmentoPosterior', 'iguales'] },
-  { titulo: 'Refracción', campos: ['refraccion'] },
   { titulo: 'Alteraciones asociadas', campos: ['retina'] },
 ];
 
@@ -27,7 +24,7 @@ const SIM: Record<string, string> = { '<': '<', '<=': '≤', '>': '>', '>=': '�
 
 function claveCriterio(c: Criterio): string {
   if (c.op === 'iguales') return 'iguales';
-  if (c.op === 'cualquiera') return c.etiqueta.startsWith('Microcórnea') ? 'cornea' : 'retina';
+  if (c.op === 'cualquiera') return 'retina';
   return c.campo;
 }
 
@@ -45,7 +42,7 @@ function celda(c: Criterio): string {
     case 'iguales':
       return 'Proporcional';
     case 'cualquiera':
-      return c.etiqueta.startsWith('Microcórnea') ? 'Microcórnea (W-W < 11)' : c.etiqueta.startsWith('Alteraciones') ? 'Retinianas' : c.etiqueta;
+      return c.etiqueta.startsWith('Alteraciones') ? 'Retinianas' : c.etiqueta;
     default:
       return `${SIM[c.op]} ${formatNumero(c.valor)} mm`;
   }
@@ -99,9 +96,7 @@ function TablaClasificacion() {
                             key={etiquetaCriterio(c)}
                             className={c.nivel === 'mayor' ? 'mr-1 inline-block rounded bg-primary-10 px-1 font-bold text-primary-900' : 'mr-1 inline-block'}
                           >
-                            {f.campos.length > 1 && 'campo' in c && c.campo.startsWith('segmento')
-                              ? `${c.campo === 'segmentoAnterior' ? 'Ant.' : 'Post.'} ${celda(c)}`
-                              : celda(c)}
+                            {celda(c)}
                           </span>
                         ))}
                   </td>
@@ -126,6 +121,11 @@ function TablaClasificacion() {
             {cfg.tipos.map((t) => (
               <td key={t.id} className={`${td} font-semibold`}>
                 {t.tecnica.join(' + ')}
+                {tecnicasAlternativas(t.id, cfg).map((a) => (
+                  <span key={a.id} className="mt-1 block font-normal text-slateGray">
+                    <span className="font-semibold text-ink">{a.titulo}</span> ({a.condicion}): {a.tecnica.join(' + ')}
+                  </span>
+                ))}
               </td>
             ))}
           </tr>
@@ -208,7 +208,7 @@ function Modulos() {
           <strong>Alerta facomórfica:</strong> {cfg.alertaFacomorfica.criterios.map((c) => etiquetaCriterio(c)).join(' y ')}.
         </p>
         <p>
-          <strong>LIO:</strong> {cfg.lio.formulas.map((f) => f.nombre).join(', ')}. Piggyback con potencia ≥ {cfg.lio.piggyback.potenciaDesdeD} D.
+          <strong>LIO:</strong> {cfg.lio.formulas.map((f) => f.nombre).join(', ')}. Aviso de piggyback con LA &lt; {cfg.lio.piggyback.longitudAxialAnticipadaMm} mm.
         </p>
         <p>
           <strong>Alertas clínicas:</strong> {cfg.alertasClinicas.map((a) => a.titulo).join('; ')}.

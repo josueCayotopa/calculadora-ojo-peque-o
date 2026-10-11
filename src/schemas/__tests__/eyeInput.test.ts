@@ -5,13 +5,12 @@ const valido = {
   ojo: 'OD',
   longitudAxial: 21.5,
   acd: 2.3,
-  blancoBlanco: 11.2,
   angulo: 'estrecho',
   grosorEscleral: 1.1,
   efusionCoroidea: false,
   cuerpoCiliar: 'normal',
   cristalino: 'normal',
-  cornea: 'normal',
+
   malformaciones: false,
   alteracionesRetinianas: {},
   factoresRiesgo: {},
@@ -29,8 +28,6 @@ describe('eyeInputSchema', () => {
     ['longitudAxial', 30.1],
     ['acd', 0.4],
     ['acd', 5.1],
-    ['blancoBlanco', 7.9],
-    ['blancoBlanco', 14.1],
     ['grosorEscleral', 0.29],
     ['grosorEscleral', 3.01],
   ])('rechaza %s = %s (fuera de rango)', (campo, valor) => {
@@ -42,14 +39,12 @@ describe('eyeInputSchema', () => {
     ['longitudAxial', 30.0],
     ['acd', 0.5],
     ['acd', 5.0],
-    ['blancoBlanco', 8.0],
-    ['blancoBlanco', 14.0],
   ])('acepta %s = %s (límite del rango)', (campo, valor) => {
     expect(eyeInputSchema.safeParse({ ...valido, [campo]: valor }).success).toBe(true);
   });
 
-  it('exige ángulo, efusión, cuerpo ciliar, cristalino, córnea y malformaciones', () => {
-    for (const campo of ['angulo', 'efusionCoroidea', 'cuerpoCiliar', 'cristalino', 'cornea', 'malformaciones']) {
+  it('exige ángulo, efusión, cuerpo ciliar, cristalino y malformaciones', () => {
+    for (const campo of ['angulo', 'efusionCoroidea', 'cuerpoCiliar', 'cristalino', 'malformaciones']) {
       const { [campo]: _, ...sin } = valido as Record<string, unknown>;
       expect(eyeInputSchema.safeParse(sin).success, campo).toBe(false);
     }
@@ -64,8 +59,8 @@ describe('eyeInputSchema', () => {
     expect(eyeInputSchema.safeParse({ ...valido, laMediaReferencia: 23.5, laDEReferencia: 1 }).success).toBe(true);
   });
 
-  it('segmentos y refracción son opcionales', () => {
-    expect(eyeInputSchema.safeParse({ ...valido, segmentoPosterior: null, refraccion: undefined }).success).toBe(true);
+  it('el grosor del cristalino es opcional', () => {
+    expect(eyeInputSchema.safeParse({ ...valido, grosorCristalino: null }).success).toBe(true);
   });
 
   it('rechaza NaN con un mensaje legible', () => {

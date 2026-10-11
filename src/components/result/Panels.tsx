@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AlertTriangle, ExternalLink } from 'lucide-react';
 import type { EvaluacionCompleta } from '@/engine/types';
+import { tecnicasAlternativas } from '@/engine';
 import { clinicalConfig, terminosUsados } from '@/config';
 import { cn } from '@/lib/utils';
 import { ALERTAS_CRITICAS } from './ClassificationCard';
@@ -11,6 +12,24 @@ import { ALERTAS_CRITICAS } from './ClassificationCard';
  */
 
 const subtitulo = 'text-[11px] font-bold uppercase tracking-wide text-slateGray';
+
+/** Una técnica dentro de la tarjeta de un tipo con excepción; se enmarca la que corresponde al resultado. */
+function BloqueTecnica({ titulo, detalle, items, indicada }: { titulo: string; detalle?: string; items: string[]; indicada: boolean }) {
+  return (
+    <div className={cn('rounded-xl border px-2.5 py-1.5', indicada ? 'border-2 border-primary bg-primary-50' : 'border-gray-200')}>
+      <div className="mb-0.5 flex items-start justify-between gap-2">
+        <p className={cn('text-xs leading-tight', indicada ? 'font-bold text-primary' : 'font-semibold text-slateGray')}>
+          {titulo}
+          {detalle && <span className="block font-normal text-slateGray">{detalle}</span>}
+        </p>
+        {indicada && (
+          <span className="shrink-0 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">Indicada</span>
+        )}
+      </div>
+      <ListaPasos items={items} destacado={indicada} />
+    </div>
+  );
+}
 
 function ListaPasos({ items, destacado }: { items: string[]; destacado: boolean }) {
   return (
@@ -36,7 +55,9 @@ export function Tratamiento({ evaluacion }: { evaluacion: EvaluacionCompleta }) 
   const c = evaluacion.clasificacion;
   const tipo = c.tipo ?? c.masCercanos[0];
   const tipos = clinicalConfig.tipos;
-  const glosario = terminosUsados(tipos.flatMap((t) => [...t.preoperatorio, ...t.tecnica]));
+  const glosario = terminosUsados(
+    tipos.flatMap((t) => [...t.preoperatorio, ...t.tecnica, ...tecnicasAlternativas(t.id, clinicalConfig).flatMap((a) => a.tecnica)]),
+  );
   return (
     <div className="space-y-2">
       {c.estado !== 'clasificado' && (
@@ -47,13 +68,19 @@ export function Tratamiento({ evaluacion }: { evaluacion: EvaluacionCompleta }) 
       <ul className="space-y-2">
         {tipos.map((t) => {
           const resultado = t.id === tipo.id;
+          const alternativas = tecnicasAlternativas(t.id, clinicalConfig);
+          // Con varias técnicas, se enmarca solo la técnica indicada, no toda la tarjeta.
+          const conAlternativas = alternativas.length > 0;
+          const excepcionActiva = resultado ? c.alertas.find((a) => alternativas.some((x) => x.id === a.id)) : undefined;
           return (
             <li
               key={t.id}
               aria-current={resultado ? 'true' : undefined}
               className={cn(
                 'rounded-2xl border px-3 py-2',
-                resultado ? 'border-2 border-primary bg-primary-50 shadow-sm' : 'border-gray-200',
+                resultado && !conAlternativas && 'border-2 border-primary bg-primary-50 shadow-sm',
+                resultado && conAlternativas && 'border-primary',
+                !resultado && 'border-gray-200',
               )}
             >
               <div className="mb-1 flex items-start justify-between gap-2">
@@ -66,7 +93,23 @@ export function Tratamiento({ evaluacion }: { evaluacion: EvaluacionCompleta }) 
                   </span>
                 )}
               </div>
-              <ListaPasos items={[...t.preoperatorio, ...t.tecnica]} destacado={resultado} />
+              {conAlternativas ? (
+                <div className="space-y-1.5">
+                  <ListaPasos items={t.preoperatorio} destacado={resultado} />
+                  <BloqueTecnica titulo="Técnica habitual" items={t.tecnica} indicada={resultado && !excepcionActiva} />
+                  {alternativas.map((a) => (
+                    <BloqueTecnica
+                      key={a.id}
+                      titulo={a.titulo}
+                      detalle={a.condicion}
+                      items={a.tecnica}
+                      indicada={excepcionActiva?.id === a.id}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <ListaPasos items={[...t.preoperatorio, ...t.tecnica]} destacado={resultado} />
+              )}
               {resultado && t.pendiente && <p className="mt-1 text-xs font-semibold text-amber-900">{t.pendiente}</p>}
             </li>
           );

@@ -6,9 +6,8 @@ export type Ojo = 'OD' | 'OI';
 export type Angulo = 'abierto' | 'estrecho' | 'deformado' | 'cerrado';
 export type CuerpoCiliar = 'normal' | 'anteriorizado';
 export type Cristalino = 'normal' | 'coloboma' | 'intumescente';
-export type Cornea = 'normal' | 'microcornea';
+/** Solo se usa en el esquema (dibujo) del tipo. */
 export type Segmento = 'normal' | 'corto';
-export type Refraccion = 'emetropia' | 'hipermetropiaModerada' | 'hipermetropiaAlta';
 
 export interface AlteracionesRetinianas {
   retinitisPigmentaria: boolean;
@@ -36,8 +35,6 @@ export interface EyeInput {
   /** Desviación estándar de referencia de la LA. Opcional (requiere la media). */
   laDEReferencia?: number | null;
   acd: number;
-  /** Diámetro corneal blanco-blanco (W-W). */
-  blancoBlanco: number;
   /** Grosor del cristalino. Opcional: solo se usa para la alerta facomórfica. */
   grosorCristalino?: number | null;
   angulo: Angulo;
@@ -45,26 +42,23 @@ export interface EyeInput {
   efusionCoroidea: boolean;
   cuerpoCiliar: CuerpoCiliar;
   cristalino: Cristalino;
-  cornea: Cornea;
   malformaciones: boolean;
-  segmentoAnterior?: Segmento | null;
-  segmentoPosterior?: Segmento | null;
-  refraccion?: Refraccion | null;
+  /** Pupila sinequiada: entra en la excepción de vitrectomía central por PP. */
+  pupilaSinequiada: boolean;
   alteracionesRetinianas: AlteracionesRetinianas;
   factoresRiesgo: FactoresRiesgo;
-  /** Potencia de LIO calculada externamente (D). Opcional; la app no la calcula. */
-  potenciaLio?: number | null;
 }
 
 // ---------------------------------------------------------------------------
 // Criterios (definidos como datos en config/rules.json)
 // ---------------------------------------------------------------------------
 
-export type CampoNumerico = 'longitudAxial' | 'acd' | 'blancoBlanco' | 'grosorCristalino' | 'grosorEscleral' | 'potenciaLio';
-export type CampoEnum = 'angulo' | 'cuerpoCiliar' | 'cristalino' | 'cornea' | 'segmentoAnterior' | 'segmentoPosterior' | 'refraccion';
+export type CampoNumerico = 'longitudAxial' | 'acd' | 'grosorCristalino' | 'grosorEscleral';
+export type CampoEnum = 'angulo' | 'cuerpoCiliar' | 'cristalino';
 export type CampoBooleano =
   | 'efusionCoroidea'
   | 'malformaciones'
+  | 'pupilaSinequiada'
   | `alteracionesRetinianas.${keyof AlteracionesRetinianas}`
   | `factoresRiesgo.${keyof FactoresRiesgo}`;
 
@@ -120,7 +114,7 @@ export interface CriterioBajoDE extends Base {
   valorRespaldo: number;
 }
 
-/** Dos campos de lista con el mismo valor (p. ej. segmentos "proporcionales"). */
+/** Dos campos de lista con el mismo valor. */
 export interface CriterioIguales extends Base {
   op: 'iguales';
   campos: [CampoEnum, CampoEnum];
@@ -178,6 +172,10 @@ export interface ItemChecklist {
   /** Ids de tipos a los que aplica, o "todos". */
   tipos: string[] | 'todos';
   condicion?: Criterio;
+  /** Solo si esta alerta clínica está activa. */
+  siAlerta?: string;
+  /** Se omite si esta alerta clínica está activa. */
+  salvoAlerta?: string;
 }
 
 export interface AlertaClinica {
@@ -188,6 +186,8 @@ export interface AlertaClinica {
   criterios: Criterio[];
   /** …y el resultado no es uno de estos tipos. */
   exceptoTipos?: string[];
+  /** Técnica que sustituye a la del tipo asignado cuando la alerta está activa. */
+  reemplazaTecnica?: string[];
 }
 
 export interface Referencia {
@@ -214,7 +214,7 @@ export interface ClinicalConfig {
   lio: {
     biometria: string;
     formulas: { nombre: string; url: string; nota?: string }[];
-    piggyback: { potenciaDesdeD: number; longitudAxialAnticipadaMm: number; mensaje: string };
+    piggyback: { longitudAxialAnticipadaMm: number; mensaje: string };
   };
   checklistPreoperatorio: ItemChecklist[];
   glosario: { termino: string; definicion: string }[];
@@ -262,6 +262,8 @@ export interface TipoEvaluado {
   cumpleMayores: boolean;
   preoperatorio: string[];
   tecnica: string[];
+  /** Título de la alerta que reemplazó la técnica del tipo (excepción), o null. */
+  tecnicaPorExcepcion: string | null;
   pendiente: string | null;
   esquema: EsquemaOjo;
 }
@@ -279,6 +281,7 @@ export interface AlertaActiva {
   id: string;
   titulo: string;
   mensaje: string;
+  reemplazaTecnica?: string[];
 }
 
 export interface ResultadoClasificacion {

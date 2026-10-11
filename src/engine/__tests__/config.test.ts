@@ -64,10 +64,10 @@ describe('Etiquetas generadas desde el criterio', () => {
   it.each([
     [{ campo: 'acd', op: '<', valor: 2.2 }, 'CA < 2.2 mm'],
     [{ campo: 'longitudAxial', op: '<=', valor: 20.5 }, 'LA ≤ 20.5 mm'],
-    [{ campo: 'blancoBlanco', op: '<', valor: 11 }, 'W-W < 11.0 mm'],
+    [{ campo: 'grosorCristalino', op: '>', valor: 5 }, 'Grosor del cristalino > 5.0 mm'],
     [{ campo: 'acd', op: 'entre', min: 2, max: 2.2, opMin: '>=', opMax: '<=' }, '2.0 ≤ CA ≤ 2.2 mm'],
     [{ campo: 'angulo', op: 'en', valores: ['cerrado'] }, 'Ángulo cerrado/ocluido'],
-    [{ campo: 'segmentoPosterior', op: 'en', valores: ['corto'] }, 'Segmento posterior corto'],
+    [{ campo: 'cuerpoCiliar', op: 'en', valores: ['anteriorizado'] }, 'Cuerpo ciliar anteriorizado'],
     [{ campo: 'efusionCoroidea', op: 'es', valor: false }, 'Sin efusión coroidea'],
     [{ campo: 'longitudAxial', op: 'bajoDE', nDE: 2, opComparacion: '<', valorRespaldo: 21 }, 'LA < media − 2 DE (o < 21.0 mm)'],
   ] as const)('%j → %s', (c, esperado) => {

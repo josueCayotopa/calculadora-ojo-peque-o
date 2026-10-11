@@ -8,7 +8,7 @@ import { BarraPorcentaje, CriteriaList } from './CriteriaList';
 import { EyeSchematic, describirEsquema } from './EyeSchematic';
 
 /** Alertas que no deben quedar escondidas en una pestaña: se muestran junto al diagnóstico. */
-export const ALERTAS_CRITICAS = new Set(['rasgos-nanoftalmos']);
+export const ALERTAS_CRITICAS = new Set(['rasgos-nanoftalmos', 'excepcion-vitrectomia']);
 
 /** Bloque principal: número romano grande, como en la diapositiva del algoritmo. */
 export function DiagnosticoHero({ evaluacion, onVerAlertas }: { evaluacion: EvaluacionCompleta; onVerAlertas?: () => void }) {

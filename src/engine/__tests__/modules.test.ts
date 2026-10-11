@@ -10,7 +10,7 @@ describe('Riesgo de glaucoma maligno', () => {
     const r = riesgoGlaucomaMaligno(tipoI(), config);
     expect(r.presentes).toBe(2);
     expect(r.nivel).toBe('moderado');
-    expect(r.total).toBe(9);
+    expect(r.total).toBe(8);
   });
 
   it('1 factor → bajo', () => {
@@ -58,12 +58,9 @@ describe('Recomendación de LIO / piggyback', () => {
     expect(r.formulas[0].nombre).toBe('Kane');
     expect(r.biometria).toMatch(/biometría óptica/i);
   });
-  it('potencia ≥ 30 D → piggyback', () => {
-    expect(recomendacionLio(tipoI({ potenciaLio: 30 }), config).piggyback.activa).toBe(true);
-    expect(recomendacionLio(tipoI({ potenciaLio: 29.5 }), config).piggyback.activa).toBe(false);
-  });
-  it('sin potencia y LA < 20.5 mm → aviso anticipado', () => {
+  it('LA < 20.5 mm → aviso de piggyback', () => {
     expect(recomendacionLio(tipoV(), config).piggyback.activa).toBe(true);
+    expect(recomendacionLio(tipoI({ longitudAxial: 20.5 }), config).piggyback.activa).toBe(false);
   });
 });
 
@@ -75,6 +72,13 @@ describe('Checklist preoperatorio', () => {
     expect(t.some((x) => x.startsWith('Manitol'))).toBe(true);
     expect(t.some((x) => x.includes('cistótomo'))).toBe(true);
     expect(t.some((x) => /vitrector|Trocar/.test(x))).toBe(false);
+  });
+
+  it('I con excepción (pupila sinequiada, LT > 5): Utrata y vitrector en lugar de cistótomo', () => {
+    const t = textos(tipoI({ grosorCristalino: 5.2, pupilaSinequiada: true }));
+    expect(t.some((x) => x.includes('cistótomo'))).toBe(false);
+    expect(t.some((x) => x.includes('Utrata'))).toBe(true);
+    expect(t.some((x) => x.includes('vitrectomía central'))).toBe(true);
   });
 
   it('II: manitol y Utrata, sin trocar ni vitrectomía', () => {

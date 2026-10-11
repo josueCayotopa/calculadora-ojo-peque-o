@@ -11,18 +11,18 @@
     },
     {
       "tema": "Tipo I (MAR) · Longitud axial",
-      "silva": "LA > 22.2 mm (umbral operativo confirmado por el Dr. Fermín según su experiencia y práctica clínica en Perú)",
-      "literatura": "El Dr. Fermín confirma que considera > 22.6 mm como referencia de LA normal y utiliza > 22.2 mm como umbral operativo para su clasificación, basándose en su experiencia y en los tamaños observados en los ojos de los pacientes que atiende en Perú. Esto documenta experiencia clínica local, no un rango normativo de toda la población peruana. Para MAR, Hoffman 2015 describe LA > 20.5 mm y Auffarth 2000, en la definición original, LA > 20 mm. La cohorte reciente de Hammer et al. (2025) incluye MAR, pero estudia ojos con LIO >30 D y no evalúa estos umbrales como límites de normalidad.",
+      "silva": "LA > 22.5 mm (umbral operativo del Dr. Fermín según su experiencia y práctica clínica en Perú; tabla actualizada)",
+      "literatura": "El Dr. Fermín confirma que considera > 22.6 mm como referencia de LA normal y utiliza un umbral operativo propio para su clasificación (> 22.2 mm en la versión anterior, > 22.5 mm en la tabla actual), basándose en su experiencia y en los tamaños observados en los ojos de los pacientes que atiende en Perú. Esto documenta experiencia clínica local, no un rango normativo de toda la población peruana. Para MAR, Hoffman 2015 describe LA > 20.5 mm y Auffarth 2000, en la definición original, LA > 20 mm. La cohorte reciente de Hammer et al. (2025) incluye MAR, pero estudia ojos con LIO >30 D y no evalúa estos umbrales como límites de normalidad.",
       "concordancia": "parcial",
-      "comentario": "Los valores > 22.6 mm y > 22.2 mm quedan documentados como referencias clínicas confirmadas por el Dr. Fermín, basadas en su práctica y en los tamaños observados en sus pacientes en Perú. Se conserva > 22.2 mm para el cálculo. Los cortes de Hoffman y Auffarth son definiciones publicadas distintas para MAR; la experiencia local no se presenta como estudio poblacional ni como consenso bibliográfico.",
+      "comentario": "Los valores > 22.6 mm y > 22.5 mm quedan documentados como referencias clínicas del Dr. Fermín, basadas en su práctica y en los tamaños observados en sus pacientes en Perú. Se usa > 22.5 mm para el cálculo. Los cortes de Hoffman y Auffarth son definiciones publicadas distintas para MAR; la experiencia local no se presenta como estudio poblacional ni como consenso bibliográfico.",
       "fuentes": ["hoffman2015", "auffarth2000", "hammer2025"]
     },
     {
       "tema": "Tipo I (MAR) · Cámara anterior",
-      "silva": "CA < 2.2 mm",
+      "silva": "CA < 2.5 mm",
       "literatura": "Hoffman 2015: CA igual o menor de 2.2 mm. Auffarth 2000: CA característica de alrededor de 2 mm.",
       "concordancia": "parcial",
-      "comentario": "Mismo umbral, distinto operador (< frente a ≤). Con CA = 2.2 mm exactos cambia el resultado. Es configurable.",
+      "comentario": "El umbral de la tabla (< 2.5 mm) es más amplio que el publicado (≤ 2.2 mm): incluye en el MAR ojos con CA entre 2.2 y 2.5 mm. Es configurable.",
       "fuentes": ["hoffman2015", "auffarth2000"]
     },
     {
@@ -41,17 +41,17 @@
     },
     {
       "tema": "Tipo II (MPR) · Anatomía",
-      "silva": "CA > 2.2 mm, segmento anterior normal y posterior corto, hipermetropía alta, alteraciones retinianas.",
+      "silva": "CA > 2.5 mm, segmento anterior normal y posterior corto, hipermetropía alta, alteraciones retinianas.",
       "literatura": "Hoffman 2015 y series de casos: segmento anterior de dimensiones normales, segmento posterior corto, hipermetropía alta, pliegues retinianos papilomaculares o retinopatía pigmentaria.",
       "concordancia": "concuerda",
       "fuentes": ["hoffman2015", "posterior2016", "posterior2019"]
     },
     {
       "tema": "Tipo II (MPR) · Longitud axial",
-      "silva": "LA < 22.2 mm",
+      "silva": "LA < 22.5 mm",
       "literatura": "En las series publicadas las LA suelen ser mucho menores (del orden de 15.5 a 18.6 mm en una serie con hipermetropía de +11 a +15.75 D).",
       "concordancia": "parcial",
-      "comentario": "El umbral de 22.2 mm es amplio. Por eso los criterios mayores del Tipo II son la CA > 2.2 mm y el segmento posterior corto.",
+      "comentario": "El umbral de 22.5 mm es amplio. La app ya no evalúa los segmentos anterior y posterior, así que los criterios mayores del Tipo II son la CA > 2.5 mm y la LA < 22.5 mm.",
       "fuentes": ["posterior2016"]
     },
     {
@@ -64,17 +64,18 @@
     },
     {
       "tema": "Tipo III (MS) · Longitud axial",
-      "silva": "LA < 21 mm (< media − 2 DE)",
+      "silva": "LA 20–21 mm (< media − 2 DE)",
       "literatura": "Hoffman 2015: LA más de 2 DE bajo la media para la edad; históricamente < 20.5 mm y, según estudios epidemiológicos, < 21.0 mm en adultos. Yosar 2021 define «ojo corto» como LA < 21.0 mm (2 DE bajo la media).",
       "concordancia": "concuerda",
+      "comentario": "El límite superior concuerda. El límite inferior de 20 mm (que separa el MS del nanoftalmos, < 20 mm) es propio de la tabla.",
       "fuentes": ["hoffman2015", "yosar2021", "eyewiki"]
     },
     {
       "tema": "Tipo III (MS) · Cámara anterior y ángulo",
-      "silva": "CA < 2 mm (proporcional); ángulo estrecho (podría estar abierto).",
+      "silva": "CA 2–2.5 mm (estructuralmente proporcional); ángulo estrecho (podría estar abierto).",
       "literatura": "Hoffman 2015 y EyeWiki: el microftalmo simple es hipermétrope pero con CA normal, esclera normal y sin riesgo de cierre angular.",
       "concordancia": "difiere",
-      "comentario": "La CA < 2 mm es criterio mayor del Tipo III, así que un microftalmo simple con CA normal (como lo describe la literatura) no sería Tipo III. Conviene validarlo con el autor.",
+      "comentario": "La CA 2–2.5 mm es criterio mayor del Tipo III, así que un microftalmo simple con CA normal (> 2.5 mm, como lo describe la literatura) no sería Tipo III. Conviene validarlo con el autor.",
       "fuentes": ["hoffman2015", "eyewiki"]
     },
     {
@@ -94,10 +95,10 @@
     },
     {
       "tema": "Tipo V (nanoftalmos) · Longitud axial",
-      "silva": "LA 14.5–20.5 mm",
+      "silva": "LA < 20 mm (con límite inferior de 14.5 mm como criterio de apoyo)",
       "literatura": "No hay consenso: Hoffman 2015 cita umbrales de < 20.5, < 20.0, < 18.0 y < 17.0 mm; EyeWiki usa < 21 mm.",
       "concordancia": "parcial",
-      "comentario": "20.5 mm coincide con una de las definiciones publicadas. No se encontró fuente para el límite inferior de 14.5 mm.",
+      "comentario": "20 mm coincide con una de las definiciones publicadas. No se encontró fuente para el límite inferior de 14.5 mm.",
       "fuentes": ["hoffman2015", "eyewiki", "carricondo2018"]
     },
     {
@@ -113,12 +114,12 @@
       "silva": "Efusión: Sí (propuesto como criterio mayor)",
       "literatura": "Hoffman 2015: el nanoftalmos tiene propensión a la efusión uveal por la esclera y coroides engrosadas, y algunos ojos presentan efusión de bajo grado antes de operar. En la serie de Yosar 2021 (71 ojos con LA < 21 mm) no hubo ningún caso de efusión.",
       "concordancia": "difiere",
-      "comentario": "Exigir efusión deja fuera a la mayoría de los nanoftalmos, que se clasificarían como Tipo III. Se recomienda que la efusión sea criterio de apoyo. Mientras tanto, la app emite una alerta cuando hay LA ≤ 20.5 mm y esclera > 1.4 mm sin efusión.",
+      "comentario": "Exigir efusión deja fuera a la mayoría de los nanoftalmos, que quedarían en zona gris. Se recomienda que la efusión sea criterio de apoyo. Mientras tanto, la app emite una alerta cuando hay LA < 20 mm y esclera > 1.4 mm sin efusión.",
       "fuentes": ["hoffman2015", "yosar2021"]
     },
     {
       "tema": "Tipo V (nanoftalmos) · Resto de rasgos",
-      "silva": "CA < 2.2 mm, ángulo cerrado, cristalino intumescente, microcórnea, segmentos cortos, cuerpo ciliar anteriorizado, hipermetropía alta.",
+      "silva": "CA < 2.0 mm, ángulo cerrado, cristalino intumescente, relación cristalino/volumen ocular alta, cuerpo ciliar anteriorizado, hipermetropía alta.",
       "literatura": "Hoffman 2015 y EyeWiki: CA estrecha (< 2.2 mm), iris convexo con ángulo estrecho, cristalino normal o engrosado y desproporcionado, posible microcórnea < 11 mm y alto riesgo de glaucoma de ángulo cerrado. La UBM ayuda a valorar la esclera y la desproporción del cristalino.",
       "concordancia": "concuerda",
       "fuentes": ["hoffman2015", "eyewiki", "carricondo2018"]
@@ -139,7 +140,7 @@
     },
     {
       "tema": "Trocar y vitrectomía por pars plana (tipos III, IV y V)",
-      "silva": "Tipo III: solo trocar · Tipos IV y V: vitrectomía central por PP",
+      "silva": "Tipo III: solo trocar 23 G · Tipos IV y V: vitrectomía central por PP · Excepción: LA > 22.5 mm, CA < 2.5 mm, LT > 5 mm y pupila sinequiada → vitrectomía central por PP + rexis con Utrata + facochop (en lugar de cistótomo + Stop and Chop)",
       "literatura": "Hoffman 2015: en casos extremos, un tap vítreo o una vitrectomía limitada profundiza la cámara. Recomienda un sistema de trocar-cánula (cita 25G) por la pars plana anómala y examinar la retina periférica después.",
       "concordancia": "parcial",
       "comentario": "La técnica concuerda; el calibre del trocar es una elección del cirujano.",

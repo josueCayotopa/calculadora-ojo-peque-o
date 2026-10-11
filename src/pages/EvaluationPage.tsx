@@ -11,6 +11,7 @@ import { resumenResultado, useEvaluaciones } from '@/state/EvaluationContext';
 import { guardarEnHistorial } from '@/state/history';
 
 const VACIO = {
+  pupilaSinequiada: false,
   alteracionesRetinianas: {
     retinitisPigmentaria: false,
     foveosquisis: false,
@@ -33,11 +34,6 @@ const rango = (r: { min: number; max: number }) => `${r.min}–${r.max}`;
 const SI_NO: Opcion<boolean>[] = [
   { value: false, label: 'No' },
   { value: true, label: 'Sí' },
-];
-const SEGMENTO: Opcion<string | null>[] = [
-  { value: 'normal', label: 'Normal' },
-  { value: 'corto', label: 'Corto' },
-  { value: null, label: 'Sin dato' },
 ];
 
 type ChoiceProps<T extends string | boolean | null> = {
@@ -166,7 +162,6 @@ export function EvaluationPage() {
             />
             <NumberField label="LA" unidad="mm" hint={rango(RANGOS.longitudAxial)} ayuda="Longitud axial" placeholder="20,5" registro={register('longitudAxial', num)} error={errors.longitudAxial} />
             <NumberField label="CA" unidad="mm" hint={rango(RANGOS.acd)} ayuda="Profundidad de cámara anterior, desde el endotelio" placeholder="2,1" registro={register('acd', num)} error={errors.acd} />
-            <NumberField label="W-W" unidad="mm" hint={rango(RANGOS.blancoBlanco)} ayuda="Diámetro corneal blanco-blanco. Microcórnea: < 11 mm" placeholder="10,8" registro={register('blancoBlanco', num)} error={errors.blancoBlanco} />
             <NumberField
               label="LA media ref."
               unidad="mm"
@@ -178,7 +173,6 @@ export function EvaluationPage() {
             />
             <NumberField label="DE ref." unidad="mm" opcional ayuda="Desviación estándar de referencia de la LA" placeholder="1,0" registro={register('laDEReferencia', num)} error={errors.laDEReferencia} />
             <NumberField label="Cristalino" unidad="mm" opcional ayuda="Grosor del cristalino; solo para la alerta facomórfica" placeholder="4,8" registro={register('grosorCristalino', num)} error={errors.grosorCristalino} />
-            <NumberField label="Potencia LIO" unidad="D" opcional ayuda="Potencia calculada con biometría óptica; solo para el aviso de piggyback" placeholder="32" registro={register('potenciaLio', num)} error={errors.potenciaLio} />
           </div>
         </Seccion>
 
@@ -221,41 +215,12 @@ export function EvaluationPage() {
                 { value: 'intumescente', label: 'Intumescente' },
               ]}
             />
-            <Choice
-              control={control}
-              name="cornea"
-              legend="Córnea"
-              opciones={[
-                { value: 'normal', label: 'Normal' },
-                { value: 'microcornea', label: 'Microcórnea' },
-              ]}
-            />
-          </div>
-          <div className="grid gap-x-3 gap-y-2 sm:grid-cols-[0.7fr_1.15fr_1.15fr]">
             <Choice<boolean> control={control} name="malformaciones" legend="Malformaciones" ayuda="colobomas, disgenesias" opciones={SI_NO} />
-            <Choice<string | null> control={control} name="segmentoAnterior" legend="Segmento anterior" opciones={SEGMENTO} />
-            <Choice<string | null>
-              control={control}
-              name="segmentoPosterior"
-              legend="Segmento posterior"
-              ayuda="Criterio mayor del Tipo II (MPR)"
-              opciones={SEGMENTO}
-            />
           </div>
+          <CheckboxField label="Pupila sinequiada" registro={register('pupilaSinequiada')} />
         </Seccion>
 
-        <Seccion n={4} titulo="Refracción y retina">
-          <Choice<string | null>
-            control={control}
-            name="refraccion"
-            legend="Refracción"
-            opciones={[
-              { value: 'emetropia', label: 'Emetropía' },
-              { value: 'hipermetropiaModerada', label: 'Hiper. moderada', descripcion: 'Hipermetropía moderada' },
-              { value: 'hipermetropiaAlta', label: 'Hiper. alta', descripcion: 'Hipermetropía alta' },
-              { value: null, label: 'Sin dato' },
-            ]}
-          />
+        <Seccion n={4} titulo="Retina y factores de riesgo">
           <fieldset>
             <legend className="mb-1 text-xs font-semibold text-ink">
               Alteraciones retinianas <span className="font-normal text-slateGray">(opc.)</span>

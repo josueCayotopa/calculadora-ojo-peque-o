@@ -7,11 +7,12 @@ import type { ClinicalConfig, Criterio } from './types';
  * de forma explícita en lugar de clasificar con reglas corruptas.
  */
 
-const campoNumerico = z.enum(['longitudAxial', 'acd', 'blancoBlanco', 'grosorCristalino', 'grosorEscleral', 'potenciaLio']);
-const campoEnum = z.enum(['angulo', 'cuerpoCiliar', 'cristalino', 'cornea', 'segmentoAnterior', 'segmentoPosterior', 'refraccion']);
+const campoNumerico = z.enum(['longitudAxial', 'acd', 'grosorCristalino', 'grosorEscleral']);
+const campoEnum = z.enum(['angulo', 'cuerpoCiliar', 'cristalino']);
 const campoBooleano = z.enum([
   'efusionCoroidea',
   'malformaciones',
+  'pupilaSinequiada',
   'alteracionesRetinianas.retinitisPigmentaria',
   'alteracionesRetinianas.foveosquisis',
   'alteracionesRetinianas.drusasNervioOptico',
@@ -29,10 +30,6 @@ export const VALORES_ENUM: Record<z.infer<typeof campoEnum>, readonly string[]> 
   angulo: ['abierto', 'estrecho', 'deformado', 'cerrado'],
   cuerpoCiliar: ['normal', 'anteriorizado'],
   cristalino: ['normal', 'coloboma', 'intumescente'],
-  cornea: ['normal', 'microcornea'],
-  segmentoAnterior: ['normal', 'corto'],
-  segmentoPosterior: ['normal', 'corto'],
-  refraccion: ['emetropia', 'hipermetropiaModerada', 'hipermetropiaAlta'],
 };
 
 const comunes = {
@@ -132,6 +129,7 @@ export const configSchema = z
           mensaje: z.string(),
           criterios: z.array(criterioSchema).min(1),
           exceptoTipos: z.array(z.string()).optional(),
+          reemplazaTecnica: z.array(z.string().min(1)).min(1).optional(),
         })
         .strict(),
     ),
@@ -150,7 +148,7 @@ export const configSchema = z
         biometria: z.string(),
         formulas: z.array(z.object({ nombre: z.string(), url: z.string().url(), nota: z.string().optional() }).strict()),
         piggyback: z
-          .object({ potenciaDesdeD: z.number(), longitudAxialAnticipadaMm: z.number(), mensaje: z.string() })
+          .object({ longitudAxialAnticipadaMm: z.number(), mensaje: z.string() })
           .strict(),
       })
       .strict(),
@@ -160,6 +158,8 @@ export const configSchema = z
           texto: z.string(),
           tipos: z.union([z.literal('todos'), z.array(z.string())]),
           condicion: criterioSchema.optional(),
+          siAlerta: z.string().optional(),
+          salvoAlerta: z.string().optional(),
         })
         .strict(),
     ),

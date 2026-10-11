@@ -1,4 +1,4 @@
-import { evaluarCriterio, formatNumero } from './criteria';
+import { etiquetaCriterio, evaluarCriterio, formatNumero } from './criteria';
 import type {
   ClinicalConfig,
   EyeInput,
@@ -38,12 +38,9 @@ export function alertaFacomorfica(input: EyeInput, config: ClinicalConfig): Resu
 /** Recomendación de LIO. La app NO calcula la potencia. */
 export function recomendacionLio(input: EyeInput, config: ClinicalConfig): ResultadoLio {
   const { piggyback } = config.lio;
-  const potencia = typeof input.potenciaLio === 'number' && Number.isFinite(input.potenciaLio) ? input.potenciaLio : null;
 
   let motivo: string | null = null;
-  if (potencia !== null && potencia >= piggyback.potenciaDesdeD) {
-    motivo = `Potencia calculada de ${formatNumero(potencia)} D (≥ ${formatNumero(piggyback.potenciaDesdeD)} D).`;
-  } else if (potencia === null && input.longitudAxial < piggyback.longitudAxialAnticipadaMm) {
+  if (input.longitudAxial < piggyback.longitudAxialAnticipadaMm) {
     motivo = `LA de ${formatNumero(input.longitudAxial)} mm (< ${formatNumero(
       piggyback.longitudAxialAnticipadaMm,
     )} mm): es probable que la potencia requerida sea alta. Confirme con biometría óptica.`;
@@ -54,6 +51,27 @@ export function recomendacionLio(input: EyeInput, config: ClinicalConfig): Resul
     formulas: config.lio.formulas,
     piggyback: { activa: motivo !== null, motivo, mensaje: piggyback.mensaje },
   };
+}
+
+export interface TecnicaAlternativa {
+  /** Id de la alerta clínica que la activa. */
+  id: string;
+  titulo: string;
+  /** Condiciones de la excepción, en texto («LA > 22.5 mm · CA < 2.5 mm · …»). */
+  condicion: string;
+  tecnica: string[];
+}
+
+/** Técnicas de excepción (alertas con `reemplazaTecnica`) que pueden aplicarse a un tipo. */
+export function tecnicasAlternativas(tipoId: string, config: ClinicalConfig): TecnicaAlternativa[] {
+  return config.alertasClinicas
+    .filter((a) => a.reemplazaTecnica && !a.exceptoTipos?.includes(tipoId))
+    .map((a) => ({
+      id: a.id,
+      titulo: a.titulo,
+      condicion: a.criterios.map((c) => etiquetaCriterio(c)).join(' · '),
+      tecnica: a.reemplazaTecnica!,
+    }));
 }
 
 /**
@@ -68,12 +86,15 @@ export function checklistPreoperatorio(
   const clasificado = clasificacion.estado === 'clasificado';
   const ids = new Set((clasificado ? [clasificacion.tipo!] : clasificacion.masCercanos).map((t) => t.id));
 
+  const alertas = new Set(clasificacion.alertas.map((a) => a.id));
   const items: ItemChecklistResultado[] = [];
   for (const item of config.checklistPreoperatorio) {
     const general = item.tipos === 'todos';
     const aplicaTipo = item.tipos === 'todos' || item.tipos.some((id) => ids.has(id));
     if (!aplicaTipo) continue;
     if (item.condicion && !evaluarCriterio(item.condicion, input).cumple) continue;
+    if (item.siAlerta && !alertas.has(item.siAlerta)) continue;
+    if (item.salvoAlerta && alertas.has(item.salvoAlerta)) continue;
     items.push({ texto: item.texto, referencial: !clasificado && !general });
   }
   return items;

@@ -36,7 +36,7 @@ export function HomePage() {
           <div className="space-y-3 p-6">
             <Badge>Clasificación con finalidad quirúrgica</Badge>
             <h1 className="text-3xl font-black leading-none tracking-tight text-ink xl:text-4xl">
-              Calculadora de Clasificación Clínica del <span className="text-primary">Ojo Pequeño</span>
+              Calculadora de Clasificación Clínica con finalidad quirúrgica del <span className="text-primary">Ojo Pequeño</span>
             </h1>
             <p className="max-w-2xl text-sm text-slateGray">
               Algoritmo del manejo de cirugía de catarata en ojo pequeño del Dr. Fermín Silva Cayatopa (Clínica La Luz),

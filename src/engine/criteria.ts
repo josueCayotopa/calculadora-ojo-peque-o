@@ -14,19 +14,14 @@ const EPS = 1e-9;
 export const NOMBRE_CAMPO: Record<CampoNumerico | CampoEnum | CampoBooleano, string> = {
   longitudAxial: 'LA',
   acd: 'CA',
-  blancoBlanco: 'W-W',
   grosorCristalino: 'Grosor del cristalino',
   grosorEscleral: 'Esclera',
-  potenciaLio: 'Potencia de LIO',
   angulo: 'Ángulo',
   cuerpoCiliar: 'Cuerpo ciliar',
   cristalino: 'Cristalino',
-  cornea: 'Córnea',
-  segmentoAnterior: 'Segmento anterior',
-  segmentoPosterior: 'Segmento posterior',
-  refraccion: 'Refracción',
   efusionCoroidea: 'Efusión coroidea',
   malformaciones: 'Malformaciones anatómicas',
+  pupilaSinequiada: 'Pupila sinequiada',
   'alteracionesRetinianas.retinitisPigmentaria': 'Retinitis pigmentaria',
   'alteracionesRetinianas.foveosquisis': 'Foveosquisis',
   'alteracionesRetinianas.drusasNervioOptico': 'Drusas del nervio óptico',
@@ -51,16 +46,9 @@ export const NOMBRE_VALOR: Record<string, string> = {
   intumescente: 'intumescente',
   coloboma: 'coloboma',
   microcornea: 'microcórnea',
-  emetropia: 'emetropía',
-  hipermetropiaModerada: 'hipermetropía moderada',
-  hipermetropiaAlta: 'hipermetropía alta',
 };
 
 const SIMBOLO: Record<OpComparacion, string> = { '<': '<', '<=': '≤', '>': '>', '>=': '≥' };
-
-function unidad(campo: CampoNumerico): string {
-  return campo === 'potenciaLio' ? 'D' : 'mm';
-}
 
 /** 2 → "2.0", 22.25 → "22.25", 1.40 → "1.4": al menos un decimal, como en la clasificación original. */
 export function formatNumero(n: number): string {
@@ -97,7 +85,7 @@ function leerBooleano(input: EyeInput, campo: CampoBooleano): boolean {
     const obj = (input as unknown as Record<string, Record<string, boolean> | undefined>)[grupo];
     return Boolean(obj?.[clave]);
   }
-  return Boolean(input[campo as 'efusionCoroidea' | 'malformaciones']);
+  return Boolean(input[campo as 'efusionCoroidea' | 'malformaciones' | 'pupilaSinequiada']);
 }
 
 /** Umbral de LA "media − n·DE" si el usuario ingresó referencia válida; si no, null. */
@@ -121,7 +109,7 @@ export function etiquetaCriterio(c: Criterio, input?: EyeInput): string {
     case 'entre':
       return `${formatNumero(c.min)} ${c.opMin === '>=' ? '≤' : '<'} ${NOMBRE_CAMPO[c.campo]} ${
         c.opMax === '<=' ? '≤' : '<'
-      } ${formatNumero(c.max)} ${unidad(c.campo)}`;
+      } ${formatNumero(c.max)} mm`;
     case 'en':
       return `${NOMBRE_CAMPO[c.campo]} ${c.valores.map((v) => NOMBRE_VALOR[v] ?? v).join(' o ')}`;
     case 'es':
@@ -137,7 +125,7 @@ export function etiquetaCriterio(c: Criterio, input?: EyeInput): string {
     case 'cualquiera':
       return c.etiqueta;
     default:
-      return `${NOMBRE_CAMPO[c.campo]} ${SIMBOLO[c.op]} ${formatNumero(c.valor)} ${unidad(c.campo)}`;
+      return `${NOMBRE_CAMPO[c.campo]} ${SIMBOLO[c.op]} ${formatNumero(c.valor)} mm`;
   }
 }
 
@@ -196,7 +184,7 @@ export function evaluarCriterio(c: Criterio, input: EyeInput, toleranciaLimite =
         ...base,
         campo: c.campo,
         cumple: comparar(x, c.opMin, c.min) && comparar(x, c.opMax, c.max),
-        observado: `${formatNumero(x)} ${unidad(c.campo)}`,
+        observado: `${formatNumero(x)} mm`,
         enLimite: dist <= toleranciaLimite + EPS,
       };
     }
@@ -207,7 +195,7 @@ export function evaluarCriterio(c: Criterio, input: EyeInput, toleranciaLimite =
         ...base,
         campo: c.campo,
         cumple: comparar(x, c.op, c.valor),
-        observado: `${formatNumero(x)} ${unidad(c.campo)}`,
+        observado: `${formatNumero(x)} mm`,
         enLimite: Math.abs(x - c.valor) <= toleranciaLimite + EPS,
       };
     }

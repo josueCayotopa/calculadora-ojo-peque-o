@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
 import type { EvaluacionCompleta, EyeInput } from '@/engine/types';
-import { NOMBRE_CAMPO, NOMBRE_VALOR, formatNumero } from '@/engine';
+import { NOMBRE_CAMPO, NOMBRE_VALOR, formatNumero, tecnicasAlternativas } from '@/engine';
 import { clinicalConfig, terminosUsados } from '@/config';
 import { nombreTipo, resumenResultado } from '@/state/EvaluationContext';
 
@@ -52,7 +52,6 @@ function marcados(grupo: string, obj: object): string {
 }
 
 const mmOpc = (n: number | null | undefined) => (n == null ? 'No ingresado' : `${formatNumero(n)} mm`);
-const listaOpc = (v: string | null | undefined) => (v ? NOMBRE_VALOR[v] ?? v : 'Sin dato');
 
 function datosIngresados(e: EyeInput): [string, string][] {
   return [
@@ -64,19 +63,15 @@ function datosIngresados(e: EyeInput): [string, string][] {
         : 'No ingresada (se usa LA < 21 mm)',
     ],
     ['Cámara anterior (CA)', `${formatNumero(e.acd)} mm`],
-    ['Diámetro blanco-blanco (W-W)', `${formatNumero(e.blancoBlanco)} mm`],
     ['Grosor del cristalino', mmOpc(e.grosorCristalino)],
-    ['Segmento anterior / posterior', `${listaOpc(e.segmentoAnterior)} / ${listaOpc(e.segmentoPosterior)}`],
-    ['Refracción', listaOpc(e.refraccion)],
     ['Alteraciones retinianas', marcados('alteracionesRetinianas', e.alteracionesRetinianas)],
     ['Ángulo (gonioscopía)', NOMBRE_VALOR[e.angulo]],
     ['Grosor escleral', `${formatNumero(e.grosorEscleral)} mm`],
     ['Efusión coroidea', e.efusionCoroidea ? 'Sí' : 'No'],
     ['Cuerpo ciliar (UBM)', NOMBRE_VALOR[e.cuerpoCiliar]],
     ['Cristalino', NOMBRE_VALOR[e.cristalino]],
-    ['Córnea', NOMBRE_VALOR[e.cornea]],
     ['Malformaciones (coloboma/disgenesia)', e.malformaciones ? 'Sí' : 'No'],
-    ['Potencia de LIO calculada', e.potenciaLio != null ? `${formatNumero(e.potenciaLio)} D` : 'No ingresada'],
+    ['Pupila sinequiada', e.pupilaSinequiada ? 'Sí' : 'No'],
     ['Otros factores de riesgo', marcados('factoresRiesgo', e.factoresRiesgo)],
   ];
 }
@@ -215,19 +210,48 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
         : `Tratamiento del tipo más cercano (Tipo ${tipoPlan.romano}) — solo referencial`,
     );
     parrafo(`Preoperatorio: ${tipoPlan.preoperatorio.join('; ') || '—'}`);
-    parrafo(`Técnica quirúrgica: ${tipoPlan.tecnica.join(' + ')}`, { bold: true });
+    const conAlternativas = tecnicasAlternativas(tipoPlan.id, clinicalConfig).length > 0;
+    const nombreTecnica = conAlternativas ? ` (${tipoPlan.tecnicaPorExcepcion ?? 'Técnica habitual'})` : '';
+    parrafo(`Técnica quirúrgica elegida${nombreTecnica}: ${tipoPlan.tecnica.join(' + ')}`, { bold: true });
     if (tipoPlan.pendiente) parrafo(tipoPlan.pendiente, { color: [146, 64, 14] });
+
+    // Una fila por técnica: en los tipos con excepción, la técnica habitual y la de
+    // excepción van en filas separadas y solo se marca la elegida.
+    const marca = c.estado === 'clasificado' ? ' (elegida)' : ' (más cercano)';
     const tiposCfg = clinicalConfig.tipos;
+    const filas: { tipo: string; tratamiento: string; elegida: boolean }[] = [];
+    for (const t of tiposCfg) {
+      const esPlan = t.id === tipoPlan.id;
+      const nombre = `Tipo ${t.romano} · ${t.nombre}`;
+      const alternativas = tecnicasAlternativas(t.id, clinicalConfig);
+      if (!alternativas.length) {
+        filas.push({ tipo: nombre + (esPlan ? marca : ''), tratamiento: [...t.preoperatorio, ...t.tecnica].join(' · '), elegida: esPlan });
+        continue;
+      }
+      const habitual = esPlan && !tipoPlan.tecnicaPorExcepcion;
+      filas.push({
+        tipo: `${nombre}\nTécnica habitual${habitual ? marca : ''}`,
+        tratamiento: [...t.preoperatorio, ...t.tecnica].join(' · '),
+        elegida: habitual,
+      });
+      for (const a of alternativas) {
+        const elegida = esPlan && tipoPlan.tecnicaPorExcepcion === a.titulo;
+        filas.push({
+          tipo: `${nombre}\n${a.titulo}${elegida ? marca : ''}`,
+          tratamiento: `${[...t.preoperatorio, ...a.tecnica].join(' · ')}\nSi: ${a.condicion}`,
+          elegida,
+        });
+      }
+    }
     tabla(
-      ['Tipo', 'Tratamiento'],
-      tiposCfg.map((t) => [
-        `Tipo ${t.romano} · ${t.nombre}${t.id === tipoPlan.id ? (c.estado === 'clasificado' ? ' (resultado)' : ' (más cercano)') : ''}`,
-        [...t.preoperatorio, ...t.tecnica].join(' · '),
-      ]),
+      ['Tipo / técnica', 'Tratamiento'],
+      filas.map((f) => [f.tipo, f.tratamiento]),
       { 0: { cellWidth: 70 } },
-      tiposCfg.findIndex((t) => t.id === tipoPlan.id),
+      filas.findIndex((f) => f.elegida),
     );
-    const glosario = terminosUsados(tiposCfg.flatMap((t) => [...t.preoperatorio, ...t.tecnica]));
+    const glosario = terminosUsados(
+      tiposCfg.flatMap((t) => [...t.preoperatorio, ...t.tecnica, ...tecnicasAlternativas(t.id, clinicalConfig).flatMap((a) => a.tecnica)]),
+    );
     if (glosario.length) parrafo(glosario.map((g) => `${g.termino}: ${g.definicion}`).join(' · '), { color: GRIS, size: 8.5 });
 
     titulo('Riesgo de glaucoma maligno');

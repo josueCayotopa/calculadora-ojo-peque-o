@@ -47,6 +47,7 @@ export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoCl
       cumpleMayores: mayores.total > 0 && mayores.cumplidos === mayores.total,
       preoperatorio: tipo.preoperatorio,
       tecnica: tipo.tecnica,
+      tecnicaPorExcepcion: null,
       pendiente: tipo.pendiente ?? null,
       esquema: tipo.esquema,
     };
@@ -73,7 +74,14 @@ export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoCl
   const alertas: AlertaActiva[] = config.alertasClinicas
     .filter((a) => !(tipo && a.exceptoTipos?.includes(tipo.id)))
     .filter((a) => a.criterios.every((c) => evaluarCriterio(c, input).cumple))
-    .map(({ id, titulo, mensaje }) => ({ id, titulo, mensaje }));
+    .map(({ id, titulo, mensaje, reemplazaTecnica }) => ({ id, titulo, mensaje, ...(reemplazaTecnica && { reemplazaTecnica }) }));
+
+  // Excepciones: una alerta activa puede sustituir la técnica del tipo asignado.
+  const excepcion = tipo && alertas.find((a) => a.reemplazaTecnica);
+  if (tipo && excepcion) {
+    tipo.tecnica = excepcion.reemplazaTecnica!;
+    tipo.tecnicaPorExcepcion = excepcion.titulo;
+  }
 
   return {
     estado: tipo ? 'clasificado' : 'zona_gris',

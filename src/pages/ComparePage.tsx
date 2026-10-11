@@ -25,7 +25,6 @@ type Fila = { label: string; valor: (e: EvaluacionCompleta) => React.ReactNode; 
 const mm = (n: number | null | undefined) => (n == null ? '—' : `${formatNumero(n)} mm`);
 const delta = (a: number | null | undefined, b: number | null | undefined) =>
   a == null || b == null ? '' : `Δ ${formatNumero(Math.abs(a - b))} mm`;
-const lista = (v: string | null | undefined) => (v ? NOMBRE_VALOR[v] ?? v : '—');
 
 const FILAS: Fila[] = [
   { label: 'Diagnóstico', valor: (e) => <strong>{resumenResultado(e)}</strong> },
@@ -37,9 +36,6 @@ const FILAS: Fila[] = [
     },
   },
   { label: 'Alertas clínicas', valor: (e) => (e.clasificacion.alertas.length ? e.clasificacion.alertas.map((a) => a.titulo).join('; ') : '—') },
-  { label: 'W-W', valor: (e) => mm(e.entrada.blancoBlanco), dif: (a, b) => delta(a.entrada.blancoBlanco, b.entrada.blancoBlanco) },
-  { label: 'Segmento ant. / post.', valor: (e) => `${lista(e.entrada.segmentoAnterior)} / ${lista(e.entrada.segmentoPosterior)}` },
-  { label: 'Refracción', valor: (e) => lista(e.entrada.refraccion) },
   {
     label: 'Glaucoma maligno',
     valor: (e) => (
