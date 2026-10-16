@@ -8,7 +8,7 @@ import type { ClinicalConfig, Criterio } from './types';
  */
 
 const campoNumerico = z.enum(['longitudAxial', 'acd', 'grosorCristalino', 'grosorEscleral']);
-const campoEnum = z.enum(['angulo', 'cuerpoCiliar', 'cristalino']);
+const campoEnum = z.enum(['angulo', 'cuerpoCiliar', 'cristalino', 'refraccion']);
 const campoBooleano = z.enum([
   'efusionCoroidea',
   'malformaciones',
@@ -19,6 +19,9 @@ const campoBooleano = z.enum([
   'alteracionesRetinianas.plieguesPapilomaculares',
   'alteracionesRetinianas.agujeroMacular',
   'alteracionesRetinianas.otra',
+  'alteracionesAsociadas.leves',
+  'alteracionesAsociadas.colobomas',
+  'alteracionesAsociadas.intumescencia',
   'factoresRiesgo.pseudoexfoliacion',
   'factoresRiesgo.cirugiaFiltrantePrevia',
   'factoresRiesgo.cirugiaCatarataPrevia',
@@ -30,6 +33,7 @@ export const VALORES_ENUM: Record<z.infer<typeof campoEnum>, readonly string[]> 
   angulo: ['abierto', 'estrecho', 'deformado', 'cerrado'],
   cuerpoCiliar: ['normal', 'anteriorizado'],
   cristalino: ['normal', 'coloboma', 'intumescente'],
+  refraccion: ['hipermetropiaLeve', 'hipermetropiaAlta', 'hipermetropiaModerada'],
 };
 
 const comunes = {
@@ -113,6 +117,7 @@ export const configSchema = z
             preoperatorio: z.array(z.string()),
             tecnica: z.array(z.string()),
             pendiente: z.string().optional(),
+            tabla: z.object({ refraccion: z.string(), alteracionesAsociadas: z.string() }).strict().optional(),
             esquema: esquemaSchema,
           })
           .strict()

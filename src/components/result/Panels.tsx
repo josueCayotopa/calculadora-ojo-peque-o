@@ -47,6 +47,33 @@ function ListaPasos({ items, destacado }: { items: string[]; destacado: boolean 
   );
 }
 
+/** Tratamiento del tipo resultante (o del más cercano en zona gris), para verlo sin cambiar de pestaña. */
+export function TratamientoIndicado({ evaluacion }: { evaluacion: EvaluacionCompleta }) {
+  const c = evaluacion.clasificacion;
+  const t = c.tipo ?? c.masCercanos[0];
+  return (
+    <div className="rounded-2xl border-2 border-primary bg-primary-50 px-3 py-2">
+      <h3 className="mb-1 text-sm font-black text-primary">
+        Tratamiento · Tipo {t.romano}
+        {c.estado !== 'clasificado' && <span className="ml-1 font-semibold text-amber-900">(referencial)</span>}
+      </h3>
+      <div className="grid gap-x-4 gap-y-1.5 sm:grid-cols-2">
+        <div>
+          <p className={subtitulo}>Preoperatorio</p>
+          {t.preoperatorio.length ? <ListaPasos items={t.preoperatorio} destacado /> : <p className="text-sm text-amber-900">Por definir</p>}
+        </div>
+        <div>
+          <p className={subtitulo}>
+            Técnica{t.tecnicaPorExcepcion && <span className="normal-case tracking-normal"> · {t.tecnicaPorExcepcion}</span>}
+          </p>
+          <ListaPasos items={t.tecnica} destacado />
+        </div>
+      </div>
+      {t.pendiente && <p className="mt-1 text-xs font-semibold text-amber-900">{t.pendiente}</p>}
+    </div>
+  );
+}
+
 /**
  * Tratamiento de los cinco tipos (como la tabla del autor), con el tipo
  * resultante enmarcado. En zona gris se enmarca el más cercano (referencial).

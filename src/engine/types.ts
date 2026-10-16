@@ -6,6 +6,7 @@ export type Ojo = 'OD' | 'OI';
 export type Angulo = 'abierto' | 'estrecho' | 'deformado' | 'cerrado';
 export type CuerpoCiliar = 'normal' | 'anteriorizado';
 export type Cristalino = 'normal' | 'coloboma' | 'intumescente';
+export type Refraccion = 'hipermetropiaLeve' | 'hipermetropiaAlta' | 'hipermetropiaModerada';
 /** Solo se usa en el esquema (dibujo) del tipo. */
 export type Segmento = 'normal' | 'corto';
 
@@ -16,6 +17,13 @@ export interface AlteracionesRetinianas {
   plieguesPapilomaculares: boolean;
   agujeroMacular: boolean;
   otra: boolean;
+}
+
+/** Alteraciones asociadas no retinianas de la tabla (las retinianas van en AlteracionesRetinianas). */
+export interface AlteracionesAsociadas {
+  leves: boolean;
+  colobomas: boolean;
+  intumescencia: boolean;
 }
 
 export interface FactoresRiesgo {
@@ -35,17 +43,23 @@ export interface EyeInput {
   /** Desviación estándar de referencia de la LA. Opcional (requiere la media). */
   laDEReferencia?: number | null;
   acd: number;
-  /** Grosor del cristalino. Opcional: solo se usa para la alerta facomórfica. */
+  /** Grosor del cristalino (LT). Obligatorio en el formulario; opcional en el tipo para evaluaciones antiguas. */
   grosorCristalino?: number | null;
   angulo: Angulo;
+  /** Grosor escleral en el polo posterior (PP), en mm. */
   grosorEscleral: number;
   efusionCoroidea: boolean;
   cuerpoCiliar: CuerpoCiliar;
-  cristalino: Cristalino;
+  /** Ya no se pide en el formulario; se conserva para leer evaluaciones antiguas. */
+  cristalino?: Cristalino;
   malformaciones: boolean;
+  /** Grado de hipermetropía. Opcional: puede dejarse en blanco. */
+  refraccion?: Refraccion;
   /** Pupila sinequiada: entra en la excepción de vitrectomía central por PP. */
   pupilaSinequiada: boolean;
   alteracionesRetinianas: AlteracionesRetinianas;
+  /** Opcional en el tipo para leer evaluaciones guardadas antes de añadirse. */
+  alteracionesAsociadas?: AlteracionesAsociadas;
   factoresRiesgo: FactoresRiesgo;
 }
 
@@ -54,12 +68,13 @@ export interface EyeInput {
 // ---------------------------------------------------------------------------
 
 export type CampoNumerico = 'longitudAxial' | 'acd' | 'grosorCristalino' | 'grosorEscleral';
-export type CampoEnum = 'angulo' | 'cuerpoCiliar' | 'cristalino';
+export type CampoEnum = 'angulo' | 'cuerpoCiliar' | 'cristalino' | 'refraccion';
 export type CampoBooleano =
   | 'efusionCoroidea'
   | 'malformaciones'
   | 'pupilaSinequiada'
   | `alteracionesRetinianas.${keyof AlteracionesRetinianas}`
+  | `alteracionesAsociadas.${keyof AlteracionesAsociadas}`
   | `factoresRiesgo.${keyof FactoresRiesgo}`;
 
 export type OpComparacion = '<' | '<=' | '>' | '>=';
@@ -159,6 +174,8 @@ export interface TipoClinico {
   sigla?: string;
   nombre: string;
   descripcion?: string;
+  /** Texto descriptivo de la tabla para filas que no son criterios (no influye en la clasificación). */
+  tabla?: { refraccion: string; alteracionesAsociadas: string };
   criterios: Criterio[];
   preoperatorio: string[];
   tecnica: string[];

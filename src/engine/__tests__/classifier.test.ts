@@ -22,7 +22,7 @@ describe('Tipo I — Microftalmo anterior relativo (MAR)', () => {
     const r = clasificar(input, config);
     expect(r.estado).toBe('clasificado');
     expect(r.tipo?.id).toBe('I');
-    expect(r.tipo?.mayores).toMatchObject({ cumplidos: 2, total: 2 });
+    expect(r.tipo?.mayores).toMatchObject({ cumplidos: 3, total: 3 });
   });
 
   it('caso típico: 100 % de criterios de apoyo', () => {
@@ -69,9 +69,13 @@ describe('Tipo IV — Microftalmo complejo (MC)', () => {
   it.each([
     ['caso típico', tipoIV()],
     ['malformación con LA normal (el único criterio mayor)', tipoIV({ longitudAxial: 23.0, acd: 2.8 })],
-    ['malformación sobre un ojo con perfil de MS', tipoIII({ malformaciones: true })],
+    ['malformación con ángulo deformado sobre un ojo con perfil de MS', tipoIII({ malformaciones: true, angulo: 'deformado' })],
   ])('%s → IV', (_, input) => {
     expect(diagnostico(input)).toBe('IV');
+  });
+
+  it('malformación sin ángulo deformado → zona gris (el ángulo es criterio mayor)', () => {
+    expect(diagnostico(tipoIII({ malformaciones: true }))).toBe('zona_gris');
   });
 });
 
@@ -93,15 +97,18 @@ describe('Orden de evaluación V → IV → III → II → I', () => {
     expect(r.tambienCumplen.map((t) => t.id)).not.toContain('III');
   });
 
-  it('nanoftalmos con malformación → V (se evalúa antes que IV)', () => {
+  it('nanoftalmos con malformación → V; no cumple IV porque el ángulo es cerrado, no deformado', () => {
     const r = clasificar(tipoV({ malformaciones: true }), config);
     expect(r.tipo?.id).toBe('V');
-    expect(r.tambienCumplen.map((t) => t.id)).toContain('IV');
+    expect(r.tambienCumplen.map((t) => t.id)).not.toContain('IV');
   });
 
   it('el orden es configurable', () => {
     const cfg = configClon();
     cfg.ordenEvaluacion = ['IV', 'V', 'III', 'II', 'I'];
+    // Se amplía el ángulo del IV para que un nanoftalmos con malformación cumpla ambos tipos.
+    const anguloIV = cfg.tipos.find((t) => t.id === 'IV')!.criterios.find((c) => 'campo' in c && c.campo === 'angulo');
+    if (anguloIV && anguloIV.op === 'en') anguloIV.valores = ['deformado', 'cerrado'];
     expect(diagnostico(tipoV({ malformaciones: true }), cfg)).toBe('IV');
   });
 });

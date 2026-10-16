@@ -41,7 +41,7 @@ describe('Alerta facomórfica', () => {
   it('CA < 2.5 con cristalino > 4.5 mm → alerta', () => {
     expect(alertaFacomorfica(tipoIII({ acd: 2.4, grosorCristalino: 4.6 }), config).activa).toBe(true);
   });
-  it('CA < 2.5 con cristalino intumescente (sin grosor medido) → alerta', () => {
+  it('CA < 2.5 con relación cristalino/volumen alta o intumescencia (sin grosor medido) → alerta', () => {
     expect(alertaFacomorfica(tipoV({ grosorCristalino: null }), config).activa).toBe(true);
   });
   it('CA = 2.5 exactos → sin alerta', () => {

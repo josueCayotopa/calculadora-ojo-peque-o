@@ -33,13 +33,14 @@ export const eyeInputSchema = z
     laMediaReferencia: opcional(numero('LA media de referencia', RANGOS.laMediaReferencia)),
     laDEReferencia: opcional(numero('DE de referencia', RANGOS.laDEReferencia)),
     acd: numero('Cámara anterior', RANGOS.acd),
-    grosorCristalino: opcional(numero('Grosor del cristalino', RANGOS.grosorCristalino)),
+    grosorCristalino: numero('Cristalino (LT)', RANGOS.grosorCristalino),
     angulo: obligatorio(['abierto', 'estrecho', 'deformado', 'cerrado'], 'Seleccione el ángulo por gonioscopía'),
-    grosorEscleral: numero('Grosor escleral', RANGOS.grosorEscleral),
+    grosorEscleral: numero('Grosor escleral (polo posterior)', RANGOS.grosorEscleral),
     efusionCoroidea: siNo('Indique si hay efusión coroidea/uveal'),
     cuerpoCiliar: obligatorio(['normal', 'anteriorizado'], 'Seleccione la posición del cuerpo ciliar'),
-    cristalino: obligatorio(['normal', 'coloboma', 'intumescente'], 'Seleccione el estado del cristalino'),
+    cristalino: z.enum(['normal', 'coloboma', 'intumescente']).optional(),
     malformaciones: siNo('Indique si hay malformaciones anatómicas'),
+    refraccion: z.enum(['hipermetropiaLeve', 'hipermetropiaAlta', 'hipermetropiaModerada']).optional(),
     pupilaSinequiada: z.boolean().default(false),
     alteracionesRetinianas: z.object({
       retinitisPigmentaria: z.boolean().default(false),
@@ -49,6 +50,13 @@ export const eyeInputSchema = z
       agujeroMacular: z.boolean().default(false),
       otra: z.boolean().default(false),
     }),
+    alteracionesAsociadas: z
+      .object({
+        leves: z.boolean().default(false),
+        colobomas: z.boolean().default(false),
+        intumescencia: z.boolean().default(false),
+      })
+      .default({}),
     factoresRiesgo: z.object({
       pseudoexfoliacion: z.boolean().default(false),
       cirugiaFiltrantePrevia: z.boolean().default(false),

@@ -4,20 +4,29 @@ import { Tabs } from '@/components/ui/tabs';
 import { Referencias } from '@/components/result/Panels';
 import { EyeSchematic } from '@/components/result/EyeSchematic';
 import { clinicalConfig } from '@/config';
-import { NOMBRE_VALOR, etiquetaCriterio, formatNumero, tecnicasAlternativas } from '@/engine';
-import type { Criterio } from '@/engine/types';
+import { NOMBRE_VALOR, etiquetaCriterio, formatNumero, siNo, tecnicasAlternativas } from '@/engine';
+import type { Criterio, TipoClinico } from '@/engine/types';
 
 /** Filas de la tabla: qué campo(s) muestra cada fila (mismo orden que la diapositiva). */
-const FILAS: { titulo: string; campos: string[] }[] = [
+type FilaTabla = {
+  titulo: string;
+  campos?: string[];
+  /** Fila sin valores: los médicos ya los conocen. */
+  vacia?: boolean;
+  texto?: keyof NonNullable<TipoClinico['tabla']>;
+};
+
+const FILAS: FilaTabla[] = [
   { titulo: 'Longitud axial (LA)', campos: ['longitudAxial'] },
   { titulo: 'Cámara anterior (CA)', campos: ['acd'] },
   { titulo: 'Ángulo', campos: ['angulo'] },
   { titulo: 'Grosor escleral', campos: ['grosorEscleral'] },
   { titulo: 'Efusión coroidea', campos: ['efusionCoroidea'] },
   { titulo: 'Cuerpo ciliar', campos: ['cuerpoCiliar'] },
-  { titulo: 'Cristalino', campos: ['cristalino'] },
-  { titulo: 'Malformaciones', campos: ['malformaciones'] },
-  { titulo: 'Alteraciones asociadas', campos: ['retina'] },
+  { titulo: 'Cristalino (LT)', vacia: true },
+  { titulo: 'Malformaciones anatómicas', campos: ['malformaciones'] },
+  { titulo: 'Refracción', texto: 'refraccion' },
+  { titulo: 'Alteraciones asociadas', texto: 'alteracionesAsociadas' },
 ];
 
 const SIM: Record<string, string> = { '<': '<', '<=': '≤', '>': '>', '>=': '≥' };
@@ -36,7 +45,12 @@ function celda(c: Criterio): string {
     case 'en':
       return c.valores.map((v) => NOMBRE_VALOR[v] ?? v).join(' o ');
     case 'es':
-      return c.valor ? 'Sí' : 'No';
+      // La precisión entre paréntesis de la etiqueta del criterio (p. ej. «(uveal)» del tipo IV) se muestra junto al Sí.
+      if (c.valor && c.etiqueta) {
+        const precision = /\((.+)\)\s*$/.exec(c.etiqueta);
+        if (precision) return `Sí (${precision[1]})`;
+      }
+      return siNo(c.campo, c.valor);
     case 'bajoDE':
       return `${SIM[c.opComparacion]} ${formatNumero(c.valorRespaldo)} mm (−${c.nDE} DE)`;
     case 'iguales':
@@ -86,7 +100,9 @@ function TablaClasificacion() {
                 {f.titulo}
               </th>
               {cfg.tipos.map((t) => {
-                const crit = t.criterios.filter((c) => f.campos.includes(claveCriterio(c)));
+                if (f.vacia) return <td key={t.id} className={td} />;
+                if (f.texto) return <td key={t.id} className={td}>{t.tabla?.[f.texto] ?? '—'}</td>;
+                const crit = t.criterios.filter((c) => f.campos?.includes(claveCriterio(c)));
                 return (
                   <td key={t.id} className={td}>
                     {crit.length === 0

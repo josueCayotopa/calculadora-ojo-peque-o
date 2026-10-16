@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Controller, useForm, type Control, type Path } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -6,12 +6,29 @@ import { Calculator, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChoiceGroup, CheckboxField, NumberField, type Opcion } from '@/components/FormFields';
 import { RANGOS, eyeInputSchema, parseDecimal, type EyeInputForm } from '@/schemas/eyeInput';
-import type { EyeInput, Ojo } from '@/engine/types';
+import type { EyeInput, Ojo, Refraccion } from '@/engine/types';
 import { resumenResultado, useEvaluaciones } from '@/state/EvaluationContext';
 import { guardarEnHistorial } from '@/state/history';
 
-const VACIO = {
+/**
+ * Campos que ya no se piden en el formulario. Se fijan siempre a su valor neutro
+ * (también al editar una evaluación antigua) para que no influyan sin verse.
+ */
+const SIN_EXTRAS = {
+  laMediaReferencia: null,
+  laDEReferencia: null,
   pupilaSinequiada: false,
+  factoresRiesgo: {
+    pseudoexfoliacion: false,
+    cirugiaFiltrantePrevia: false,
+    cirugiaCatarataPrevia: false,
+    cierreAngularAgudoAdelfo: false,
+    antecedenteFamiliarGlaucoma: false,
+  },
+} satisfies Partial<EyeInputForm>;
+
+const VACIO = {
+  ...SIN_EXTRAS,
   alteracionesRetinianas: {
     retinitisPigmentaria: false,
     foveosquisis: false,
@@ -20,21 +37,16 @@ const VACIO = {
     agujeroMacular: false,
     otra: false,
   },
-  factoresRiesgo: {
-    pseudoexfoliacion: false,
-    cirugiaFiltrantePrevia: false,
-    cirugiaCatarataPrevia: false,
-    cierreAngularAgudoAdelfo: false,
-    antecedenteFamiliarGlaucoma: false,
-  },
+  alteracionesAsociadas: { leves: false, colobomas: false, intumescencia: false },
 } as Partial<EyeInputForm>;
 
 const num = { setValueAs: parseDecimal };
+
+/** Las evaluaciones antiguas guardaban otras opciones de refracción (emétrope…): se dejan en blanco al editar. */
+const REFRACCIONES: readonly Refraccion[] = ['hipermetropiaLeve', 'hipermetropiaAlta', 'hipermetropiaModerada'];
+const refraccionVigente = (r: string | undefined): Refraccion | undefined => REFRACCIONES.find((x) => x === r);
+
 const rango = (r: { min: number; max: number }) => `${r.min}–${r.max}`;
-const SI_NO: Opcion<boolean>[] = [
-  { value: false, label: 'No' },
-  { value: true, label: 'Sí' },
-];
 
 type ChoiceProps<T extends string | boolean | null> = {
   control: Control<EyeInputForm, unknown, EyeInput>;
@@ -65,22 +77,9 @@ function Choice<T extends string | boolean | null>({ control, name, ...rest }: C
   );
 }
 
-/** Sección numerada del formulario (equivale a un "paso", pero todas visibles a la vez). */
-function Seccion({ n, titulo, extra, children }: { n: number; titulo: string; extra?: ReactNode; children: ReactNode }) {
-  return (
-    <section aria-labelledby={`sec-${n}`} className="flex flex-col gap-3 rounded-3xl border border-gray-100 bg-white p-4 shadow-sm">
-      <div className="flex items-center justify-between gap-3">
-        <h2 id={`sec-${n}`} className="flex items-center gap-2 text-sm font-bold text-ink">
-          <span className="flex size-6 items-center justify-center rounded-full bg-primary text-xs text-white" aria-hidden="true">
-            {n}
-          </span>
-          {titulo}
-        </h2>
-        {extra}
-      </div>
-      {children}
-    </section>
-  );
+/** Una fila de la lista de variables. */
+function Fila({ children }: { children: ReactNode }) {
+  return <li className="py-3 first:pt-0 last:pb-0">{children}</li>;
 }
 
 export function EvaluationPage() {
@@ -96,41 +95,27 @@ export function EvaluationPage() {
   const {
     register,
     control,
-    getValues,
-    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<EyeInputForm, unknown, EyeInput>({
     resolver: zodResolver(eyeInputSchema),
-    defaultValues: previa ?? { ...VACIO, ojo: ojoInicial },
+    defaultValues: previa ? { ...VACIO, ...previa, grosorCristalino: previa.grosorCristalino ?? undefined, refraccion: refraccionVigente(previa.refraccion), ...SIN_EXTRAS } : { ...VACIO, ojo: ojoInicial },
     mode: 'onTouched',
     shouldFocusError: true,
   });
 
-  const calcular = handleSubmit((data) => {
+  const onSubmit = handleSubmit((data) => {
     const r = evaluar(data);
     if (guardar) guardarEnHistorial({ ojo: data.ojo, entrada: data, resumen: resumenResultado(r) });
     navigate(`/resultado/${data.ojo}`);
   });
 
-  function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    // "Media y DE juntas" es una regla de todo el formulario: se avisa aunque haya otros errores.
-    const [media, de] = getValues(['laMediaReferencia', 'laDEReferencia']);
-    if ((media == null) !== (de == null)) {
-      setError(media == null ? 'laMediaReferencia' : 'laDEReferencia', {
-        message: 'Ingrese media y DE juntas (o ninguna)',
-      });
-    }
-    void calcular();
-  }
-
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-3">
+    <form onSubmit={onSubmit} noValidate className="mx-auto flex w-full max-w-3xl flex-col gap-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-black tracking-tight text-ink">{previa ? 'Editar evaluación' : 'Nueva evaluación'}</h1>
-          <p className="hidden text-xs text-slateGray xl:block">Complete las 4 secciones. Los datos no salen de este dispositivo.</p>
+          <p className="hidden text-xs text-slateGray xl:block">Complete las variables. Los datos no salen de este dispositivo.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <label className="flex cursor-pointer items-center gap-2 text-xs text-slateGray" title="Solo medidas y fecha, sin datos del paciente, en este navegador.">
@@ -148,106 +133,110 @@ export function EvaluationPage() {
         </div>
       </div>
 
-      <div className="grid gap-3 lg:grid-cols-2">
-        <Seccion n={1} titulo="Biometría">
-          <div className="grid grid-cols-2 gap-x-3 gap-y-2 sm:grid-cols-4">
-            <Choice<Ojo>
-              control={control}
-              name="ojo"
-              legend="Ojo"
-              opciones={[
-                { value: 'OD', label: 'OD', descripcion: 'Ojo derecho' },
-                { value: 'OI', label: 'OI', descripcion: 'Ojo izquierdo' },
-              ]}
-            />
-            <NumberField label="LA" unidad="mm" hint={rango(RANGOS.longitudAxial)} ayuda="Longitud axial" placeholder="20,5" registro={register('longitudAxial', num)} error={errors.longitudAxial} />
-            <NumberField label="CA" unidad="mm" hint={rango(RANGOS.acd)} ayuda="Profundidad de cámara anterior, desde el endotelio" placeholder="2,1" registro={register('acd', num)} error={errors.acd} />
-            <NumberField
-              label="LA media ref."
-              unidad="mm"
-              opcional
-              ayuda="LA media de referencia (edad/población) para el criterio «< media − 2 DE». Si se deja vacía se usa LA < 21 mm."
-              placeholder="23,5"
-              registro={register('laMediaReferencia', num)}
-              error={errors.laMediaReferencia}
-            />
-            <NumberField label="DE ref." unidad="mm" opcional ayuda="Desviación estándar de referencia de la LA" placeholder="1,0" registro={register('laDEReferencia', num)} error={errors.laDEReferencia} />
-            <NumberField label="Cristalino" unidad="mm" opcional ayuda="Grosor del cristalino; solo para la alerta facomórfica" placeholder="4,8" registro={register('grosorCristalino', num)} error={errors.grosorCristalino} />
-          </div>
-        </Seccion>
-
-        <Seccion n={2} titulo="Gonioscopía y UBM">
+      <ol className="divide-y divide-gray-100 rounded-3xl border border-gray-100 bg-white p-4 shadow-sm">
+        <Fila>
+          <Choice<Ojo>
+            control={control}
+            name="ojo"
+            legend="Ojo"
+            opciones={[
+              { value: 'OD', label: 'OD', descripcion: 'Ojo derecho' },
+              { value: 'OI', label: 'OI', descripcion: 'Ojo izquierdo' },
+            ]}
+          />
+        </Fila>
+        <Fila>
+          <NumberField label="Longitud axial" unidad="mm" hint={rango(RANGOS.longitudAxial)} registro={register('longitudAxial', num)} error={errors.longitudAxial} />
+        </Fila>
+        <Fila>
+          <NumberField label="Cámara anterior" unidad="mm" hint={rango(RANGOS.acd)} ayuda="Profundidad de cámara anterior, desde el endotelio" registro={register('acd', num)} error={errors.acd} />
+        </Fila>
+        <Fila>
           <Choice
             control={control}
             name="angulo"
-            legend="Ángulo (gonioscopía)"
+            legend="Ángulo"
+            ayuda="Gonioscopía"
             opciones={[
               { value: 'abierto', label: 'Abierto' },
               { value: 'estrecho', label: 'Estrecho/ocluible' },
               { value: 'deformado', label: 'Deformado' },
-              { value: 'cerrado', label: 'Cerrado/ocluido' },
+              { value: 'cerrado', label: 'Cerrado/ocluible' },
             ]}
           />
-          <div className="grid gap-x-3 gap-y-2 sm:grid-cols-[1fr_1fr_1.4fr]">
-            <NumberField label="Esclera" unidad="mm" hint={rango(RANGOS.grosorEscleral)} ayuda="Grosor escleral por ecografía / UBM" placeholder="1,1" registro={register('grosorEscleral', num)} error={errors.grosorEscleral} />
-            <Choice<boolean> control={control} name="efusionCoroidea" legend="Efusión coroidea" opciones={SI_NO} />
-            <Choice
-              control={control}
-              name="cuerpoCiliar"
-              legend="Cuerpo ciliar (UBM)"
-              opciones={[
-                { value: 'normal', label: 'Normal' },
-                { value: 'anteriorizado', label: 'Anteriorizado' },
-              ]}
-            />
-          </div>
-        </Seccion>
-
-        <Seccion n={3} titulo="Hallazgos">
-          <div className="grid gap-x-3 gap-y-2 sm:grid-cols-[1.5fr_1fr]">
-            <Choice
-              control={control}
-              name="cristalino"
-              legend="Cristalino"
-              opciones={[
-                { value: 'normal', label: 'Normal' },
-                { value: 'coloboma', label: 'Coloboma' },
-                { value: 'intumescente', label: 'Intumescente' },
-              ]}
-            />
-            <Choice<boolean> control={control} name="malformaciones" legend="Malformaciones" ayuda="colobomas, disgenesias" opciones={SI_NO} />
-          </div>
-          <CheckboxField label="Pupila sinequiada" registro={register('pupilaSinequiada')} />
-        </Seccion>
-
-        <Seccion n={4} titulo="Retina y factores de riesgo">
+        </Fila>
+        <Fila>
+          <NumberField label="Grosor escleral – polo posterior (PP)" unidad="mm" hint={rango(RANGOS.grosorEscleral)} ayuda="Grosor escleral en el polo posterior, por ecografía / UBM" registro={register('grosorEscleral', num)} error={errors.grosorEscleral} />
+        </Fila>
+        <Fila>
+          <Choice<boolean>
+            control={control}
+            name="efusionCoroidea"
+            legend="Efusión coroidea"
+            opciones={[
+              { value: false, label: 'No' },
+              { value: true, label: 'Sí' },
+            ]}
+          />
+        </Fila>
+        <Fila>
+          <Choice
+            control={control}
+            name="cuerpoCiliar"
+            legend="Cuerpo ciliar"
+            ayuda="UBM"
+            opciones={[
+              { value: 'normal', label: 'Normal' },
+              { value: 'anteriorizado', label: 'Anteriorizado' },
+            ]}
+          />
+        </Fila>
+        <Fila>
+          <NumberField label="Cristalino (LT)" unidad="mm" hint={rango(RANGOS.grosorCristalino)} ayuda="Grosor del cristalino" registro={register('grosorCristalino', num)} error={errors.grosorCristalino} />
+        </Fila>
+        <Fila>
+          <Choice<boolean>
+            control={control}
+            name="malformaciones"
+            legend="Malformaciones anatómicas"
+            opciones={[
+              { value: false, label: 'No' },
+              { value: true, label: 'Sí (colobomas y disgenesias)' },
+            ]}
+          />
+        </Fila>
+        <Fila>
+          <Choice<Refraccion>
+            control={control}
+            name="refraccion"
+            legend="Refracción (opc.)"
+            ayuda="Opcional: puede dejarse en blanco"
+            opciones={[
+              { value: 'hipermetropiaLeve', label: 'Hipermetropía leve' },
+              { value: 'hipermetropiaAlta', label: 'Hipermetropía alta' },
+              { value: 'hipermetropiaModerada', label: 'Hipermetropía moderada' },
+            ]}
+          />
+        </Fila>
+        <Fila>
           <fieldset>
             <legend className="mb-1 text-xs font-semibold text-ink">
-              Alteraciones retinianas <span className="font-normal text-slateGray">(opc.)</span>
+              Alteraciones asociadas <span className="font-normal text-slateGray">(opc. · sin marcar = No)</span>
             </legend>
             <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
+              <CheckboxField label="Leves" registro={register('alteracionesAsociadas.leves')} />
               <CheckboxField label="Retinitis pigmentaria" registro={register('alteracionesRetinianas.retinitisPigmentaria')} />
               <CheckboxField label="Foveosquisis" registro={register('alteracionesRetinianas.foveosquisis')} />
               <CheckboxField label="Drusas del NO" registro={register('alteracionesRetinianas.drusasNervioOptico')} />
               <CheckboxField label="Pliegues papilomaculares" registro={register('alteracionesRetinianas.plieguesPapilomaculares')} />
               <CheckboxField label="Agujero macular" registro={register('alteracionesRetinianas.agujeroMacular')} />
-              <CheckboxField label="Otra" registro={register('alteracionesRetinianas.otra')} />
+              <CheckboxField label="Colobomas" registro={register('alteracionesAsociadas.colobomas')} />
+              <CheckboxField label="Otra alteración retiniana" registro={register('alteracionesRetinianas.otra')} />
+              <CheckboxField label="Intumescencia" registro={register('alteracionesAsociadas.intumescencia')} />
             </div>
           </fieldset>
-          <fieldset>
-            <legend className="mb-1 text-xs font-semibold text-ink">
-              Otros factores de riesgo de glaucoma maligno <span className="font-normal text-slateGray">(opc.)</span>
-            </legend>
-            <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
-              <CheckboxField label="Pseudoexfoliación" registro={register('factoresRiesgo.pseudoexfoliacion')} />
-              <CheckboxField label="Cirugía filtrante" registro={register('factoresRiesgo.cirugiaFiltrantePrevia')} />
-              <CheckboxField label="Catarata previa" registro={register('factoresRiesgo.cirugiaCatarataPrevia')} />
-              <CheckboxField label="Cierre angular agudo adelfo" registro={register('factoresRiesgo.cierreAngularAgudoAdelfo')} />
-              <CheckboxField label="Glaucoma familiar" registro={register('factoresRiesgo.antecedenteFamiliarGlaucoma')} />
-            </div>
-          </fieldset>
-        </Seccion>
-      </div>
+        </Fila>
+      </ol>
     </form>
   );
 }

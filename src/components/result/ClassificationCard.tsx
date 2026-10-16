@@ -6,6 +6,7 @@ import { nombreTipo } from '@/state/EvaluationContext';
 import { cn } from '@/lib/utils';
 import { BarraPorcentaje, CriteriaList } from './CriteriaList';
 import { EyeSchematic, describirEsquema } from './EyeSchematic';
+import { TratamientoIndicado } from './Panels';
 
 /** Alertas que no deben quedar escondidas en una pestaña: se muestran junto al diagnóstico. */
 export const ALERTAS_CRITICAS = new Set(['rasgos-nanoftalmos', 'excepcion-vitrectomia']);
@@ -166,8 +167,9 @@ export function PanelCriterios({ evaluacion }: { evaluacion: EvaluacionCompleta 
                 ))}
             </ul>
           )}
-          <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+          <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
             <DetalleTipo t={actual} />
+            <TratamientoIndicado evaluacion={evaluacion} />
           </div>
         </>
       )}

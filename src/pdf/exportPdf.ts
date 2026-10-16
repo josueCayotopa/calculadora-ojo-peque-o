@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
 import type { EvaluacionCompleta, EyeInput } from '@/engine/types';
-import { NOMBRE_CAMPO, NOMBRE_VALOR, formatNumero, tecnicasAlternativas } from '@/engine';
+import { NOMBRE_CAMPO, NOMBRE_VALOR, formatNumero, siNo, tecnicasAlternativas } from '@/engine';
 import { clinicalConfig, terminosUsados } from '@/config';
 import { nombreTipo, resumenResultado } from '@/state/EvaluationContext';
 
@@ -51,28 +51,19 @@ function marcados(grupo: string, obj: object): string {
   return nombres.length ? nombres.join(', ') : 'Ninguno';
 }
 
-const mmOpc = (n: number | null | undefined) => (n == null ? 'No ingresado' : `${formatNumero(n)} mm`);
-
 function datosIngresados(e: EyeInput): [string, string][] {
   return [
     ['Longitud axial (LA)', `${formatNumero(e.longitudAxial)} mm`],
-    [
-      'LA de referencia (media ± DE)',
-      e.laMediaReferencia != null && e.laDEReferencia != null
-        ? `${formatNumero(e.laMediaReferencia)} ± ${formatNumero(e.laDEReferencia)} mm`
-        : 'No ingresada (se usa LA < 21 mm)',
-    ],
     ['Cámara anterior (CA)', `${formatNumero(e.acd)} mm`],
-    ['Grosor del cristalino', mmOpc(e.grosorCristalino)],
-    ['Alteraciones retinianas', marcados('alteracionesRetinianas', e.alteracionesRetinianas)],
     ['Ángulo (gonioscopía)', NOMBRE_VALOR[e.angulo]],
-    ['Grosor escleral', `${formatNumero(e.grosorEscleral)} mm`],
-    ['Efusión coroidea', e.efusionCoroidea ? 'Sí' : 'No'],
+    ['Grosor escleral (polo posterior)', `${formatNumero(e.grosorEscleral)} mm`],
+    ['Efusión coroidea', siNo('efusionCoroidea', e.efusionCoroidea)],
     ['Cuerpo ciliar (UBM)', NOMBRE_VALOR[e.cuerpoCiliar]],
-    ['Cristalino', NOMBRE_VALOR[e.cristalino]],
-    ['Malformaciones (coloboma/disgenesia)', e.malformaciones ? 'Sí' : 'No'],
-    ['Pupila sinequiada', e.pupilaSinequiada ? 'Sí' : 'No'],
-    ['Otros factores de riesgo', marcados('factoresRiesgo', e.factoresRiesgo)],
+    ['Cristalino (LT)', e.grosorCristalino != null ? `${formatNumero(e.grosorCristalino)} mm` : 'No ingresado'],
+    ['Malformaciones anatómicas', siNo('malformaciones', e.malformaciones)],
+    ['Refracción', e.refraccion ? (NOMBRE_VALOR[e.refraccion] ?? e.refraccion) : 'No ingresada'],
+    ['Alteraciones asociadas', marcados('alteracionesAsociadas', e.alteracionesAsociadas ?? {})],
+    ['Alteraciones retinianas', marcados('alteracionesRetinianas', e.alteracionesRetinianas)],
   ];
 }
 

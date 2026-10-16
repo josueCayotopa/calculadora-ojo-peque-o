@@ -51,7 +51,7 @@
       "silva": "LA < 22.5 mm",
       "literatura": "En las series publicadas las LA suelen ser mucho menores (del orden de 15.5 a 18.6 mm en una serie con hipermetropía de +11 a +15.75 D).",
       "concordancia": "parcial",
-      "comentario": "El umbral de 22.5 mm es amplio. La app ya no evalúa los segmentos anterior y posterior, así que los criterios mayores del Tipo II son la CA > 2.5 mm y la LA < 22.5 mm.",
+      "comentario": "El umbral de 22.5 mm es amplio. La app ya no evalúa los segmentos anterior y posterior, así que los criterios mayores del Tipo II son la CA > 2.5 mm, la LA < 22.5 mm y el ángulo estrecho/ocluible.",
       "fuentes": ["posterior2016"]
     },
     {
@@ -119,7 +119,7 @@
     },
     {
       "tema": "Tipo V (nanoftalmos) · Resto de rasgos",
-      "silva": "CA < 2.0 mm, ángulo cerrado, cristalino intumescente, relación cristalino/volumen ocular alta, cuerpo ciliar anteriorizado, hipermetropía alta.",
+      "silva": "CA < 2.0 mm, ángulo cerrado/ocluible (criterio mayor), intumescencia, cuerpo ciliar anteriorizado, hipermetropía alta.",
       "literatura": "Hoffman 2015 y EyeWiki: CA estrecha (< 2.2 mm), iris convexo con ángulo estrecho, cristalino normal o engrosado y desproporcionado, posible microcórnea < 11 mm y alto riesgo de glaucoma de ángulo cerrado. La UBM ayuda a valorar la esclera y la desproporción del cristalino.",
       "concordancia": "concuerda",
       "fuentes": ["hoffman2015", "eyewiki", "carricondo2018"]

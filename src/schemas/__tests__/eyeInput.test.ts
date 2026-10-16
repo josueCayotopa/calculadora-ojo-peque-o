@@ -5,6 +5,7 @@ const valido = {
   ojo: 'OD',
   longitudAxial: 21.5,
   acd: 2.3,
+  grosorCristalino: 4.2,
   angulo: 'estrecho',
   grosorEscleral: 1.1,
   efusionCoroidea: false,
@@ -12,6 +13,7 @@ const valido = {
   cristalino: 'normal',
 
   malformaciones: false,
+  refraccion: 'hipermetropiaModerada',
   alteracionesRetinianas: {},
   factoresRiesgo: {},
 };
@@ -28,8 +30,6 @@ describe('eyeInputSchema', () => {
     ['longitudAxial', 30.1],
     ['acd', 0.4],
     ['acd', 5.1],
-    ['grosorEscleral', 0.29],
-    ['grosorEscleral', 3.01],
   ])('rechaza %s = %s (fuera de rango)', (campo, valor) => {
     expect(eyeInputSchema.safeParse({ ...valido, [campo]: valor }).success).toBe(false);
   });
@@ -43,11 +43,20 @@ describe('eyeInputSchema', () => {
     expect(eyeInputSchema.safeParse({ ...valido, [campo]: valor }).success).toBe(true);
   });
 
-  it('exige ángulo, efusión, cuerpo ciliar, cristalino y malformaciones', () => {
-    for (const campo of ['angulo', 'efusionCoroidea', 'cuerpoCiliar', 'cristalino', 'malformaciones']) {
+  it('exige ángulo, efusión, cuerpo ciliar y malformaciones', () => {
+    for (const campo of ['angulo', 'efusionCoroidea', 'cuerpoCiliar', 'malformaciones']) {
       const { [campo]: _, ...sin } = valido as Record<string, unknown>;
       expect(eyeInputSchema.safeParse(sin).success, campo).toBe(false);
     }
+  });
+
+  it('la refracción es opcional', () => {
+    const { refraccion: _, ...sin } = valido;
+    expect(eyeInputSchema.safeParse(sin).success).toBe(true);
+  });
+
+  it.each([0.29, 3.01])('rechaza grosor escleral = %s (fuera de rango)', (v) => {
+    expect(eyeInputSchema.safeParse({ ...valido, grosorEscleral: v }).success).toBe(false);
   });
 
   it('acepta el ángulo "deformado"', () => {
@@ -59,8 +68,10 @@ describe('eyeInputSchema', () => {
     expect(eyeInputSchema.safeParse({ ...valido, laMediaReferencia: 23.5, laDEReferencia: 1 }).success).toBe(true);
   });
 
-  it('el grosor del cristalino es opcional', () => {
-    expect(eyeInputSchema.safeParse({ ...valido, grosorCristalino: null }).success).toBe(true);
+  it('exige el cristalino (LT) y lo valida en rango', () => {
+    expect(eyeInputSchema.safeParse({ ...valido, grosorCristalino: null }).success).toBe(false);
+    expect(eyeInputSchema.safeParse({ ...valido, grosorCristalino: 1.9 }).success).toBe(false);
+    expect(eyeInputSchema.safeParse({ ...valido, grosorCristalino: 7.1 }).success).toBe(false);
   });
 
   it('rechaza NaN con un mensaje legible', () => {

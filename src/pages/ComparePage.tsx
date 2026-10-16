@@ -3,7 +3,7 @@ import { FileDown, Plus } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert } from '@/components/ui/alert';
-import { NOMBRE_VALOR, formatNumero } from '@/engine';
+import { NOMBRE_VALOR, formatNumero, siNo } from '@/engine';
 import type { EvaluacionCompleta, NivelRiesgo, Ojo } from '@/engine/types';
 import { resumenResultado, useEvaluaciones } from '@/state/EvaluationContext';
 import { useExportarPdf } from './ResultPage';
@@ -47,12 +47,13 @@ const FILAS: Fila[] = [
   { label: 'Alerta facomórfica', valor: (e) => (e.facomorfico.activa ? <Badge variant="danger">Sí</Badge> : 'No') },
   { label: 'Aviso piggyback', valor: (e) => (e.lio.piggyback.activa ? <Badge variant="warning">Sí</Badge> : 'No') },
   { label: 'Longitud axial', valor: (e) => mm(e.entrada.longitudAxial), dif: (a, b) => delta(a.entrada.longitudAxial, b.entrada.longitudAxial) },
-  { label: 'CA', valor: (e) => mm(e.entrada.acd), dif: (a, b) => delta(a.entrada.acd, b.entrada.acd) },
-  { label: 'Grosor del cristalino', valor: (e) => mm(e.entrada.grosorCristalino), dif: (a, b) => delta(a.entrada.grosorCristalino, b.entrada.grosorCristalino) },
-  { label: 'Grosor escleral', valor: (e) => mm(e.entrada.grosorEscleral), dif: (a, b) => delta(a.entrada.grosorEscleral, b.entrada.grosorEscleral) },
+  { label: 'Cámara anterior', valor: (e) => mm(e.entrada.acd), dif: (a, b) => delta(a.entrada.acd, b.entrada.acd) },
+  { label: 'Grosor escleral (PP)', valor: (e) => mm(e.entrada.grosorEscleral), dif: (a, b) => delta(a.entrada.grosorEscleral, b.entrada.grosorEscleral) },
   { label: 'Ángulo', valor: (e) => NOMBRE_VALOR[e.entrada.angulo] },
-  { label: 'Efusión coroidea', valor: (e) => (e.entrada.efusionCoroidea ? 'Sí' : 'No') },
+  { label: 'Efusión coroidea', valor: (e) => siNo('efusionCoroidea', e.entrada.efusionCoroidea) },
   { label: 'Cuerpo ciliar', valor: (e) => NOMBRE_VALOR[e.entrada.cuerpoCiliar] },
+  { label: 'Cristalino (LT)', valor: (e) => mm(e.entrada.grosorCristalino), dif: (a, b) => delta(a.entrada.grosorCristalino, b.entrada.grosorCristalino) },
+  { label: 'Refracción', valor: (e) => (e.entrada.refraccion ? (NOMBRE_VALOR[e.entrada.refraccion] ?? e.entrada.refraccion) : '—') },
 ];
 
 export function ComparePage() {

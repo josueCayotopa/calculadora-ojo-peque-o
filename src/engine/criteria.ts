@@ -14,11 +14,12 @@ const EPS = 1e-9;
 export const NOMBRE_CAMPO: Record<CampoNumerico | CampoEnum | CampoBooleano, string> = {
   longitudAxial: 'LA',
   acd: 'CA',
-  grosorCristalino: 'Grosor del cristalino',
-  grosorEscleral: 'Esclera',
+  grosorCristalino: 'Cristalino (LT)',
+  grosorEscleral: 'Esclera polo posterior',
   angulo: 'Ángulo',
   cuerpoCiliar: 'Cuerpo ciliar',
   cristalino: 'Cristalino',
+  refraccion: 'Refracción',
   efusionCoroidea: 'Efusión coroidea',
   malformaciones: 'Malformaciones anatómicas',
   pupilaSinequiada: 'Pupila sinequiada',
@@ -28,6 +29,9 @@ export const NOMBRE_CAMPO: Record<CampoNumerico | CampoEnum | CampoBooleano, str
   'alteracionesRetinianas.plieguesPapilomaculares': 'Pliegues papilomaculares',
   'alteracionesRetinianas.agujeroMacular': 'Agujero macular',
   'alteracionesRetinianas.otra': 'Otra alteración retiniana',
+  'alteracionesAsociadas.leves': 'Alteraciones leves',
+  'alteracionesAsociadas.colobomas': 'Colobomas',
+  'alteracionesAsociadas.intumescencia': 'Intumescencia',
   'factoresRiesgo.pseudoexfoliacion': 'Pseudoexfoliación',
   'factoresRiesgo.cirugiaFiltrantePrevia': 'Cirugía filtrante previa',
   'factoresRiesgo.cirugiaCatarataPrevia': 'Cirugía de catarata previa',
@@ -39,14 +43,24 @@ export const NOMBRE_VALOR: Record<string, string> = {
   abierto: 'abierto',
   estrecho: 'estrecho/ocluible',
   deformado: 'deformado',
-  cerrado: 'cerrado/ocluido',
+  cerrado: 'cerrado/ocluible',
   normal: 'normal',
   corto: 'corto',
   anteriorizado: 'anteriorizado',
   intumescente: 'intumescente',
   coloboma: 'coloboma',
   microcornea: 'microcórnea',
+  hipermetropiaLeve: 'hipermetropía leve',
+  hipermetropiaAlta: 'hipermetropía alta',
+  hipermetropiaModerada: 'hipermetropía moderada',
 };
+
+/** Texto del «Sí» con su precisión clínica, como en la tabla de clasificación. */
+export const TEXTO_SI: Partial<Record<CampoBooleano, string>> = {
+  malformaciones: 'Sí (colobomas y disgenesias)',
+};
+
+export const siNo = (campo: CampoBooleano, v: boolean): string => (v ? (TEXTO_SI[campo] ?? 'Sí') : 'No');
 
 const SIMBOLO: Record<OpComparacion, string> = { '<': '<', '<=': '≤', '>': '>', '>=': '≥' };
 

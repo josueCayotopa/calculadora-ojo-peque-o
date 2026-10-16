@@ -72,4 +72,5 @@ export const tipoIV = base({
 export const tipoV = base({
   longitudAxial: 18.0, acd: 1.7, angulo: 'cerrado', grosorEscleral: 1.8, efusionCoroidea: true,
   cuerpoCiliar: 'anteriorizado', cristalino: 'intumescente', malformaciones: false,
+  alteracionesAsociadas: { leves: false, colobomas: false, intumescencia: true },
 });
