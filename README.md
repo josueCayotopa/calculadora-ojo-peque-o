@@ -49,10 +49,10 @@ Medidas en mm. No influyen en la clasificación: **cristalino (LT)**, **refracci
 3. Se avisa cuando una medida está a ≤ 0.05 mm de un umbral.
 4. «LA < media − 2 DE» usa siempre el umbral fijo de **21 mm**.
 5. **Alerta facomórfica:** CA < 2.5 mm con LT > 4.5 mm o intumescencia.
+6. **Excepción del Tipo I:** con LA > 22.5, CA < 2.0 y LT > 5 mm, la técnica pasa a vitrectomía central por PP + rexis con Utrata + facochop.
 
 ### Limitaciones conocidas
 
-- La **excepción de vitrectomía central por PP** exige pupila sinequiada, que ya no se pide: no se activa.
 - El **riesgo de glaucoma maligno** se calcula solo con las variables del formulario; pseudoexfoliación y cirugía previa cuentan siempre como «No».
 
 ## Uso

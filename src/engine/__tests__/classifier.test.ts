@@ -217,8 +217,8 @@ describe('Alertas clínicas', () => {
     expect(clasificar(tipoIV(), config).alertas.map((a) => a.id)).toContain('efusion-preexistente');
   });
 
-  it('excepción: LA > 22.5, CA < 2.5, LT > 5 y pupila sinequiada → vitrectomía central por PP + rexis con Utrata + facochop', () => {
-    const r = clasificar(tipoI({ grosorCristalino: 5.2, pupilaSinequiada: true }), config);
+  it('excepción: LA > 22.5, CA < 2.0 y LT > 5 (sin exigir pupila sinequiada) → vitrectomía central por PP + rexis con Utrata + facochop', () => {
+    const r = clasificar(tipoI({ acd: 1.9, grosorCristalino: 5.2 }), config);
     expect(r.tipo?.id).toBe('I');
     expect(r.alertas.map((a) => a.id)).toContain('excepcion-vitrectomia');
     expect(r.tipo?.tecnica).toEqual(['Vitrectomía central por PP', 'Rexis con Utrata', 'Facochop']);
@@ -232,9 +232,9 @@ describe('Alertas clínicas', () => {
   });
 
   it.each([
-    ['sin pupila sinequiada', tipoI({ grosorCristalino: 5.2 })],
-    ['LT = 5 mm', tipoI({ grosorCristalino: 5.0, pupilaSinequiada: true })],
-    ['sin dato de LT', tipoI({ pupilaSinequiada: true })],
+    ['con CA = 2.0 mm', tipoI({ acd: 2.0, grosorCristalino: 5.2 })],
+    ['LT = 5 mm', tipoI({ acd: 1.9, grosorCristalino: 5.0 })],
+    ['sin dato de LT', tipoI({ acd: 1.9, grosorCristalino: null })],
   ])('la excepción no se activa %s', (_, input) => {
     expect(clasificar(input, config).alertas.map((a) => a.id)).not.toContain('excepcion-vitrectomia');
   });

@@ -74,8 +74,8 @@ describe('Checklist preoperatorio', () => {
     expect(t.some((x) => /vitrector|Trocar/.test(x))).toBe(false);
   });
 
-  it('I con excepción (pupila sinequiada, LT > 5): Utrata y vitrector en lugar de cistótomo', () => {
-    const t = textos(tipoI({ grosorCristalino: 5.2, pupilaSinequiada: true }));
+  it('I con excepción (CA < 2.0, LT > 5): Utrata y vitrector en lugar de cistótomo', () => {
+    const t = textos(tipoI({ acd: 1.9, grosorCristalino: 5.2 }));
     expect(t.some((x) => x.includes('cistótomo'))).toBe(false);
     expect(t.some((x) => x.includes('Utrata'))).toBe(true);
     expect(t.some((x) => x.includes('vitrectomía central'))).toBe(true);

@@ -1,5 +1,5 @@
 {
-  "version": "2.9.0",
+  "version": "2.11.0",
   "fechaRevision": "2026-10-15",
   "toleranciaLimiteMm": 0.05,
   "ordenEvaluacion": ["V", "IV", "III", "II", "I"],
@@ -194,12 +194,11 @@
     {
       "id": "excepcion-vitrectomia",
       "titulo": "Excepción: vitrectomía central por PP",
-      "mensaje": "LA > 22.5 mm, CA < 2.5 mm, cristalino (LT) > 5 mm y pupila sinequiada: en lugar de rexis con cistótomo + Stop and Chop, realizar vitrectomía central por pars plana + rexis con Utrata + facochop.",
+      "mensaje": "LA > 22.5 mm, CA < 2.0 mm y cristalino (LT) > 5 mm: en lugar de rexis con cistótomo + Stop and Chop, realizar vitrectomía central por pars plana + rexis con Utrata + facochop.",
       "criterios": [
         { "campo": "longitudAxial", "op": ">", "valor": 22.5 },
-        { "campo": "acd", "op": "<", "valor": 2.5 },
-        { "campo": "grosorCristalino", "op": ">", "valor": 5.0 },
-        { "campo": "pupilaSinequiada", "op": "es", "valor": true }
+        { "campo": "acd", "op": "<", "valor": 2.0 },
+        { "campo": "grosorCristalino", "op": ">", "valor": 5.0 }
       ],
       "exceptoTipos": ["II", "III", "IV", "V"],
       "reemplazaTecnica": ["Vitrectomía central por PP", "Rexis con Utrata", "Facochop"]
@@ -270,7 +269,7 @@
     { "texto": "Anestesia tópica asistida (con sedación)", "tipos": "todos" },
     { "texto": "Rexis con cistótomo doblado por paracentesis; considerar azul tripano y viscoelástico cohesivo", "tipos": ["I"], "salvoAlerta": "excepcion-vitrectomia" },
     { "texto": "Pinza de Utrata para la rexis; considerar azul tripano y viscoelástico cohesivo", "tipos": ["I"], "siAlerta": "excepcion-vitrectomia" },
-    { "texto": "Trocar-cánula y vitrector para vitrectomía central por pars plana (excepción: pupila sinequiada, LT > 5 mm)", "tipos": ["I"], "siAlerta": "excepcion-vitrectomia" },
+    { "texto": "Trocar-cánula y vitrector para vitrectomía central por pars plana (excepción: CA < 2.0 mm y LT > 5 mm)", "tipos": ["I"], "siAlerta": "excepcion-vitrectomia" },
     { "texto": "Pinza de Utrata para la rexis; considerar azul tripano y viscoelástico cohesivo", "tipos": ["II", "IV", "V"] },
     { "texto": "Rexis con pinza de Utrata o cistótomo; considerar azul tripano y viscoelástico cohesivo", "tipos": ["III"] },
     { "texto": "Trocar de pars plana 23 G colocado, sin vitrectomía programada", "tipos": ["III"] },
@@ -313,13 +312,12 @@
   "supuestosPendientes": [
     "Los criterios mayores son una propuesta y deben validarse. En especial, exigir efusión coroidea como mayor del Tipo V hace que un nanoftalmos sin efusión quede en zona gris (LA < 20 mm no entra en el Tipo III; la app lo advierte con una alerta).",
     "Grosor escleral: se mide solo en el polo posterior (PP) y se compara con los umbrales < 1.4 / > 1.4 mm. Para el nanoftalmos la literatura suele citar > 1.7 mm (esclera + coroides, posterior).",
-    "Excepción de vitrectomía central por PP: la diapositiva dice «CA < 20mm»; se interpreta como CA < 2.5 mm.",
+    "Excepción de vitrectomía central por PP (solo Tipo I): CA < 2.0 mm, confirmado por el autor.",
     "CA 2–2.5 mm en MS y MC: Hoffman 2015 describe CA normal en el microftalmo simple y complejo.",
     "Efusión «Sí (uveal)» en MC y esclera < 1.4 mm / sin efusión en MPR: la literatura describe esclera normal en MC y engrosamiento esclerocoroideo con propensión a efusión en el microftalmos posterior.",
     "Significado de «Solo trocar» en el Tipo III (se asume trocar de pars plana 23 G sin vitrectomía programada; Hoffman cita 25G).",
     "Límite inferior de LA de 14.5 mm en nanoftalmos: no se encontró fuente publicada.",
     "Los umbrales del semáforo de glaucoma maligno y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.",
-    "El ángulo es criterio mayor en los 5 tipos: un microftalmo complejo (malformaciones) sin ángulo deformado queda en zona gris.",
-    "La excepción de vitrectomía central por PP exige pupila sinequiada, que el formulario ya no pide: la excepción no se activa."
+    "El ángulo es criterio mayor en los 5 tipos: un microftalmo complejo (malformaciones) sin ángulo deformado queda en zona gris."
   ]
 }

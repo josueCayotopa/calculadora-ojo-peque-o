@@ -1,6 +1,6 @@
 # Validación clínica — Clasificación del Ojo Pequeño
 
-> Documento generado automáticamente desde `src/config/evidencia.json` (revisión 2026-10-09) para las reglas v2.9.0.
+> Documento generado automáticamente desde `src/config/evidencia.json` (revisión 2026-10-09) para las reglas v2.11.0.
 > **Herramienta de apoyo clínico. La decisión final corresponde al cirujano.**
 
 ## Metodología
@@ -45,7 +45,7 @@ Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las re
 | Tipo V (nanoftalmos) · Resto de rasgos | CA < 2.0 mm, ángulo cerrado/ocluible (criterio mayor), intumescencia, cuerpo ciliar anteriorizado, hipermetropía alta. | Hoffman 2015 y EyeWiki: CA estrecha (< 2.2 mm), iris convexo con ángulo estrecho, cristalino normal o engrosado y desproporcionado, posible microcórnea < 11 mm y alto riesgo de glaucoma de ángulo cerrado. La UBM ayuda a valorar la esclera y la desproporción del cristalino. [1][5][4] | ✅ Concuerda |  |
 | Manitol preoperatorio | Manitol 30 min antes (todos los tipos). | Hoffman 2015: manitol y acetazolamida IV 30 min antes reducen el volumen vítreo. Una revisión de 2024 describe manitol al 20 % (100 mL) 30 a 60 min antes para bajar la PIO y profundizar la CA. [1][8] | ✅ Concuerda |  |
 | Rexis con cistótomo (Tipo I) | Rexis con cistótomo + Stop and Chop | Hoffman 2015: capsulorrexis con cistótomo doblado por paracentesis (o pinza microincisional) para no perder viscoelástico; el azul tripano facilita la capsulorrexis. [1] | ✅ Concuerda |  |
-| Trocar y vitrectomía por pars plana (tipos III, IV y V) | Tipo III: solo trocar 23 G · Tipos IV y V: vitrectomía central por PP · Excepción: LA > 22.5 mm, CA < 2.5 mm, LT > 5 mm y pupila sinequiada → vitrectomía central por PP + rexis con Utrata + facochop (en lugar de cistótomo + Stop and Chop) | Hoffman 2015: en casos extremos, un tap vítreo o una vitrectomía limitada profundiza la cámara. Recomienda un sistema de trocar-cánula (cita 25G) por la pars plana anómala y examinar la retina periférica después. [1] | 🟡 Parcial | La técnica concuerda; el calibre del trocar es una elección del cirujano. |
+| Trocar y vitrectomía por pars plana (tipos III, IV y V) | Tipo III: solo trocar 23 G · Tipos IV y V: vitrectomía central por PP · Excepción (Tipo I): LA > 22.5 mm, CA < 2.0 mm y LT > 5 mm → vitrectomía central por PP + rexis con Utrata + facochop (en lugar de cistótomo + Stop and Chop) | Hoffman 2015: en casos extremos, un tap vítreo o una vitrectomía limitada profundiza la cámara. Recomienda un sistema de trocar-cánula (cita 25G) por la pars plana anómala y examinar la retina periférica después. [1] | 🟡 Parcial | La técnica concuerda; el calibre del trocar es una elección del cirujano. |
 | IHZV (Tipo V) | Vitrectomía central por PP + Rexis + Utrata + IHZV | La irido-zónulo-hialoido-vitrectomía está descrita como tratamiento del glaucoma maligno y puede combinarse con facoemulsificación en ojos hipermétropes con cierre angular. Hoffman 2015 señala que una iridectomía quirúrgica durante la faco facilita la hialoidotomía láser si aparece desviación del acuoso. [10][1] | 🟡 Parcial | Hay respaldo en series y casos; la evidencia de su uso profiláctico sistemático en nanoftalmos es limitada. |
 | Sin trocar ni vitrectomía (Tipo II) | Rexis con Utrata + Facochop | No se encontró una recomendación específica. Es coherente con un segmento anterior de dimensiones normales, sin compresión posterior del diafragma iris-cristalino.  | ⚪ Sin evidencia |  |
 | Fórmulas de LIO | (Módulo de la app) | Hoffman 2015 prefiere Hoffer Q, Holladay 2 y Haigis en ojos cortos. Estudios posteriores encuentran que Kane es la más precisa en LA < 22 mm. Yosar 2021: Kane y SRK/T fueron más precisas que Hoffer Q y Barrett Universal II. [1][2][9] | ✅ Concuerda | La app lista Kane en primer lugar. |
@@ -56,14 +56,13 @@ Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las re
 
 1. Los criterios mayores son una propuesta y deben validarse. En especial, exigir efusión coroidea como mayor del Tipo V hace que un nanoftalmos sin efusión quede en zona gris (LA < 20 mm no entra en el Tipo III; la app lo advierte con una alerta).
 2. Grosor escleral: se mide solo en el polo posterior (PP) y se compara con los umbrales < 1.4 / > 1.4 mm. Para el nanoftalmos la literatura suele citar > 1.7 mm (esclera + coroides, posterior).
-3. Excepción de vitrectomía central por PP: la diapositiva dice «CA < 20mm»; se interpreta como CA < 2.5 mm.
+3. Excepción de vitrectomía central por PP (solo Tipo I): CA < 2.0 mm, confirmado por el autor.
 4. CA 2–2.5 mm en MS y MC: Hoffman 2015 describe CA normal en el microftalmo simple y complejo.
 5. Efusión «Sí (uveal)» en MC y esclera < 1.4 mm / sin efusión en MPR: la literatura describe esclera normal en MC y engrosamiento esclerocoroideo con propensión a efusión en el microftalmos posterior.
 6. Significado de «Solo trocar» en el Tipo III (se asume trocar de pars plana 23 G sin vitrectomía programada; Hoffman cita 25G).
 7. Límite inferior de LA de 14.5 mm en nanoftalmos: no se encontró fuente publicada.
 8. Los umbrales del semáforo de glaucoma maligno y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.
 9. El ángulo es criterio mayor en los 5 tipos: un microftalmo complejo (malformaciones) sin ángulo deformado queda en zona gris.
-10. La excepción de vitrectomía central por PP exige pupila sinequiada, que el formulario ya no pide: la excepción no se activa.
 
 ## Fuentes
 
