@@ -23,7 +23,7 @@ const FILAS: FilaTabla[] = [
   { titulo: 'Grosor escleral', campos: ['grosorEscleral'] },
   { titulo: 'Efusión coroidea', campos: ['efusionCoroidea'] },
   { titulo: 'Cuerpo ciliar', campos: ['cuerpoCiliar'] },
-  { titulo: 'Cristalino (LT)', vacia: true },
+  { titulo: 'Cristalino (LT)', texto: 'cristalino' },
   { titulo: 'Malformaciones anatómicas', campos: ['malformaciones'] },
   { titulo: 'Refracción', texto: 'refraccion' },
   { titulo: 'Alteraciones asociadas', texto: 'alteracionesAsociadas' },

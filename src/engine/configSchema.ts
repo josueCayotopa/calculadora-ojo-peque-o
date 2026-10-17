@@ -117,7 +117,7 @@ export const configSchema = z
             preoperatorio: z.array(z.string()),
             tecnica: z.array(z.string()),
             pendiente: z.string().optional(),
-            tabla: z.object({ refraccion: z.string(), alteracionesAsociadas: z.string() }).strict().optional(),
+            tabla: z.object({ cristalino: z.string(), refraccion: z.string(), alteracionesAsociadas: z.string() }).strict().optional(),
             esquema: esquemaSchema,
           })
           .strict()

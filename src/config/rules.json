@@ -11,7 +11,7 @@
       "sigla": "MAR",
       "nombre": "Microftalmo anterior relativo",
       "descripcion": "Longitud axial normal con segmento anterior pequeño. Alteraciones asociadas leves.",
-      "tabla": { "refraccion": "—", "alteracionesAsociadas": "Leves" },
+      "tabla": { "cristalino": "< 4.3 mm", "refraccion": "—", "alteracionesAsociadas": "Leves" },
       "criterios": [
         { "nivel": "mayor", "campo": "longitudAxial", "op": ">", "valor": 22.5 },
         { "nivel": "mayor", "campo": "acd", "op": "<", "valor": 2.5 },
@@ -41,7 +41,7 @@
       "sigla": "MPR",
       "nombre": "Microftalmos posterior relativo",
       "descripcion": "Segmento anterior de dimensiones normales con segmento posterior corto e hipermetropía alta.",
-      "tabla": { "refraccion": "Hipermetropía alta", "alteracionesAsociadas": "Retinitis pigmentaria, foveosquisis, drusas del NO, pliegues papilomaculares, agujero macular" },
+      "tabla": { "cristalino": "< 4.3 mm", "refraccion": "Hipermetropía alta", "alteracionesAsociadas": "Retinitis pigmentaria, foveosquisis, drusas del NO, pliegues papilomaculares, agujero macular" },
       "criterios": [
         { "nivel": "mayor", "campo": "acd", "op": ">", "valor": 2.5 },
         { "nivel": "mayor", "campo": "longitudAxial", "op": "<", "valor": 22.5 },
@@ -82,7 +82,7 @@
       "sigla": "MS",
       "nombre": "Microftalmo simple",
       "descripcion": "Ojo globalmente pequeño y estructuralmente proporcional, sin malformaciones.",
-      "tabla": { "refraccion": "Hipermetropía moderada", "alteracionesAsociadas": "No" },
+      "tabla": { "cristalino": "< 4.3 mm", "refraccion": "Hipermetropía moderada", "alteracionesAsociadas": "No" },
       "criterios": [
         { "nivel": "mayor", "campo": "longitudAxial", "op": ">=", "valor": 20.0 },
         { "nivel": "mayor", "campo": "longitudAxial", "op": "bajoDE", "nDE": 2, "opComparacion": "<", "valorRespaldo": 21.0 },
@@ -113,7 +113,7 @@
       "sigla": "MC",
       "nombre": "Microftalmo complejo",
       "descripcion": "Ojo pequeño con malformaciones anatómicas (colobomas, disgenesias).",
-      "tabla": { "refraccion": "—", "alteracionesAsociadas": "Colobomas, alteración retiniana" },
+      "tabla": { "cristalino": "< 4.3 mm", "refraccion": "—", "alteracionesAsociadas": "Colobomas, alteración retiniana" },
       "criterios": [
         { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": true },
         { "campo": "longitudAxial", "op": "bajoDE", "nDE": 2, "opComparacion": "<", "valorRespaldo": 21.0 },
@@ -153,7 +153,7 @@
       "romano": "V",
       "nombre": "Nanoftalmos",
       "descripcion": "Ojo corto con segmentos anterior y posterior cortos, esclera engrosada y tendencia a efusión uveal.",
-      "tabla": { "refraccion": "Hipermetropía alta", "alteracionesAsociadas": "Intumescencia" },
+      "tabla": { "cristalino": "> 4.3 mm", "refraccion": "Hipermetropía alta", "alteracionesAsociadas": "Intumescencia" },
       "criterios": [
         { "nivel": "mayor", "campo": "longitudAxial", "op": "<", "valor": 20.0 },
         { "nivel": "mayor", "campo": "grosorEscleral", "op": ">", "valor": 1.4 },

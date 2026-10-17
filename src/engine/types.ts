@@ -175,7 +175,7 @@ export interface TipoClinico {
   nombre: string;
   descripcion?: string;
   /** Texto descriptivo de la tabla para filas que no son criterios (no influye en la clasificación). */
-  tabla?: { refraccion: string; alteracionesAsociadas: string };
+  tabla?: { cristalino: string; refraccion: string; alteracionesAsociadas: string };
   criterios: Criterio[];
   preoperatorio: string[];
   tecnica: string[];
