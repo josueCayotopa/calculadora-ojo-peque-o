@@ -41,6 +41,7 @@ export const eyeInputSchema = z
     cristalino: z.enum(['normal', 'coloboma', 'intumescente']).optional(),
     malformaciones: siNo('Indique si hay malformaciones anatómicas'),
     refraccion: z.enum(['hipermetropiaLeve', 'hipermetropiaAlta', 'hipermetropiaModerada']).optional(),
+    sinequias: z.enum(['no', 'menor180', 'mayor180']).optional(),
     pupilaSinequiada: z.boolean().default(false),
     alteracionesRetinianas: z.object({
       retinitisPigmentaria: z.boolean().default(false),

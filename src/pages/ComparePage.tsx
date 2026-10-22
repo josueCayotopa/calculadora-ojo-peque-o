@@ -50,6 +50,7 @@ const FILAS: Fila[] = [
   { label: 'Cámara anterior', valor: (e) => mm(e.entrada.acd), dif: (a, b) => delta(a.entrada.acd, b.entrada.acd) },
   { label: 'Grosor escleral (PP)', valor: (e) => mm(e.entrada.grosorEscleral), dif: (a, b) => delta(a.entrada.grosorEscleral, b.entrada.grosorEscleral) },
   { label: 'Ángulo', valor: (e) => NOMBRE_VALOR[e.entrada.angulo] },
+  { label: 'Sinequias', valor: (e) => (e.entrada.sinequias && e.entrada.sinequias !== 'no' ? NOMBRE_VALOR[e.entrada.sinequias] : 'No') },
   { label: 'Efusión coroidea', valor: (e) => siNo('efusionCoroidea', e.entrada.efusionCoroidea) },
   { label: 'Cuerpo ciliar', valor: (e) => NOMBRE_VALOR[e.entrada.cuerpoCiliar] },
   { label: 'Cristalino (LT)', valor: (e) => mm(e.entrada.grosorCristalino), dif: (a, b) => delta(a.entrada.grosorCristalino, b.entrada.grosorCristalino) },

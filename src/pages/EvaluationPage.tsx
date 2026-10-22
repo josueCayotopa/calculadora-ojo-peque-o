@@ -6,7 +6,7 @@ import { Calculator, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChoiceGroup, CheckboxField, NumberField, type Opcion } from '@/components/FormFields';
 import { RANGOS, eyeInputSchema, parseDecimal, type EyeInputForm } from '@/schemas/eyeInput';
-import type { EyeInput, Ojo, Refraccion } from '@/engine/types';
+import type { EyeInput, Ojo, Refraccion, Sinequias } from '@/engine/types';
 import { resumenResultado, useEvaluaciones } from '@/state/EvaluationContext';
 import { guardarEnHistorial } from '@/state/history';
 
@@ -162,6 +162,19 @@ export function EvaluationPage() {
               { value: 'estrecho', label: 'Estrecho/ocluible' },
               { value: 'deformado', label: 'Deformado' },
               { value: 'cerrado', label: 'Cerrado/ocluible' },
+            ]}
+          />
+        </Fila>
+        <Fila>
+          <Choice<Sinequias>
+            control={control}
+            name="sinequias"
+            legend="Sinequias (opc.)"
+            ayuda="Goniosinequias. > 180°: se añade válvula de Ahmed; < 180°: goniosinequiálisis"
+            opciones={[
+              { value: 'no', label: 'No' },
+              { value: 'menor180', label: '< 180°' },
+              { value: 'mayor180', label: '> 180°' },
             ]}
           />
         </Fila>

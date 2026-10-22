@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { AlertTriangle, ExternalLink } from 'lucide-react';
 import type { EvaluacionCompleta } from '@/engine/types';
-import { tecnicasAlternativas } from '@/engine';
+import { conSinequias, tecnicasAlternativas } from '@/engine';
 import { clinicalConfig, terminosUsados } from '@/config';
 import { cn } from '@/lib/utils';
 import { ALERTAS_CRITICAS } from './ClassificationCard';
@@ -82,6 +82,7 @@ export function Tratamiento({ evaluacion }: { evaluacion: EvaluacionCompleta }) 
   const c = evaluacion.clasificacion;
   const tipo = c.tipo ?? c.masCercanos[0];
   const tipos = clinicalConfig.tipos;
+  const entrada = evaluacion.entrada;
   const glosario = terminosUsados(
     tipos.flatMap((t) => [...t.preoperatorio, ...t.tecnica, ...tecnicasAlternativas(t.id, clinicalConfig).flatMap((a) => a.tecnica)]),
   );
@@ -123,19 +124,19 @@ export function Tratamiento({ evaluacion }: { evaluacion: EvaluacionCompleta }) 
               {conAlternativas ? (
                 <div className="space-y-1.5">
                   <ListaPasos items={t.preoperatorio} destacado={resultado} />
-                  <BloqueTecnica titulo="Técnica habitual" items={t.tecnica} indicada={resultado && !excepcionActiva} />
+                  <BloqueTecnica titulo="Técnica habitual" items={conSinequias(t.tecnica, entrada)} indicada={resultado && !excepcionActiva} />
                   {alternativas.map((a) => (
                     <BloqueTecnica
                       key={a.id}
                       titulo={a.titulo}
                       detalle={a.condicion}
-                      items={a.tecnica}
+                      items={conSinequias(a.tecnica, entrada)}
                       indicada={excepcionActiva?.id === a.id}
                     />
                   ))}
                 </div>
               ) : (
-                <ListaPasos items={[...t.preoperatorio, ...t.tecnica]} destacado={resultado} />
+                <ListaPasos items={[...t.preoperatorio, ...conSinequias(t.tecnica, entrada)]} destacado={resultado} />
               )}
               {resultado && t.pendiente && <p className="mt-1 text-xs font-semibold text-amber-900">{t.pendiente}</p>}
             </li>

@@ -1,4 +1,5 @@
 import { NOMBRE_CAMPO, evaluarCriterio } from './criteria';
+import { conSinequias } from './modules';
 import type {
   AdvertenciaLimite,
   AlertaActiva,
@@ -46,7 +47,7 @@ export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoCl
       apoyo: { ...contar(apoyoCrit), porcentaje: pesoTotal > 0 ? pesoCumplido / pesoTotal : 0 },
       cumpleMayores: mayores.total > 0 && mayores.cumplidos === mayores.total,
       preoperatorio: tipo.preoperatorio,
-      tecnica: tipo.tecnica,
+      tecnica: conSinequias(tipo.tecnica, input),
       tecnicaPorExcepcion: null,
       pendiente: tipo.pendiente ?? null,
       esquema: tipo.esquema,
@@ -79,7 +80,7 @@ export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoCl
   // Excepciones: una alerta activa puede sustituir la técnica del tipo asignado.
   const excepcion = tipo && alertas.find((a) => a.reemplazaTecnica);
   if (tipo && excepcion) {
-    tipo.tecnica = excepcion.reemplazaTecnica!;
+    tipo.tecnica = conSinequias(excepcion.reemplazaTecnica!, input);
     tipo.tecnicaPorExcepcion = excepcion.titulo;
   }
 

@@ -7,6 +7,8 @@ export type Angulo = 'abierto' | 'estrecho' | 'deformado' | 'cerrado';
 export type CuerpoCiliar = 'normal' | 'anteriorizado';
 export type Cristalino = 'normal' | 'coloboma' | 'intumescente';
 export type Refraccion = 'hipermetropiaLeve' | 'hipermetropiaAlta' | 'hipermetropiaModerada';
+/** Extensión de las sinequias anteriores (goniosinequias) en la gonioscopía. */
+export type Sinequias = 'no' | 'menor180' | 'mayor180';
 /** Solo se usa en el esquema (dibujo) del tipo. */
 export type Segmento = 'normal' | 'corto';
 
@@ -55,6 +57,8 @@ export interface EyeInput {
   malformaciones: boolean;
   /** Grado de hipermetropía. Opcional: puede dejarse en blanco. */
   refraccion?: Refraccion;
+  /** Sinequias anteriores. Opcional (vacío = sin sinequias): añade una técnica al tratamiento de todos los tipos. */
+  sinequias?: Sinequias;
   /** Pupila sinequiada: entra en la excepción de vitrectomía central por PP. */
   pupilaSinequiada: boolean;
   alteracionesRetinianas: AlteracionesRetinianas;

@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
 import type { EvaluacionCompleta, EyeInput } from '@/engine/types';
-import { NOMBRE_CAMPO, NOMBRE_VALOR, formatNumero, siNo, tecnicasAlternativas } from '@/engine';
+import { NOMBRE_CAMPO, NOMBRE_VALOR, conSinequias, formatNumero, siNo, tecnicasAlternativas } from '@/engine';
 import { clinicalConfig, terminosUsados } from '@/config';
 import { nombreTipo, resumenResultado } from '@/state/EvaluationContext';
 
@@ -56,6 +56,7 @@ function datosIngresados(e: EyeInput): [string, string][] {
     ['Longitud axial (LA)', `${formatNumero(e.longitudAxial)} mm`],
     ['Cámara anterior (CA)', `${formatNumero(e.acd)} mm`],
     ['Ángulo (gonioscopía)', NOMBRE_VALOR[e.angulo]],
+    ['Sinequias', e.sinequias && e.sinequias !== 'no' ? NOMBRE_VALOR[e.sinequias] : 'No'],
     ['Grosor escleral (polo posterior)', `${formatNumero(e.grosorEscleral)} mm`],
     ['Efusión coroidea', siNo('efusionCoroidea', e.efusionCoroidea)],
     ['Cuerpo ciliar (UBM)', NOMBRE_VALOR[e.cuerpoCiliar]],
@@ -216,20 +217,20 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
       const nombre = `Tipo ${t.romano} · ${t.nombre}`;
       const alternativas = tecnicasAlternativas(t.id, clinicalConfig);
       if (!alternativas.length) {
-        filas.push({ tipo: nombre + (esPlan ? marca : ''), tratamiento: [...t.preoperatorio, ...t.tecnica].join(' · '), elegida: esPlan });
+        filas.push({ tipo: nombre + (esPlan ? marca : ''), tratamiento: [...t.preoperatorio, ...conSinequias(t.tecnica, e.entrada)].join(' · '), elegida: esPlan });
         continue;
       }
       const habitual = esPlan && !tipoPlan.tecnicaPorExcepcion;
       filas.push({
         tipo: `${nombre}\nTécnica habitual${habitual ? marca : ''}`,
-        tratamiento: [...t.preoperatorio, ...t.tecnica].join(' · '),
+        tratamiento: [...t.preoperatorio, ...conSinequias(t.tecnica, e.entrada)].join(' · '),
         elegida: habitual,
       });
       for (const a of alternativas) {
         const elegida = esPlan && tipoPlan.tecnicaPorExcepcion === a.titulo;
         filas.push({
           tipo: `${nombre}\n${a.titulo}${elegida ? marca : ''}`,
-          tratamiento: `${[...t.preoperatorio, ...a.tecnica].join(' · ')}\nSi: ${a.condicion}`,
+          tratamiento: `${[...t.preoperatorio, ...conSinequias(a.tecnica, e.entrada)].join(' · ')}\nSi: ${a.condicion}`,
           elegida,
         });
       }

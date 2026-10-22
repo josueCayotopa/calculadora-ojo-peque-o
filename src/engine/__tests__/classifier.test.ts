@@ -284,3 +284,21 @@ describe('Pureza', () => {
     expect(JSON.stringify([input, config])).toBe(antes);
   });
 });
+
+describe('Sinequias', () => {
+  it.each([
+    ['mayor180', 'Válvula de Ahmed'],
+    ['menor180', 'Goniosinequiálisis'],
+  ] as const)('%s añade «%s» a la técnica de todos los tipos', (sinequias, tecnica) => {
+    for (const input of [tipoI(), tipoII(), tipoIII(), tipoIV(), tipoV()]) {
+      const r = clasificar({ ...input, sinequias }, config);
+      expect(r.tipo?.tecnica.at(-1)).toBe(tecnica);
+      expect(r.ranking.every((t) => t.tecnica.at(-1) === tecnica)).toBe(true);
+    }
+  });
+
+  it('sin sinequias no cambia la técnica', () => {
+    const base = clasificar(tipoII(), config).tipo?.tecnica;
+    expect(clasificar({ ...tipoII(), sinequias: 'no' }, config).tipo?.tecnica).toEqual(base);
+  });
+});

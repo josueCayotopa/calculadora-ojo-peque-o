@@ -53,6 +53,8 @@ export const NOMBRE_VALOR: Record<string, string> = {
   hipermetropiaLeve: 'hipermetropía leve',
   hipermetropiaAlta: 'hipermetropía alta',
   hipermetropiaModerada: 'hipermetropía moderada',
+  menor180: '< 180°',
+  mayor180: '> 180°',
 };
 
 /** Texto del «Sí» con su precisión clínica, como en la tabla de clasificación. */
