@@ -96,7 +96,7 @@ export function ResultPage() {
         </Alert>
       )}
 
-      <div className="grid gap-3 lg:min-h-0 lg:flex-1 lg:grid-cols-[15rem_minmax(0,1fr)_23rem] xl:grid-cols-[18rem_minmax(0,1fr)_26rem]">
+      <div className="grid grid-cols-1 gap-3 lg:min-h-0 lg:flex-1 lg:grid-cols-[15rem_minmax(0,1fr)_23rem] xl:grid-cols-[18rem_minmax(0,1fr)_26rem]">
         <div className="flex flex-col gap-3 lg:min-h-0 lg:overflow-y-auto">
           <DiagnosticoHero evaluacion={evaluacion} onVerAlertas={() => setPestana('alertas')} />
           <PanelEsquema evaluacion={evaluacion} />

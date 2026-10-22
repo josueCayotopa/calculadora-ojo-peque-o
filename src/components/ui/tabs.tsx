@@ -41,7 +41,7 @@ export function Tabs({ tabs, activo, onCambiar, label, className, panelClassName
 
   return (
     <div className={cn('flex min-h-0 flex-col', className)}>
-      <div role="tablist" aria-label={label} className="flex shrink-0 overflow-x-auto overflow-y-hidden border-b border-gray-200">
+      <div role="tablist" aria-label={label} className="relative flex shrink-0 overflow-x-auto overflow-y-hidden border-b border-gray-200">
         {tabs.map((t, i) => {
           const sel = t.id === actual.id;
           return (
@@ -74,7 +74,7 @@ export function Tabs({ tabs, activo, onCambiar, label, className, panelClassName
         id={`${base}-panel-${actual.id}`}
         aria-labelledby={`${base}-tab-${actual.id}`}
         tabIndex={0}
-        className={cn('min-h-0 flex-1 pt-3 focus-visible:outline-none', panelClassName)}
+        className={cn('relative min-h-0 flex-1 pt-3 focus-visible:outline-none', panelClassName)}
       >
         {actual.contenido}
       </div>

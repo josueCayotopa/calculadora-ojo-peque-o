@@ -250,6 +250,14 @@ export function EvaluationPage() {
           </fieldset>
         </Fila>
       </ol>
+
+      {/* En móvil el formulario es largo: el botón de enviar queda siempre a mano al final de la pantalla. */}
+      <div className="sticky bottom-0 -mx-4 border-t border-gray-100 bg-white/95 px-4 py-2 backdrop-blur sm:hidden">
+        <Button type="submit" className="w-full">
+          <Calculator aria-hidden="true" />
+          Obtener diagnóstico
+        </Button>
+      </div>
     </form>
   );
 }

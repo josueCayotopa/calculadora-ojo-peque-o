@@ -66,7 +66,7 @@ function TablaClasificacion() {
   const cfg = clinicalConfig;
   const td = "px-2 py-0.5 align-top xl:py-1";
   return (
-    <div className="h-full overflow-auto">
+    <div className="relative h-full overflow-auto">
       <table className="w-full min-w-[56rem] border-collapse text-left text-xs">
         <caption className="sr-only">Criterios, tratamiento y esquema por tipo. Resaltado: criterio mayor.</caption>
         <thead>

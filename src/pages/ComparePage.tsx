@@ -111,7 +111,7 @@ export function ComparePage() {
       )}
 
       {(od || oi) && (
-        <section aria-label="Resumen comparativo" className="overflow-x-auto rounded-3xl bg-white px-4 py-2 shadow-sm">
+        <section aria-label="Resumen comparativo" className="relative overflow-x-auto rounded-3xl bg-white px-4 py-2 shadow-sm">
           <table className="w-full min-w-[36rem] text-left text-[13px]">
             <thead>
               <tr className="border-b-2 border-primary text-ink">

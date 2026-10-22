@@ -109,6 +109,8 @@ export function ChoiceGroup<T extends string | boolean | null>({
   const id = useId();
   const errorId = `${id}-error`;
   const ayudaId = `${id}-ayuda`;
+  // En móvil no caben en una fila: se reparten de dos en dos (la última, sola, ocupa todo el ancho).
+  const largo = opciones.length >= 4 || opciones.reduce((n, o) => n + o.label.length, 0) > 30;
   return (
     <fieldset
       className={cn('min-w-0 space-y-1', className)}
@@ -127,6 +129,7 @@ export function ChoiceGroup<T extends string | boolean | null>({
       <div
         className={cn(
           'flex rounded-xl border bg-white p-0.5',
+          largo && 'flex-wrap gap-0.5 sm:flex-nowrap sm:gap-0',
           error ? 'border-red-700' : 'border-gray-300',
         )}
       >
@@ -138,6 +141,7 @@ export function ChoiceGroup<T extends string | boolean | null>({
               title={o.descripcion}
               className={cn(
                 'relative flex min-h-9 flex-1 cursor-pointer items-center justify-center whitespace-nowrap rounded-[10px] px-1.5 text-center text-[13px] font-semibold leading-tight transition-colors',
+                largo && 'basis-[calc(50%-0.125rem)] whitespace-normal sm:basis-0 sm:whitespace-nowrap',
                 'has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary',
                 checked ? 'bg-primary text-white shadow-sm' : 'text-ink hover:bg-slateGray-100',
               )}
