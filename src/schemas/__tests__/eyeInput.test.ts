@@ -8,18 +8,17 @@ const valido = {
   grosorCristalino: 4.2,
   angulo: 'estrecho',
   wtw: 10.5,
-  cristalino: 'normal',
   malformaciones: false,
-  refraccion: 'hipermetropiaModerada',
-  alteracionesRetinianas: {},
-  factoresRiesgo: {},
 };
 
 describe('eyeInputSchema', () => {
-  it('acepta un ojo válido y aplica valores por defecto', () => {
-    const r = eyeInputSchema.parse(valido);
-    expect(r.alteracionesRetinianas.foveosquisis).toBe(false);
-    expect(r.factoresRiesgo.pseudoexfoliacion).toBe(false);
+  it('acepta un ojo válido con solo las variables de la tabla', () => {
+    expect(eyeInputSchema.parse(valido)).toEqual(valido);
+  });
+
+  it('descarta las variables de evaluaciones antiguas (refracción, sinequias, alteraciones…)', () => {
+    const r = eyeInputSchema.parse({ ...valido, refraccion: 'hipermetropiaAlta', sinequias: 'mayor180', factoresRiesgo: {} });
+    expect(Object.keys(r).sort()).toEqual(Object.keys(valido).sort());
   });
 
   it.each([
@@ -47,22 +46,12 @@ describe('eyeInputSchema', () => {
     }
   });
 
-  it('la refracción es opcional', () => {
-    const { refraccion: _, ...sin } = valido;
-    expect(eyeInputSchema.safeParse(sin).success).toBe(true);
-  });
-
   it.each([7.9, 14.1])('rechaza WTW = %s (fuera de rango)', (v) => {
     expect(eyeInputSchema.safeParse({ ...valido, wtw: v }).success).toBe(false);
   });
 
   it('acepta el ángulo "deformado"', () => {
     expect(eyeInputSchema.safeParse({ ...valido, angulo: 'deformado' }).success).toBe(true);
-  });
-
-  it('media y DE de referencia deben ingresarse juntas', () => {
-    expect(eyeInputSchema.safeParse({ ...valido, laMediaReferencia: 23.5 }).success).toBe(false);
-    expect(eyeInputSchema.safeParse({ ...valido, laMediaReferencia: 23.5, laDEReferencia: 1 }).success).toBe(true);
   });
 
   it('exige el cristalino (LT) y lo valida en rango', () => {

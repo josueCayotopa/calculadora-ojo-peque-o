@@ -6,19 +6,16 @@ Aplicación web (PWA) basada en el **algoritmo de manejo de cirugía de catarata
 
 ## Qué hace
 
-El oftalmólogo llena, por ojo (OD/OI), una lista de 9 variables:
+El oftalmólogo llena, por ojo (OD/OI), solo las variables de la tabla de clasificación:
 
 | Variable | Dato |
 |---|---|
 | Longitud axial | mm |
 | Cámara anterior | mm |
 | Ángulo | Abierto · Estrecho/ocluible · Deformado · Cerrado/ocluible |
-| Sinequias *(opcional)* | No · < 180° · > 180° |
 | Cristalino (LT) | mm (con la LA se calcula el **índice LT/AL**) |
 | Malformaciones anatómicas | No · Sí (colobomas y disgenesias) |
 | WTW (blanco-blanco) | mm |
-| Refracción *(opcional)* | Hipermetropía leve · Hipermetropía alta · Hipermetropía moderada |
-| Alteraciones asociadas *(opcional, sin marcar = No)* | Leves · Retinitis pigmentaria · Foveosquisis · Drusas del NO · Pliegues papilomaculares · Agujero macular · Colobomas · Otra alteración retiniana · Intumescencia |
 
 La app devuelve:
 
@@ -40,20 +37,20 @@ Tabla del Dr. Fermín Silva. **Todas las filas son criterios mayores** (obligato
 | Malformaciones | No | No | No | Sí (colobomas y disgenesias) | No |
 | WTW | < 11.0 | > 11.0 | < 11.0 | < 11.0 | < 11.0 |
 
-Medidas en mm; el índice LT/AL es adimensional (LT ÷ LA). No influyen en la clasificación: **refracción** y **alteraciones asociadas**. El LT también se usa en la alerta facomórfica.
+Medidas en mm; el índice LT/AL es adimensional (LT ÷ LA). El tratamiento es el del tipo, sin técnicas añadidas por otras variables. El LT también se usa en la alerta facomórfica.
 
 ## Cómo clasifica
 
 1. Los tipos se evalúan en orden **V → IV → III → II → I**. El diagnóstico es el primero que cumple todos sus mayores.
 2. Si ninguno los cumple: **zona gris**, con los 2 tipos más cercanos y los criterios en conflicto.
 3. Se avisa cuando una medida está a ≤ 0.05 mm de un umbral (≤ 0.005 en el índice LT/AL).
-4. «LA < media − 2 DE» usa siempre el umbral fijo de **21 mm**.
-5. **Alerta facomórfica:** CA < 2.5 mm con LT > 4.5 mm o intumescencia.
+4. El «−2 DE» de la LA (tipos III y IV) se aplica como umbral fijo de **21 mm**.
+5. **Alerta facomórfica:** CA < 2.5 mm con LT > 4.5 mm.
 6. **Excepción del Tipo I:** con LA > 22.5, CA < 2.0 y LT > 5 mm, la técnica pasa a vitrectomía central por PP + rexis con Utrata + facochop.
 
 ### Limitaciones conocidas
 
-- El **riesgo de glaucoma maligno** se calcula solo con las variables del formulario; pseudoexfoliación y cirugía previa cuentan siempre como «No».
+- El **riesgo de glaucoma maligno** se calcula solo con las variables de la tabla (LA, CA y ángulo).
 
 ## Uso
 
@@ -84,8 +81,8 @@ Operadores: `<` `<=` `>` `>=` · `entre` · `en` (lista) · `es` (sí/no) · `ba
 Campos:
 
 - **Números:** `longitudAxial`, `acd`, `grosorCristalino` (LT), `wtw`, `indiceLTAL` (calculado: LT / LA).
-- **Listas:** `angulo`, `refraccion`.
-- **Sí/No:** `malformaciones`, `alteracionesRetinianas.*`, `alteracionesAsociadas.*`.
+- **Listas:** `angulo`.
+- **Sí/No:** `malformaciones`.
 
 ## Validación con la literatura
 

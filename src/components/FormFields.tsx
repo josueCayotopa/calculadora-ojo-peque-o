@@ -1,6 +1,6 @@
 import { useId, type ReactNode, type Ref } from 'react';
 import type { FieldError, UseFormRegisterReturn } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
+import { Input, NativeSelect } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 /*
@@ -166,17 +166,63 @@ export function ChoiceGroup<T extends string | boolean | null>({
   );
 }
 
-interface CheckboxFieldProps {
-  label: ReactNode;
+interface SelectFieldProps {
+  label: string;
+  ayuda?: string;
+  opciones: Opcion<string>[];
   registro: UseFormRegisterReturn;
+  error?: FieldError;
 }
 
-/** Casilla compacta tipo "chip". */
-export function CheckboxField({ label, registro }: CheckboxFieldProps) {
+/** Desplegable nativo con opción vacía «-- Seleccione --» (cómodo en tablet y móvil). */
+export function SelectField({ label, ayuda, opciones, registro, error }: SelectFieldProps) {
+  const id = useId();
+  const ayudaId = `${id}-ayuda`;
+  const errorId = `${id}-error`;
   return (
-    <label className="flex min-h-9 cursor-pointer items-center gap-2 rounded-xl border border-gray-300 bg-white px-2 py-1 text-xs font-semibold leading-tight text-ink transition-colors hover:border-gray-400 has-[:checked]:border-primary has-[:checked]:bg-primary-50 has-[:checked]:text-primary-900 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary">
-      <input type="checkbox" className="size-4 shrink-0" {...registro} />
-      <span>{label}</span>
-    </label>
+    <div className="min-w-0 space-y-1" title={ayuda}>
+      <label htmlFor={id} className={cn(etiquetaCls, 'block truncate')}>
+        {label}
+      </label>
+      <NativeSelect
+        id={id}
+        defaultValue=""
+        aria-invalid={error ? true : undefined}
+        aria-describedby={cn(ayuda && ayudaId, error && errorId) || undefined}
+        className="min-h-10 py-1.5 text-sm"
+        {...registro}
+      >
+        <option value="" disabled>
+          -- Seleccione --
+        </option>
+        {opciones.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </NativeSelect>
+      {ayuda && (
+        <span id={ayudaId} className="sr-only">
+          {ayuda}
+        </span>
+      )}
+      <MensajeError id={errorId} error={error} />
+    </div>
+  );
+}
+
+/** Valor calculado (no editable) con el mismo aspecto que un campo. */
+export function CampoCalculado({ label, valor, ayuda }: { label: string; valor: ReactNode; ayuda?: string }) {
+  return (
+    <div className="min-w-0 space-y-1" title={ayuda}>
+      <div className="flex items-baseline justify-between gap-2">
+        <span className={cn(etiquetaCls, 'truncate')}>{label}</span>
+        <span className="shrink-0 text-[11px] text-slateGray">calculado</span>
+      </div>
+      <output aria-live="polite" className="flex min-h-10 items-center rounded-xl border border-gray-200 bg-lightBg px-4 py-1.5 text-base font-semibold text-ink">
+        {valor}
+      </output>
+      {ayuda && <span className="sr-only">{ayuda}</span>}
+    </div>
   );
 }

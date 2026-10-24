@@ -5,63 +5,24 @@
 export type Ojo = 'OD' | 'OI';
 export type Angulo = 'abierto' | 'estrecho' | 'deformado' | 'cerrado';
 export type Cristalino = 'normal' | 'coloboma' | 'intumescente';
-export type Refraccion = 'hipermetropiaLeve' | 'hipermetropiaAlta' | 'hipermetropiaModerada';
-/** Extensión de las sinequias anteriores (goniosinequias) en la gonioscopía. */
-export type Sinequias = 'no' | 'menor180' | 'mayor180';
 /** Solo se usa en el esquema (dibujo) del tipo. */
 export type Segmento = 'normal' | 'corto';
 
-export interface AlteracionesRetinianas {
-  retinitisPigmentaria: boolean;
-  foveosquisis: boolean;
-  drusasNervioOptico: boolean;
-  plieguesPapilomaculares: boolean;
-  agujeroMacular: boolean;
-  otra: boolean;
-}
-
-/** Alteraciones asociadas no retinianas de la tabla (las retinianas van en AlteracionesRetinianas). */
-export interface AlteracionesAsociadas {
-  leves: boolean;
-  colobomas: boolean;
-  intumescencia: boolean;
-}
-
-export interface FactoresRiesgo {
-  pseudoexfoliacion: boolean;
-  cirugiaFiltrantePrevia: boolean;
-  cirugiaCatarataPrevia: boolean;
-  cierreAngularAgudoAdelfo: boolean;
-  antecedenteFamiliarGlaucoma: boolean;
-}
-
-/** Datos de un ojo tal como los ingresa el oftalmólogo. Longitudes en mm. */
+/**
+ * Datos de un ojo tal como los ingresa el oftalmólogo: solo las variables de la
+ * tabla de clasificación (LA, CA, ángulo, LT para el índice LT/AL, malformaciones
+ * y WTW). Longitudes en mm.
+ */
 export interface EyeInput {
   ojo: Ojo;
   longitudAxial: number;
-  /** LA media de referencia (población/edad) para el criterio "< media − 2 DE". Opcional. */
-  laMediaReferencia?: number | null;
-  /** Desviación estándar de referencia de la LA. Opcional (requiere la media). */
-  laDEReferencia?: number | null;
   acd: number;
   /** Grosor del cristalino (LT). Obligatorio en el formulario; opcional en el tipo para evaluaciones antiguas. */
   grosorCristalino?: number | null;
   /** Diámetro corneal horizontal blanco-blanco (WTW). */
   wtw: number;
   angulo: Angulo;
-  /** Ya no se pide en el formulario; se conserva para leer evaluaciones antiguas. */
-  cristalino?: Cristalino;
   malformaciones: boolean;
-  /** Grado de hipermetropía. Opcional: puede dejarse en blanco. */
-  refraccion?: Refraccion;
-  /** Sinequias anteriores. Opcional (vacío = sin sinequias): añade una técnica al tratamiento de todos los tipos. */
-  sinequias?: Sinequias;
-  /** Pupila sinequiada: entra en la excepción de vitrectomía central por PP. */
-  pupilaSinequiada: boolean;
-  alteracionesRetinianas: AlteracionesRetinianas;
-  /** Opcional en el tipo para leer evaluaciones guardadas antes de añadirse. */
-  alteracionesAsociadas?: AlteracionesAsociadas;
-  factoresRiesgo: FactoresRiesgo;
 }
 
 // ---------------------------------------------------------------------------
@@ -70,13 +31,8 @@ export interface EyeInput {
 
 /** `indiceLTAL` no se ingresa: se calcula como LT / LA (adimensional). */
 export type CampoNumerico = 'longitudAxial' | 'acd' | 'grosorCristalino' | 'wtw' | 'indiceLTAL';
-export type CampoEnum = 'angulo' | 'cristalino' | 'refraccion';
-export type CampoBooleano =
-  | 'malformaciones'
-  | 'pupilaSinequiada'
-  | `alteracionesRetinianas.${keyof AlteracionesRetinianas}`
-  | `alteracionesAsociadas.${keyof AlteracionesAsociadas}`
-  | `factoresRiesgo.${keyof FactoresRiesgo}`;
+export type CampoEnum = 'angulo';
+export type CampoBooleano = 'malformaciones';
 
 export type OpComparacion = '<' | '<=' | '>' | '>=';
 
@@ -118,18 +74,6 @@ export interface CriterioBooleano extends Base {
   valor: boolean;
 }
 
-/**
- * LA por debajo de (media − n·DE). Si el usuario no ingresó media y DE de
- * referencia, se usa el umbral absoluto `valorRespaldo`.
- */
-export interface CriterioBajoDE extends Base {
-  campo: 'longitudAxial';
-  op: 'bajoDE';
-  nDE: number;
-  opComparacion: '<' | '<=';
-  valorRespaldo: number;
-}
-
 /** Dos campos de lista con el mismo valor. */
 export interface CriterioIguales extends Base {
   op: 'iguales';
@@ -148,7 +92,6 @@ export type Criterio =
   | CriterioRango
   | CriterioEnum
   | CriterioBooleano
-  | CriterioBajoDE
   | CriterioIguales
   | CriterioCualquiera;
 

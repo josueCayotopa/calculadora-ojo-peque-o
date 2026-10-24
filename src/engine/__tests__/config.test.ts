@@ -71,7 +71,6 @@ describe('Etiquetas generadas desde el criterio', () => {
     [{ campo: 'indiceLTAL', op: '>', valor: 0.22 }, 'Índice LT/AL > 0.22'],
     [{ campo: 'indiceLTAL', op: 'entre', min: 0.18, max: 0.2, opMin: '>=', opMax: '<=' }, '0.18 ≤ Índice LT/AL ≤ 0.20'],
     [{ campo: 'malformaciones', op: 'es', valor: false }, 'Sin malformaciones anatómicas'],
-    [{ campo: 'longitudAxial', op: 'bajoDE', nDE: 2, opComparacion: '<', valorRespaldo: 21 }, 'LA < media − 2 DE (o < 21.0 mm)'],
   ] as const)('%j → %s', (c, esperado) => {
     expect(etiquetaCriterio(c as any)).toBe(esperado);
   });

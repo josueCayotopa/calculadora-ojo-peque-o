@@ -4,8 +4,6 @@ import type { EyeInput } from '@/engine/types';
 /** Rangos fisiológicos/instrumentales aceptados por el formulario (no son criterios clínicos). */
 export const RANGOS = {
   longitudAxial: { min: 14.0, max: 30.0, unidad: 'mm' },
-  laMediaReferencia: { min: 18.0, max: 28.0, unidad: 'mm' },
-  laDEReferencia: { min: 0.1, max: 3.0, unidad: 'mm' },
   acd: { min: 0.5, max: 5.0, unidad: 'mm' },
   grosorCristalino: { min: 2.0, max: 7.0, unidad: 'mm' },
   wtw: { min: 8.0, max: 14.0, unidad: 'mm' },
@@ -24,57 +22,20 @@ function obligatorio<U extends string, T extends Readonly<[U, ...U[]]>>(valores:
 }
 
 const siNo = (mensaje: string) => z.boolean({ required_error: mensaje, invalid_type_error: mensaje });
-const opcional = <T extends z.ZodTypeAny>(s: T) => s.nullable().optional();
 
-export const eyeInputSchema = z
-  .object({
-    ojo: obligatorio(['OD', 'OI'], 'Seleccione el ojo (OD u OI)'),
-    longitudAxial: numero('Longitud axial', RANGOS.longitudAxial),
-    laMediaReferencia: opcional(numero('LA media de referencia', RANGOS.laMediaReferencia)),
-    laDEReferencia: opcional(numero('DE de referencia', RANGOS.laDEReferencia)),
-    acd: numero('Cámara anterior', RANGOS.acd),
-    grosorCristalino: numero('Cristalino (LT)', RANGOS.grosorCristalino),
-    angulo: obligatorio(['abierto', 'estrecho', 'deformado', 'cerrado'], 'Seleccione el ángulo por gonioscopía'),
-    wtw: numero('WTW', RANGOS.wtw),
-    cristalino: z.enum(['normal', 'coloboma', 'intumescente']).optional(),
-    malformaciones: siNo('Indique si hay malformaciones anatómicas'),
-    refraccion: z.enum(['hipermetropiaLeve', 'hipermetropiaAlta', 'hipermetropiaModerada']).optional(),
-    sinequias: z.enum(['no', 'menor180', 'mayor180']).optional(),
-    pupilaSinequiada: z.boolean().default(false),
-    alteracionesRetinianas: z.object({
-      retinitisPigmentaria: z.boolean().default(false),
-      foveosquisis: z.boolean().default(false),
-      drusasNervioOptico: z.boolean().default(false),
-      plieguesPapilomaculares: z.boolean().default(false),
-      agujeroMacular: z.boolean().default(false),
-      otra: z.boolean().default(false),
-    }),
-    alteracionesAsociadas: z
-      .object({
-        leves: z.boolean().default(false),
-        colobomas: z.boolean().default(false),
-        intumescencia: z.boolean().default(false),
-      })
-      .default({}),
-    factoresRiesgo: z.object({
-      pseudoexfoliacion: z.boolean().default(false),
-      cirugiaFiltrantePrevia: z.boolean().default(false),
-      cirugiaCatarataPrevia: z.boolean().default(false),
-      cierreAngularAgudoAdelfo: z.boolean().default(false),
-      antecedenteFamiliarGlaucoma: z.boolean().default(false),
-    }),
-  })
-  .superRefine((d, ctx) => {
-    const media = d.laMediaReferencia != null;
-    const de = d.laDEReferencia != null;
-    if (media !== de) {
-      ctx.addIssue({
-        code: 'custom',
-        path: [media ? 'laDEReferencia' : 'laMediaReferencia'],
-        message: 'Ingrese la media y la DE de referencia juntas (o deje ambas vacías para usar LA < 21 mm)',
-      });
-    }
-  }) satisfies z.ZodType<EyeInput, z.ZodTypeDef, unknown>;
+/**
+ * Solo las variables de la tabla de clasificación. Las claves de evaluaciones
+ * antiguas (refracción, sinequias, alteraciones…) se descartan al validar.
+ */
+export const eyeInputSchema = z.object({
+  ojo: obligatorio(['OD', 'OI'], 'Seleccione el ojo (OD u OI)'),
+  longitudAxial: numero('Longitud axial', RANGOS.longitudAxial),
+  acd: numero('Cámara anterior', RANGOS.acd),
+  grosorCristalino: numero('Cristalino (LT)', RANGOS.grosorCristalino),
+  angulo: obligatorio(['abierto', 'estrecho', 'deformado', 'cerrado'], 'Seleccione el ángulo por gonioscopía'),
+  wtw: numero('WTW', RANGOS.wtw),
+  malformaciones: siNo('Indique si hay malformaciones anatómicas'),
+}) satisfies z.ZodType<EyeInput, z.ZodTypeDef, unknown>;
 
 export type EyeInputForm = z.input<typeof eyeInputSchema>;
 

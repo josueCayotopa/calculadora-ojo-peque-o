@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
 import type { EvaluacionCompleta, EyeInput } from '@/engine/types';
-import { NOMBRE_CAMPO, NOMBRE_VALOR, conSinequias, formatNumero, indiceLTAL, siNo, tecnicasAlternativas } from '@/engine';
+import { NOMBRE_VALOR, formatNumero, indiceLTAL, siNo, tecnicasAlternativas } from '@/engine';
 import { clinicalConfig, terminosUsados } from '@/config';
 import { nombreTipo, resumenResultado } from '@/state/EvaluationContext';
 
@@ -43,27 +43,15 @@ async function cargarPoppins(doc: jsPDF): Promise<string> {
   }
 }
 
-/** Nombres de las casillas marcadas de un grupo (retina, factores de riesgo). */
-function marcados(grupo: string, obj: object): string {
-  const nombres = Object.entries(obj)
-    .filter(([, v]) => v === true)
-    .map(([k]) => NOMBRE_CAMPO[`${grupo}.${k}` as keyof typeof NOMBRE_CAMPO] ?? k);
-  return nombres.length ? nombres.join(', ') : 'Ninguno';
-}
-
 function datosIngresados(e: EyeInput): [string, string][] {
   return [
     ['Longitud axial (LA)', `${formatNumero(e.longitudAxial)} mm`],
     ['Cámara anterior (CA)', `${formatNumero(e.acd)} mm`],
     ['Ángulo (gonioscopía)', NOMBRE_VALOR[e.angulo]],
-    ['Sinequias', e.sinequias && e.sinequias !== 'no' ? NOMBRE_VALOR[e.sinequias] : 'No'],
     ['Cristalino (LT)', e.grosorCristalino != null ? `${formatNumero(e.grosorCristalino)} mm` : 'No ingresado'],
     ['Índice LT/AL (calculado)', indiceLTAL(e)?.toFixed(3) ?? 'Sin dato'],
     ['Malformaciones anatómicas', siNo('malformaciones', e.malformaciones)],
     ['WTW', `${formatNumero(e.wtw)} mm`],
-    ['Refracción', e.refraccion ? (NOMBRE_VALOR[e.refraccion] ?? e.refraccion) : 'No ingresada'],
-    ['Alteraciones asociadas', marcados('alteracionesAsociadas', e.alteracionesAsociadas ?? {})],
-    ['Alteraciones retinianas', marcados('alteracionesRetinianas', e.alteracionesRetinianas)],
   ];
 }
 
@@ -216,20 +204,20 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
       const nombre = `Tipo ${t.romano} · ${t.nombre}`;
       const alternativas = tecnicasAlternativas(t.id, clinicalConfig);
       if (!alternativas.length) {
-        filas.push({ tipo: nombre + (esPlan ? marca : ''), tratamiento: [...t.preoperatorio, ...conSinequias(t.tecnica, e.entrada)].join(' · '), elegida: esPlan });
+        filas.push({ tipo: nombre + (esPlan ? marca : ''), tratamiento: [...t.preoperatorio, ...t.tecnica].join(' · '), elegida: esPlan });
         continue;
       }
       const habitual = esPlan && !tipoPlan.tecnicaPorExcepcion;
       filas.push({
         tipo: `${nombre}\nTécnica habitual${habitual ? marca : ''}`,
-        tratamiento: [...t.preoperatorio, ...conSinequias(t.tecnica, e.entrada)].join(' · '),
+        tratamiento: [...t.preoperatorio, ...t.tecnica].join(' · '),
         elegida: habitual,
       });
       for (const a of alternativas) {
         const elegida = esPlan && tipoPlan.tecnicaPorExcepcion === a.titulo;
         filas.push({
           tipo: `${nombre}\n${a.titulo}${elegida ? marca : ''}`,
-          tratamiento: `${[...t.preoperatorio, ...conSinequias(a.tecnica, e.entrada)].join(' · ')}\nSi: ${a.condicion}`,
+          tratamiento: `${[...t.preoperatorio, ...a.tecnica].join(' · ')}\nSi: ${a.condicion}`,
           elegida,
         });
       }

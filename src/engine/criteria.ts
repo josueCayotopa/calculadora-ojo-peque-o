@@ -18,24 +18,7 @@ export const NOMBRE_CAMPO: Record<CampoNumerico | CampoEnum | CampoBooleano, str
   wtw: 'WTW',
   indiceLTAL: 'Índice LT/AL',
   angulo: 'Ángulo',
-  cristalino: 'Cristalino',
-  refraccion: 'Refracción',
   malformaciones: 'Malformaciones anatómicas',
-  pupilaSinequiada: 'Pupila sinequiada',
-  'alteracionesRetinianas.retinitisPigmentaria': 'Retinitis pigmentaria',
-  'alteracionesRetinianas.foveosquisis': 'Foveosquisis',
-  'alteracionesRetinianas.drusasNervioOptico': 'Drusas del nervio óptico',
-  'alteracionesRetinianas.plieguesPapilomaculares': 'Pliegues papilomaculares',
-  'alteracionesRetinianas.agujeroMacular': 'Agujero macular',
-  'alteracionesRetinianas.otra': 'Otra alteración retiniana',
-  'alteracionesAsociadas.leves': 'Alteraciones leves',
-  'alteracionesAsociadas.colobomas': 'Colobomas',
-  'alteracionesAsociadas.intumescencia': 'Intumescencia',
-  'factoresRiesgo.pseudoexfoliacion': 'Pseudoexfoliación',
-  'factoresRiesgo.cirugiaFiltrantePrevia': 'Cirugía filtrante previa',
-  'factoresRiesgo.cirugiaCatarataPrevia': 'Cirugía de catarata previa',
-  'factoresRiesgo.cierreAngularAgudoAdelfo': 'Cierre angular agudo en el ojo adelfo',
-  'factoresRiesgo.antecedenteFamiliarGlaucoma': 'Antecedente familiar de glaucoma',
 };
 
 export const NOMBRE_VALOR: Record<string, string> = {
@@ -49,11 +32,6 @@ export const NOMBRE_VALOR: Record<string, string> = {
   intumescente: 'intumescente',
   coloboma: 'coloboma',
   microcornea: 'microcórnea',
-  hipermetropiaLeve: 'hipermetropía leve',
-  hipermetropiaAlta: 'hipermetropía alta',
-  hipermetropiaModerada: 'hipermetropía moderada',
-  menor180: '< 180°',
-  mayor180: '> 180°',
 };
 
 /** Texto del «Sí» con su precisión clínica, como en la tabla de clasificación. */
@@ -125,30 +103,11 @@ function leerEnum(input: EyeInput, campo: CampoEnum): string | null {
 }
 
 function leerBooleano(input: EyeInput, campo: CampoBooleano): boolean {
-  const [grupo, clave] = campo.split('.') as [string, string | undefined];
-  if (clave) {
-    const obj = (input as unknown as Record<string, Record<string, boolean> | undefined>)[grupo];
-    return Boolean(obj?.[clave]);
-  }
-  return Boolean(input[campo as 'malformaciones' | 'pupilaSinequiada']);
+  return Boolean(input[campo]);
 }
 
-/** Umbral de LA "media − n·DE" si el usuario ingresó referencia válida; si no, null. */
-export function umbralDE(input: EyeInput, nDE: number): number | null {
-  const m = input.laMediaReferencia;
-  const de = input.laDEReferencia;
-  if (typeof m === 'number' && Number.isFinite(m) && typeof de === 'number' && Number.isFinite(de) && de > 0) {
-    return m - nDE * de;
-  }
-  return null;
-}
-
-/**
- * Etiqueta legible generada a partir del criterio, para que nunca quede desfasada
- * del umbral. Con `input`, los criterios dependientes del paciente (media − DE)
- * muestran el umbral efectivo.
- */
-export function etiquetaCriterio(c: Criterio, input?: EyeInput): string {
+/** Etiqueta legible generada a partir del criterio, para que nunca quede desfasada del umbral. */
+export function etiquetaCriterio(c: Criterio): string {
   if (c.etiqueta) return c.etiqueta;
   switch (c.op) {
     case 'entre':
@@ -159,13 +118,6 @@ export function etiquetaCriterio(c: Criterio, input?: EyeInput): string {
       return `${NOMBRE_CAMPO[c.campo]} ${c.valores.map((v) => NOMBRE_VALOR[v] ?? v).join(' o ')}`;
     case 'es':
       return c.valor ? NOMBRE_CAMPO[c.campo] : `Sin ${NOMBRE_CAMPO[c.campo].charAt(0).toLowerCase()}${NOMBRE_CAMPO[c.campo].slice(1)}`;
-    case 'bajoDE': {
-      const s = SIMBOLO[c.opComparacion];
-      const u = input ? umbralDE(input, c.nDE) : null;
-      if (u !== null) return `LA ${s} media − ${c.nDE} DE (${formatNumero(u)} mm)`;
-      if (input) return `LA ${s} ${formatNumero(c.valorRespaldo)} mm`;
-      return `LA ${s} media − ${c.nDE} DE (o ${s} ${formatNumero(c.valorRespaldo)} mm)`;
-    }
     case 'iguales':
     case 'cualquiera':
       return c.etiqueta;
@@ -175,7 +127,7 @@ export function etiquetaCriterio(c: Criterio, input?: EyeInput): string {
 }
 
 export function evaluarCriterio(c: Criterio, input: EyeInput, tol: Tolerancia = SIN_TOLERANCIA): CriterioEvaluado {
-  const etiqueta = etiquetaCriterio(c, input);
+  const etiqueta = etiquetaCriterio(c);
   const base = { etiqueta, peso: c.peso ?? 1, nivel: c.nivel ?? 'apoyo', enLimite: false, sinDato: false } as const;
   const sinDato = (campo?: string): CriterioEvaluado => ({ ...base, campo, cumple: false, sinDato: true, observado: 'sin dato' });
 
@@ -208,18 +160,6 @@ export function evaluarCriterio(c: Criterio, input: EyeInput, tol: Tolerancia = 
     case 'es': {
       const v = leerBooleano(input, c.campo);
       return { ...base, campo: c.campo, cumple: v === c.valor, observado: v ? 'sí' : 'no' };
-    }
-    case 'bajoDE': {
-      const x = leerNumero(input, 'longitudAxial');
-      if (x === null) return sinDato(c.campo);
-      const umbral = umbralDE(input, c.nDE) ?? c.valorRespaldo;
-      return {
-        ...base,
-        campo: c.campo,
-        cumple: comparar(x, c.opComparacion, umbral),
-        observado: `${formatNumero(x)} mm`,
-        enLimite: Math.abs(x - umbral) <= tol.mm + EPS,
-      };
     }
     case 'entre': {
       const x = leerNumero(input, c.campo);

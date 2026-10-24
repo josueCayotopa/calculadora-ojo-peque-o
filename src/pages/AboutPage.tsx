@@ -29,6 +29,11 @@ function claveCriterio(c: Criterio): string {
 
 /** Texto corto de un criterio para la celda (sin el nombre del campo). */
 function celda(c: Criterio): string {
+  // La LA de los tipos III y IV conserva la notación «(−2 DE)» de la tabla original.
+  return c.etiqueta?.includes('−2 DE') ? `${celdaValor(c)} (−2 DE)` : celdaValor(c);
+}
+
+function celdaValor(c: Criterio): string {
   switch (c.op) {
     case 'entre':
       return c.campo === 'indiceLTAL' ? `${c.min.toFixed(2)}–${c.max.toFixed(2)}` : `${formatNumero(c.min)}–${formatNumero(c.max)} mm`;
@@ -41,12 +46,10 @@ function celda(c: Criterio): string {
         if (precision) return `Sí (${precision[1]})`;
       }
       return siNo(c.campo, c.valor);
-    case 'bajoDE':
-      return `${SIM[c.opComparacion]} ${formatNumero(c.valorRespaldo)} mm (−${c.nDE} DE)`;
     case 'iguales':
       return 'Proporcional';
     case 'cualquiera':
-      return c.etiqueta.startsWith('Alteraciones') ? 'Retinianas' : c.etiqueta;
+      return c.etiqueta;
     default:
       return `${SIM[c.op]} ${formatMedida(c.campo, c.valor)}`;
   }

@@ -36,7 +36,6 @@ describe('Tipo II — Microftalmos posterior relativo (MPR)', () => {
     ['caso típico', tipoII()],
     ['LA muy corta, CA amplia', tipoII({ longitudAxial: 16.0, acd: 3.2, grosorCristalino: 3.0 })],
     ['CA justo por encima de 2.5', tipoII({ acd: 2.51 })],
-    ['sin alteraciones retinianas (ya no son criterio)', tipoII({ alteracionesRetinianas: { plieguesPapilomaculares: false } })],
   ])('%s → II', (_, input) => {
     expect(diagnostico(input)).toBe('II');
   });
@@ -139,14 +138,14 @@ describe('Límites exactos', () => {
   it('LA 19.99: no cumple LA ≥ 20 del MS', () => {
     const r = clasificar(tipoIII({ longitudAxial: 19.99 }), config);
     expect(r.estado).toBe('zona_gris');
-    expect(r.conflictos.map((c) => c.etiqueta)).toContain('LA ≥ 20.0 mm');
+    expect(r.conflictos.map((c) => c.etiqueta)).toContain('20 ≤ LA < 21 mm (−2 DE)');
   });
 
   it('LA 21.0: no cumple LA < 21 del MS', () => {
     expect(diagnostico(tipoIII({ longitudAxial: 20.99 }))).toBe('III');
     const r = clasificar(tipoIII({ longitudAxial: 21.0 }), config);
     expect(r.estado).toBe('zona_gris');
-    expect(r.conflictos.map((c) => c.etiqueta)).toContain('LA < 21.0 mm');
+    expect(r.conflictos.map((c) => c.etiqueta)).toContain('20 ≤ LA < 21 mm (−2 DE)');
   });
 
   it('LA 22.5: no cumple LA > 22.5 del MAR', () => {
@@ -184,26 +183,14 @@ describe('Límites exactos', () => {
   });
 });
 
-describe('LA < media − 2 DE', () => {
-  it('con media y DE de referencia se usa el umbral calculado', () => {
-    // 23.5 − 2 × 1.0 = 21.5 → LA 21.2 cumple aunque sea ≥ 21
-    const input = tipoIII({ longitudAxial: 21.2, laMediaReferencia: 23.5, laDEReferencia: 1.0 });
-    const r = clasificar(input, config);
-    expect(r.tipo?.id).toBe('III');
-    expect(r.tipo?.criterios[1].etiqueta).toBe('LA < media − 2 DE (21.5 mm)');
+describe('LA −2 DE (< 21 mm)', () => {
+  it('LA = 21 mm exactos no cumple < 21 (tipos III y IV)', () => {
+    expect(diagnostico(tipoIII({ longitudAxial: 21.0 }))).toBe('zona_gris');
+    expect(diagnostico(tipoIV({ longitudAxial: 21.0 }))).toBe('zona_gris');
   });
 
-  it('sin referencia se usa LA < 21 mm', () => {
-    expect(diagnostico(tipoIII({ longitudAxial: 21.2 }))).toBe('zona_gris');
-  });
-
-  it('una referencia más exigente excluye un ojo que cumpliría < 21', () => {
-    // 23.0 − 2 × 1.2 = 20.6 → LA 20.8 no cumple
-    expect(diagnostico(tipoIII({ longitudAxial: 20.8, laMediaReferencia: 23.0, laDEReferencia: 1.2 }))).toBe('zona_gris');
-  });
-
-  it('DE inválida (0) se ignora y se usa el respaldo', () => {
-    expect(diagnostico(tipoIII({ laMediaReferencia: 23.5, laDEReferencia: 0 }))).toBe('III');
+  it('la etiqueta conserva la notación de la tabla', () => {
+    expect(clasificar(tipoIII(), config).tipo?.criterios[0].etiqueta).toBe('20 ≤ LA < 21 mm (−2 DE)');
   });
 });
 
@@ -308,20 +295,11 @@ describe('Pureza', () => {
   });
 });
 
-describe('Sinequias', () => {
-  it.each([
-    ['mayor180', 'Válvula de Ahmed'],
-    ['menor180', 'Goniosinequiálisis'],
-  ] as const)('%s añade «%s» a la técnica de todos los tipos', (sinequias, tecnica) => {
+describe('Tratamiento', () => {
+  it('cada tipo recibe exactamente la técnica de su configuración', () => {
     for (const input of [tipoI(), tipoII(), tipoIII(), tipoIV(), tipoV()]) {
-      const r = clasificar({ ...input, sinequias }, config);
-      expect(r.tipo?.tecnica.at(-1)).toBe(tecnica);
-      expect(r.ranking.every((t) => t.tecnica.at(-1) === tecnica)).toBe(true);
+      const r = clasificar(input, config);
+      expect(r.tipo?.tecnica).toEqual(config.tipos.find((t) => t.id === r.tipo?.id)?.tecnica);
     }
-  });
-
-  it('sin sinequias no cambia la técnica', () => {
-    const base = clasificar(tipoII(), config).tipo?.tecnica;
-    expect(clasificar({ ...tipoII(), sinequias: 'no' }, config).tipo?.tecnica).toEqual(base);
   });
 });

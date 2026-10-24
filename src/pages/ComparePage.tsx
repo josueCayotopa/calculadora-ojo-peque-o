@@ -49,12 +49,10 @@ const FILAS: Fila[] = [
   { label: 'Longitud axial', valor: (e) => mm(e.entrada.longitudAxial), dif: (a, b) => delta(a.entrada.longitudAxial, b.entrada.longitudAxial) },
   { label: 'Cámara anterior', valor: (e) => mm(e.entrada.acd), dif: (a, b) => delta(a.entrada.acd, b.entrada.acd) },
   { label: 'Ángulo', valor: (e) => NOMBRE_VALOR[e.entrada.angulo] },
-  { label: 'Sinequias', valor: (e) => (e.entrada.sinequias && e.entrada.sinequias !== 'no' ? NOMBRE_VALOR[e.entrada.sinequias] : 'No') },
   { label: 'Cristalino (LT)', valor: (e) => mm(e.entrada.grosorCristalino), dif: (a, b) => delta(a.entrada.grosorCristalino, b.entrada.grosorCristalino) },
   { label: 'Índice LT/AL', valor: (e) => indiceLTAL(e.entrada)?.toFixed(3) ?? '—' },
   { label: 'Malformaciones', valor: (e) => siNo('malformaciones', e.entrada.malformaciones) },
   { label: 'WTW', valor: (e) => mm(e.entrada.wtw), dif: (a, b) => delta(a.entrada.wtw, b.entrada.wtw) },
-  { label: 'Refracción', valor: (e) => (e.entrada.refraccion ? (NOMBRE_VALOR[e.entrada.refraccion] ?? e.entrada.refraccion) : '—') },
 ];
 
 export function ComparePage() {

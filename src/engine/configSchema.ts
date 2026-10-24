@@ -8,30 +8,11 @@ import type { ClinicalConfig, Criterio } from './types';
  */
 
 const campoNumerico = z.enum(['longitudAxial', 'acd', 'grosorCristalino', 'wtw', 'indiceLTAL']);
-const campoEnum = z.enum(['angulo', 'cristalino', 'refraccion']);
-const campoBooleano = z.enum([
-  'malformaciones',
-  'pupilaSinequiada',
-  'alteracionesRetinianas.retinitisPigmentaria',
-  'alteracionesRetinianas.foveosquisis',
-  'alteracionesRetinianas.drusasNervioOptico',
-  'alteracionesRetinianas.plieguesPapilomaculares',
-  'alteracionesRetinianas.agujeroMacular',
-  'alteracionesRetinianas.otra',
-  'alteracionesAsociadas.leves',
-  'alteracionesAsociadas.colobomas',
-  'alteracionesAsociadas.intumescencia',
-  'factoresRiesgo.pseudoexfoliacion',
-  'factoresRiesgo.cirugiaFiltrantePrevia',
-  'factoresRiesgo.cirugiaCatarataPrevia',
-  'factoresRiesgo.cierreAngularAgudoAdelfo',
-  'factoresRiesgo.antecedenteFamiliarGlaucoma',
-]);
+const campoEnum = z.enum(['angulo']);
+const campoBooleano = z.enum(['malformaciones']);
 
 export const VALORES_ENUM: Record<z.infer<typeof campoEnum>, readonly string[]> = {
   angulo: ['abierto', 'estrecho', 'deformado', 'cerrado'],
-  cristalino: ['normal', 'coloboma', 'intumescente'],
-  refraccion: ['hipermetropiaLeve', 'hipermetropiaAlta', 'hipermetropiaModerada'],
 };
 
 const comunes = {
@@ -59,19 +40,9 @@ export const criterioSchema: z.ZodType<Criterio> = z.lazy(() =>
       .object({ ...comunes, campo: campoEnum, op: z.literal('en'), valores: z.array(z.string()).min(1) })
       .strict()
       .refine((c) => c.valores.every((v) => VALORES_ENUM[c.campo].includes(v)), {
-        message: 'Valor no permitido para el campo (revise la ortografía: abierto/estrecho/deformado/cerrado, normal/corto, …)',
+        message: 'Valor no permitido para el campo (revise la ortografía: abierto/estrecho/deformado/cerrado)',
       }),
     z.object({ ...comunes, campo: campoBooleano, op: z.literal('es'), valor: z.boolean() }).strict(),
-    z
-      .object({
-        ...comunes,
-        campo: z.literal('longitudAxial'),
-        op: z.literal('bajoDE'),
-        nDE: z.number().positive(),
-        opComparacion: z.enum(['<', '<=']),
-        valorRespaldo: z.number(),
-      })
-      .strict(),
     z
       .object({ ...comunes, op: z.literal('iguales'), campos: z.tuple([campoEnum, campoEnum]), etiqueta: z.string().min(1) })
       .strict(),

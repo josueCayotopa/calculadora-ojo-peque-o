@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0",
+  "version": "3.1.0",
   "fechaRevision": "2026-10-24",
   "toleranciaLimiteMm": 0.05,
   "toleranciaLimiteIndice": 0.005,
@@ -69,8 +69,7 @@
       "nombre": "Microftalmo simple",
       "descripcion": "Ojo globalmente pequeño y estructuralmente proporcional, sin malformaciones.",
       "criterios": [
-        { "nivel": "mayor", "campo": "longitudAxial", "op": ">=", "valor": 20 },
-        { "nivel": "mayor", "campo": "longitudAxial", "op": "bajoDE", "nDE": 2, "opComparacion": "<", "valorRespaldo": 21 },
+        { "nivel": "mayor", "campo": "longitudAxial", "op": "entre", "min": 20, "max": 21, "opMin": ">=", "opMax": "<", "etiqueta": "20 ≤ LA < 21 mm (−2 DE)" },
         { "nivel": "mayor", "campo": "acd", "op": "entre", "min": 2, "max": 2.5, "opMin": ">=", "opMax": "<=" },
         { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["estrecho", "abierto"], "etiqueta": "Ángulo estrecho (puede estar abierto)" },
         { "nivel": "mayor", "campo": "indiceLTAL", "op": "entre", "min": 0.18, "max": 0.2, "opMin": ">=", "opMax": "<=" },
@@ -98,7 +97,7 @@
       "nombre": "Microftalmo complejo",
       "descripcion": "Ojo pequeño con malformaciones anatómicas (colobomas, disgenesias).",
       "criterios": [
-        { "nivel": "mayor", "campo": "longitudAxial", "op": "bajoDE", "nDE": 2, "opComparacion": "<", "valorRespaldo": 21 },
+        { "nivel": "mayor", "campo": "longitudAxial", "op": "<", "valor": 21, "etiqueta": "LA < 21 mm (−2 DE)" },
         { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["deformado"] },
         { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": true },
         { "nivel": "mayor", "campo": "wtw", "op": "<", "valor": 11 }
@@ -163,32 +162,16 @@
     "factores": [
       { "campo": "longitudAxial", "op": "<", "valor": 22.2 },
       { "campo": "acd", "op": "<", "valor": 2.2 },
-      { "campo": "angulo", "op": "en", "valores": ["estrecho", "cerrado"], "etiqueta": "Ángulo estrecho o cerrado" },
-      { "campo": "factoresRiesgo.pseudoexfoliacion", "op": "es", "valor": true },
-      {
-        "op": "cualquiera",
-        "etiqueta": "Cirugía filtrante o de catarata previa",
-        "criterios": [
-          { "campo": "factoresRiesgo.cirugiaFiltrantePrevia", "op": "es", "valor": true },
-          { "campo": "factoresRiesgo.cirugiaCatarataPrevia", "op": "es", "valor": true }
-        ]
-      }
+      { "campo": "angulo", "op": "en", "valores": ["estrecho", "cerrado"], "etiqueta": "Ángulo estrecho o cerrado" }
     ],
     "umbrales": { "moderadoDesde": 2, "altoDesde": 3 }
   },
   "alertaFacomorfica": {
     "criterios": [
       { "campo": "acd", "op": "<", "valor": 2.5 },
-      {
-        "op": "cualquiera",
-        "etiqueta": "Cristalino grueso (> 4.5 mm) o intumescencia",
-        "criterios": [
-          { "campo": "grosorCristalino", "op": ">", "valor": 4.5 },
-          { "campo": "alteracionesAsociadas.intumescencia", "op": "es", "valor": true }
-        ]
-      }
+      { "campo": "grosorCristalino", "op": ">", "valor": 4.5 }
     ],
-    "mensaje": "Cámara anterior estrecha con cristalino grueso o intumescente: evaluar mecanismo facomórfico con UBM."
+    "mensaje": "Cámara anterior estrecha con cristalino grueso: evaluar mecanismo facomórfico con UBM."
   },
   "lio": {
     "biometria": "Use biometría óptica (IOLMaster, Lenstar): en ojos cortos un error pequeño de LA produce un error refractivo mayor. La aplicación no calcula la potencia de la LIO.",
@@ -251,7 +234,7 @@
     { "termino": "Índice LT/AL", "definicion": "Grosor del cristalino dividido por la longitud axial. La app lo calcula a partir de LT y LA." },
     {
       "termino": "DE",
-      "definicion": "Desviación estándar. «< media − 2 DE» se calcula con la media y la DE de referencia ingresadas; sin ellas, se usa LA < 21 mm."
+      "definicion": "Desviación estándar. El «−2 DE» de la tabla se aplica como LA < 21 mm."
     },
     { "termino": "UBM", "definicion": "Biomicroscopía ultrasónica." },
     { "termino": "Rexis", "definicion": "Capsulorrexis circular continua." },
@@ -291,7 +274,8 @@
     "Excepción de vitrectomía central por PP (solo Tipo I): LA > 22.5 mm, CA < 2.0 mm y LT > 5 mm. Con LA de hasta ~22.7 mm, un LT > 5 mm da un índice LT/AL ≥ 0.22, que ya excluye el Tipo I.",
     "CA 2–2.5 mm en MS: Hoffman 2015 describe CA normal en el microftalmo simple.",
     "Significado de «Solo trocar» en el Tipo III (se asume trocar de pars plana 23 G sin vitrectomía programada; Hoffman cita 25G).",
-    "Los umbrales del semáforo de glaucoma maligno (alto desde 3 factores, al retirarse esclera, efusión y cuerpo ciliar) y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.",
+    "Solo se ingresan las variables de la tabla (LA, CA, ángulo, LT para el índice LT/AL, malformaciones y WTW); el tratamiento es el del tipo, sin técnicas añadidas por otras variables.",
+    "Los umbrales del semáforo de glaucoma maligno (LA, CA y ángulo; alto con los 3) y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.",
     "El ángulo es criterio mayor en los 5 tipos: un microftalmo complejo (malformaciones) sin ángulo deformado queda en zona gris."
   ]
 }

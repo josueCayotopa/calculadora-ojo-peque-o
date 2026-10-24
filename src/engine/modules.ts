@@ -10,15 +10,6 @@ import type {
   ResultadoLio,
 } from './types';
 
-/** Técnica que las sinequias anteriores añaden al tratamiento, sea cual sea el tipo. */
-export const TECNICA_SINEQUIAS = { menor180: 'Goniosinequiálisis', mayor180: 'Válvula de Ahmed' } as const;
-
-/** Técnica de un tipo con la añadida por las sinequias (si las hay). */
-export function conSinequias(tecnica: string[], input: Pick<EyeInput, 'sinequias'>): string[] {
-  const s = input.sinequias;
-  return s === 'menor180' || s === 'mayor180' ? [...tecnica, TECNICA_SINEQUIAS[s]] : tecnica;
-}
-
 /** Riesgo de glaucoma maligno: conteo de factores presentes → semáforo. */
 export function riesgoGlaucomaMaligno(input: EyeInput, config: ClinicalConfig): ResultadoGlaucomaMaligno {
   const { factores, umbrales } = config.glaucomaMaligno;

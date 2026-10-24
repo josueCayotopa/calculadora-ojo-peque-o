@@ -10,30 +10,17 @@ describe('Riesgo de glaucoma maligno', () => {
     const r = riesgoGlaucomaMaligno(tipoI(), config);
     expect(r.presentes).toBe(2);
     expect(r.nivel).toBe('moderado');
-    expect(r.total).toBe(5);
+    expect(r.total).toBe(3);
   });
 
   it('1 factor → bajo', () => {
     expect(riesgoGlaucomaMaligno(tipoI({ angulo: 'abierto' }), config).nivel).toBe('bajo');
   });
 
-  it('3 factores → alto (umbral exacto)', () => {
-    const r = riesgoGlaucomaMaligno(tipoI({ factoresRiesgo: { pseudoexfoliacion: true } }), config);
+  it('nanoftalmos: LA, CA y ángulo → alto', () => {
+    const r = riesgoGlaucomaMaligno(tipoV(), config);
     expect(r.presentes).toBe(3);
     expect(r.nivel).toBe('alto');
-  });
-
-  it('nanoftalmos → alto', () => {
-    expect(riesgoGlaucomaMaligno(tipoV(), config).nivel).toBe('alto');
-  });
-
-  it('cirugía filtrante y de catarata previa cuentan como un solo factor', () => {
-    const una = riesgoGlaucomaMaligno(tipoI({ factoresRiesgo: { cirugiaFiltrantePrevia: true } }), config).presentes;
-    const ambas = riesgoGlaucomaMaligno(
-      tipoI({ factoresRiesgo: { cirugiaFiltrantePrevia: true, cirugiaCatarataPrevia: true } }),
-      config,
-    ).presentes;
-    expect(ambas).toBe(una);
   });
 });
 
@@ -41,8 +28,8 @@ describe('Alerta facomórfica', () => {
   it('CA < 2.5 con cristalino > 4.5 mm → alerta', () => {
     expect(alertaFacomorfica(tipoIII({ acd: 2.4, grosorCristalino: 4.6 }), config).activa).toBe(true);
   });
-  it('CA < 2.5 con relación cristalino/volumen alta o intumescencia (sin grosor medido) → alerta', () => {
-    expect(alertaFacomorfica(tipoV({ grosorCristalino: null }), config).activa).toBe(true);
+  it('sin grosor del cristalino medido → sin alerta', () => {
+    expect(alertaFacomorfica(tipoV({ grosorCristalino: null }), config).activa).toBe(false);
   });
   it('CA = 2.5 exactos → sin alerta', () => {
     expect(alertaFacomorfica(tipoIII({ acd: 2.5, grosorCristalino: 5.0 }), config).activa).toBe(false);
