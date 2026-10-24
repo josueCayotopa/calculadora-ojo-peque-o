@@ -3,7 +3,7 @@ import { FileDown, Plus } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert } from '@/components/ui/alert';
-import { NOMBRE_VALOR, formatNumero, siNo } from '@/engine';
+import { NOMBRE_VALOR, formatNumero, indiceLTAL, siNo } from '@/engine';
 import type { EvaluacionCompleta, NivelRiesgo, Ojo } from '@/engine/types';
 import { resumenResultado, useEvaluaciones } from '@/state/EvaluationContext';
 import { useExportarPdf } from './ResultPage';
@@ -32,7 +32,7 @@ const FILAS: Fila[] = [
     label: 'Criterios',
     valor: (e) => {
       const t = e.clasificacion.tipo ?? e.clasificacion.masCercanos[0];
-      return `Mayores ${t.mayores.cumplidos}/${t.mayores.total} · apoyo ${Math.round(t.apoyo.porcentaje * 100)} %`;
+      return `Mayores ${t.mayores.cumplidos}/${t.mayores.total}${t.apoyo.total ? ` · apoyo ${Math.round(t.apoyo.porcentaje * 100)} %` : ''}`;
     },
   },
   { label: 'Alertas clínicas', valor: (e) => (e.clasificacion.alertas.length ? e.clasificacion.alertas.map((a) => a.titulo).join('; ') : '—') },
@@ -48,12 +48,12 @@ const FILAS: Fila[] = [
   { label: 'Aviso piggyback', valor: (e) => (e.lio.piggyback.activa ? <Badge variant="warning">Sí</Badge> : 'No') },
   { label: 'Longitud axial', valor: (e) => mm(e.entrada.longitudAxial), dif: (a, b) => delta(a.entrada.longitudAxial, b.entrada.longitudAxial) },
   { label: 'Cámara anterior', valor: (e) => mm(e.entrada.acd), dif: (a, b) => delta(a.entrada.acd, b.entrada.acd) },
-  { label: 'Grosor escleral (PP)', valor: (e) => mm(e.entrada.grosorEscleral), dif: (a, b) => delta(a.entrada.grosorEscleral, b.entrada.grosorEscleral) },
   { label: 'Ángulo', valor: (e) => NOMBRE_VALOR[e.entrada.angulo] },
   { label: 'Sinequias', valor: (e) => (e.entrada.sinequias && e.entrada.sinequias !== 'no' ? NOMBRE_VALOR[e.entrada.sinequias] : 'No') },
-  { label: 'Efusión coroidea', valor: (e) => siNo('efusionCoroidea', e.entrada.efusionCoroidea) },
-  { label: 'Cuerpo ciliar', valor: (e) => NOMBRE_VALOR[e.entrada.cuerpoCiliar] },
   { label: 'Cristalino (LT)', valor: (e) => mm(e.entrada.grosorCristalino), dif: (a, b) => delta(a.entrada.grosorCristalino, b.entrada.grosorCristalino) },
+  { label: 'Índice LT/AL', valor: (e) => indiceLTAL(e.entrada)?.toFixed(3) ?? '—' },
+  { label: 'Malformaciones', valor: (e) => siNo('malformaciones', e.entrada.malformaciones) },
+  { label: 'WTW', valor: (e) => mm(e.entrada.wtw), dif: (a, b) => delta(a.entrada.wtw, b.entrada.wtw) },
   { label: 'Refracción', valor: (e) => (e.entrada.refraccion ? (NOMBRE_VALOR[e.entrada.refraccion] ?? e.entrada.refraccion) : '—') },
 ];
 

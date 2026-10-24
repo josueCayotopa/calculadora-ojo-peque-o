@@ -8,7 +8,7 @@ export const RANGOS = {
   laDEReferencia: { min: 0.1, max: 3.0, unidad: 'mm' },
   acd: { min: 0.5, max: 5.0, unidad: 'mm' },
   grosorCristalino: { min: 2.0, max: 7.0, unidad: 'mm' },
-  grosorEscleral: { min: 0.3, max: 3.0, unidad: 'mm' },
+  wtw: { min: 8.0, max: 14.0, unidad: 'mm' },
 } as const;
 
 function numero(nombre: string, { min, max, unidad }: { min: number; max: number; unidad: string }) {
@@ -35,9 +35,7 @@ export const eyeInputSchema = z
     acd: numero('Cámara anterior', RANGOS.acd),
     grosorCristalino: numero('Cristalino (LT)', RANGOS.grosorCristalino),
     angulo: obligatorio(['abierto', 'estrecho', 'deformado', 'cerrado'], 'Seleccione el ángulo por gonioscopía'),
-    grosorEscleral: numero('Grosor escleral (polo posterior)', RANGOS.grosorEscleral),
-    efusionCoroidea: siNo('Indique si hay efusión coroidea/uveal'),
-    cuerpoCiliar: obligatorio(['normal', 'anteriorizado'], 'Seleccione la posición del cuerpo ciliar'),
+    wtw: numero('WTW', RANGOS.wtw),
     cristalino: z.enum(['normal', 'coloboma', 'intumescente']).optional(),
     malformaciones: siNo('Indique si hay malformaciones anatómicas'),
     refraccion: z.enum(['hipermetropiaLeve', 'hipermetropiaAlta', 'hipermetropiaModerada']).optional(),

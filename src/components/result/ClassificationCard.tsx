@@ -9,7 +9,11 @@ import { EyeSchematic, describirEsquema } from './EyeSchematic';
 import { TratamientoIndicado } from './Panels';
 
 /** Alertas que no deben quedar escondidas en una pestaña: se muestran junto al diagnóstico. */
-export const ALERTAS_CRITICAS = new Set(['rasgos-nanoftalmos', 'excepcion-vitrectomia']);
+export const ALERTAS_CRITICAS = new Set(['excepcion-vitrectomia']);
+
+/** Fracción de criterios mayores cumplidos (todas las filas de la tabla son mayores). */
+const fraccionMayores = (t: TipoEvaluado) => (t.mayores.total ? t.mayores.cumplidos / t.mayores.total : 0);
+const textoApoyo = (t: TipoEvaluado) => (t.apoyo.total ? ` · apoyo ${Math.round(t.apoyo.porcentaje * 100)} %` : '');
 
 /** Bloque principal: número romano grande, como en la diapositiva del algoritmo. */
 export function DiagnosticoHero({ evaluacion, onVerAlertas }: { evaluacion: EvaluacionCompleta; onVerAlertas?: () => void }) {
@@ -40,7 +44,7 @@ export function DiagnosticoHero({ evaluacion, onVerAlertas }: { evaluacion: Eval
         )}
         <p className="mt-2 text-xs opacity-90">
           {tipo
-            ? `Cumple ${tipo.mayores.cumplidos}/${tipo.mayores.total} criterios mayores · apoyo ${Math.round(tipo.apoyo.porcentaje * 100)} %`
+            ? `Cumple ${tipo.mayores.cumplidos}/${tipo.mayores.total} criterios mayores${textoApoyo(tipo)}`
             : `Ningún tipo cumple sus criterios mayores. Más cercanos: ${c.masCercanos.map((t) => `Tipo ${t.romano}`).join(' y ')}. No se fuerza un diagnóstico.`}
         </p>
       </div>
@@ -88,14 +92,21 @@ function DetalleTipo({ t }: { t: TipoEvaluado }) {
     <div className="space-y-2">
       <div className="flex items-center gap-3">
         <span className="shrink-0 text-xs text-slateGray">
-          Mayores <strong className="text-ink">{t.mayores.cumplidos}/{t.mayores.total}</strong> · Apoyo{' '}
-          <strong className="text-ink">
-            {t.apoyo.cumplidos}/{t.apoyo.total}
-          </strong>
-          {t.apoyo.sinDato > 0 && ` (${t.apoyo.sinDato} sin dato)`}
+          Mayores <strong className="text-ink">{t.mayores.cumplidos}/{t.mayores.total}</strong>
+          {t.mayores.sinDato > 0 && ` (${t.mayores.sinDato} sin dato)`}
+          {t.apoyo.total > 0 && (
+            <>
+              {' '}
+              · Apoyo{' '}
+              <strong className="text-ink">
+                {t.apoyo.cumplidos}/{t.apoyo.total}
+              </strong>
+              {t.apoyo.sinDato > 0 && ` (${t.apoyo.sinDato} sin dato)`}
+            </>
+          )}
         </span>
         <div className="flex-1">
-          <BarraPorcentaje valor={t.apoyo.porcentaje} etiqueta={`Concordancia de apoyo con el Tipo ${t.romano}`} />
+          <BarraPorcentaje valor={fraccionMayores(t)} etiqueta={`Criterios mayores cumplidos del Tipo ${t.romano}`} />
         </div>
       </div>
       <CriteriaList criterios={t.criterios} />
@@ -189,7 +200,7 @@ export function RankingTipos({ evaluacion }: { evaluacion: EvaluacionCompleta })
               {t.cumpleMayores ? ' ✓' : ''})
             </span>
           </p>
-          <BarraPorcentaje valor={t.apoyo.porcentaje} etiqueta={`Concordancia de apoyo con el Tipo ${t.romano}`} />
+          <BarraPorcentaje valor={fraccionMayores(t)} etiqueta={`Criterios mayores cumplidos del Tipo ${t.romano}`} />
         </li>
       ))}
     </ol>

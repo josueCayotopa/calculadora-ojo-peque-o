@@ -7,11 +7,8 @@ const valido = {
   acd: 2.3,
   grosorCristalino: 4.2,
   angulo: 'estrecho',
-  grosorEscleral: 1.1,
-  efusionCoroidea: false,
-  cuerpoCiliar: 'normal',
+  wtw: 10.5,
   cristalino: 'normal',
-
   malformaciones: false,
   refraccion: 'hipermetropiaModerada',
   alteracionesRetinianas: {},
@@ -43,8 +40,8 @@ describe('eyeInputSchema', () => {
     expect(eyeInputSchema.safeParse({ ...valido, [campo]: valor }).success).toBe(true);
   });
 
-  it('exige ángulo, efusión, cuerpo ciliar y malformaciones', () => {
-    for (const campo of ['angulo', 'efusionCoroidea', 'cuerpoCiliar', 'malformaciones']) {
+  it('exige ángulo, malformaciones y WTW', () => {
+    for (const campo of ['angulo', 'malformaciones', 'wtw']) {
       const { [campo]: _, ...sin } = valido as Record<string, unknown>;
       expect(eyeInputSchema.safeParse(sin).success, campo).toBe(false);
     }
@@ -55,8 +52,8 @@ describe('eyeInputSchema', () => {
     expect(eyeInputSchema.safeParse(sin).success).toBe(true);
   });
 
-  it.each([0.29, 3.01])('rechaza grosor escleral = %s (fuera de rango)', (v) => {
-    expect(eyeInputSchema.safeParse({ ...valido, grosorEscleral: v }).success).toBe(false);
+  it.each([7.9, 14.1])('rechaza WTW = %s (fuera de rango)', (v) => {
+    expect(eyeInputSchema.safeParse({ ...valido, wtw: v }).success).toBe(false);
   });
 
   it('acepta el ángulo "deformado"', () => {

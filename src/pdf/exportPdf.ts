@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
 import type { EvaluacionCompleta, EyeInput } from '@/engine/types';
-import { NOMBRE_CAMPO, NOMBRE_VALOR, conSinequias, formatNumero, siNo, tecnicasAlternativas } from '@/engine';
+import { NOMBRE_CAMPO, NOMBRE_VALOR, conSinequias, formatNumero, indiceLTAL, siNo, tecnicasAlternativas } from '@/engine';
 import { clinicalConfig, terminosUsados } from '@/config';
 import { nombreTipo, resumenResultado } from '@/state/EvaluationContext';
 
@@ -57,11 +57,10 @@ function datosIngresados(e: EyeInput): [string, string][] {
     ['Cámara anterior (CA)', `${formatNumero(e.acd)} mm`],
     ['Ángulo (gonioscopía)', NOMBRE_VALOR[e.angulo]],
     ['Sinequias', e.sinequias && e.sinequias !== 'no' ? NOMBRE_VALOR[e.sinequias] : 'No'],
-    ['Grosor escleral (polo posterior)', `${formatNumero(e.grosorEscleral)} mm`],
-    ['Efusión coroidea', siNo('efusionCoroidea', e.efusionCoroidea)],
-    ['Cuerpo ciliar (UBM)', NOMBRE_VALOR[e.cuerpoCiliar]],
     ['Cristalino (LT)', e.grosorCristalino != null ? `${formatNumero(e.grosorCristalino)} mm` : 'No ingresado'],
+    ['Índice LT/AL (calculado)', indiceLTAL(e)?.toFixed(3) ?? 'Sin dato'],
     ['Malformaciones anatómicas', siNo('malformaciones', e.malformaciones)],
+    ['WTW', `${formatNumero(e.wtw)} mm`],
     ['Refracción', e.refraccion ? (NOMBRE_VALOR[e.refraccion] ?? e.refraccion) : 'No ingresada'],
     ['Alteraciones asociadas', marcados('alteracionesAsociadas', e.alteracionesAsociadas ?? {})],
     ['Alteraciones retinianas', marcados('alteracionesRetinianas', e.alteracionesRetinianas)],
@@ -161,9 +160,9 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
     c.alertas.forEach((a) => parrafo(`${a.titulo}: ${a.mensaje}`, { color: [153, 27, 27] }));
     for (const tipo of c.masCercanos) {
       parrafo(
-        `Tipo ${tipo.romano} · ${nombreTipo(tipo)}: mayores ${tipo.mayores.cumplidos}/${tipo.mayores.total}, apoyo ${
-          tipo.apoyo.cumplidos
-        }/${tipo.apoyo.total} (${Math.round(tipo.apoyo.porcentaje * 100)} %)`,
+        `Tipo ${tipo.romano} · ${nombreTipo(tipo)}: mayores ${tipo.mayores.cumplidos}/${tipo.mayores.total}${
+          tipo.apoyo.total ? `, apoyo ${tipo.apoyo.cumplidos}/${tipo.apoyo.total} (${Math.round(tipo.apoyo.porcentaje * 100)} %)` : ''
+        }`,
         { color: GRIS },
       );
       tabla(
@@ -185,7 +184,7 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
     }
     if (c.advertenciasLimite.length) {
       parrafo(
-        `Valores en el límite (≤ ${clinicalConfig.toleranciaLimiteMm} mm de un umbral): ${c.advertenciasLimite
+        `Valores en el límite (≤ ${clinicalConfig.toleranciaLimiteMm} mm o ≤ ${clinicalConfig.toleranciaLimiteIndice} de índice LT/AL de un umbral): ${c.advertenciasLimite
           .map((a) => `${a.medida} = ${a.observado} (umbral: ${a.criterios.join('; ')})`)
           .join(' · ')}. Considere repetir la medición.`,
         { color: [146, 64, 14] },

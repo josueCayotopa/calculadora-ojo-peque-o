@@ -4,7 +4,6 @@
 
 export type Ojo = 'OD' | 'OI';
 export type Angulo = 'abierto' | 'estrecho' | 'deformado' | 'cerrado';
-export type CuerpoCiliar = 'normal' | 'anteriorizado';
 export type Cristalino = 'normal' | 'coloboma' | 'intumescente';
 export type Refraccion = 'hipermetropiaLeve' | 'hipermetropiaAlta' | 'hipermetropiaModerada';
 /** Extensión de las sinequias anteriores (goniosinequias) en la gonioscopía. */
@@ -47,11 +46,9 @@ export interface EyeInput {
   acd: number;
   /** Grosor del cristalino (LT). Obligatorio en el formulario; opcional en el tipo para evaluaciones antiguas. */
   grosorCristalino?: number | null;
+  /** Diámetro corneal horizontal blanco-blanco (WTW). */
+  wtw: number;
   angulo: Angulo;
-  /** Grosor escleral en el polo posterior (PP), en mm. */
-  grosorEscleral: number;
-  efusionCoroidea: boolean;
-  cuerpoCiliar: CuerpoCiliar;
   /** Ya no se pide en el formulario; se conserva para leer evaluaciones antiguas. */
   cristalino?: Cristalino;
   malformaciones: boolean;
@@ -71,10 +68,10 @@ export interface EyeInput {
 // Criterios (definidos como datos en config/rules.json)
 // ---------------------------------------------------------------------------
 
-export type CampoNumerico = 'longitudAxial' | 'acd' | 'grosorCristalino' | 'grosorEscleral';
-export type CampoEnum = 'angulo' | 'cuerpoCiliar' | 'cristalino' | 'refraccion';
+/** `indiceLTAL` no se ingresa: se calcula como LT / LA (adimensional). */
+export type CampoNumerico = 'longitudAxial' | 'acd' | 'grosorCristalino' | 'wtw' | 'indiceLTAL';
+export type CampoEnum = 'angulo' | 'cristalino' | 'refraccion';
 export type CampoBooleano =
-  | 'efusionCoroidea'
   | 'malformaciones'
   | 'pupilaSinequiada'
   | `alteracionesRetinianas.${keyof AlteracionesRetinianas}`
@@ -178,8 +175,6 @@ export interface TipoClinico {
   sigla?: string;
   nombre: string;
   descripcion?: string;
-  /** Texto descriptivo de la tabla para filas que no son criterios (no influye en la clasificación). */
-  tabla?: { cristalino: string; refraccion: string; alteracionesAsociadas: string };
   criterios: Criterio[];
   preoperatorio: string[];
   tecnica: string[];
@@ -221,6 +216,8 @@ export interface ClinicalConfig {
   fechaRevision: string;
   /** Distancia (mm) a un umbral por debajo de la cual se advierte "valor en el límite". */
   toleranciaLimiteMm: number;
+  /** Lo mismo para el índice LT/AL (adimensional). */
+  toleranciaLimiteIndice: number;
   /** Orden de evaluación: se asigna el primer tipo que cumple todos sus criterios mayores. */
   ordenEvaluacion: string[];
   /** Cuántos tipos cercanos mostrar en zona gris. */
@@ -258,7 +255,7 @@ export interface CriterioEvaluado {
   /** Valor observado, formateado para mostrar. */
   observado: string;
   peso: number;
-  /** true si el valor numérico está a ≤ toleranciaLimiteMm del umbral. */
+  /** true si el valor numérico está a ≤ toleranciaLimiteMm (o toleranciaLimiteIndice) del umbral. */
   enLimite: boolean;
 }
 

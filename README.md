@@ -6,18 +6,17 @@ Aplicación web (PWA) basada en el **algoritmo de manejo de cirugía de catarata
 
 ## Qué hace
 
-El oftalmólogo llena, por ojo (OD/OI), una lista de 10 variables:
+El oftalmólogo llena, por ojo (OD/OI), una lista de 9 variables:
 
 | Variable | Dato |
 |---|---|
 | Longitud axial | mm |
 | Cámara anterior | mm |
 | Ángulo | Abierto · Estrecho/ocluible · Deformado · Cerrado/ocluible |
-| Grosor escleral – polo posterior (PP) | mm |
-| Efusión coroidea | No · Sí |
-| Cuerpo ciliar | Normal · Anteriorizado |
-| Cristalino (LT) | mm |
+| Sinequias *(opcional)* | No · < 180° · > 180° |
+| Cristalino (LT) | mm (con la LA se calcula el **índice LT/AL**) |
 | Malformaciones anatómicas | No · Sí (colobomas y disgenesias) |
+| WTW (blanco-blanco) | mm |
 | Refracción *(opcional)* | Hipermetropía leve · Hipermetropía alta · Hipermetropía moderada |
 | Alteraciones asociadas *(opcional, sin marcar = No)* | Leves · Retinitis pigmentaria · Foveosquisis · Drusas del NO · Pliegues papilomaculares · Agujero macular · Colobomas · Otra alteración retiniana · Intumescencia |
 
@@ -30,23 +29,24 @@ La app devuelve:
 
 ## Criterios por tipo
 
-**Mayor** = obligatorio para asignar el tipo. **Apoyo** = suma al % de concordancia, no decide.
+Tabla del Dr. Fermín Silva. **Todas las filas son criterios mayores** (obligatorios para asignar el tipo); «variable» = no se evalúa.
 
-| Tipo | Mayores | Apoyo |
-|---|---|---|
-| **I** MAR | LA > 22.5 · CA < 2.5 · ángulo estrecho/ocluible | esclera PP < 1.4 · sin efusión · cuerpo ciliar normal · sin malformaciones |
-| **II** MPR | CA > 2.5 · LA < 22.5 · ángulo estrecho/ocluible | esclera PP < 1.4 · sin efusión · cuerpo ciliar normal · sin malformaciones · alguna alteración retiniana |
-| **III** MS | 20 ≤ LA < 21 · 2.0 ≤ CA ≤ 2.5 · sin malformaciones · ángulo estrecho o abierto | esclera PP < 1.4 · sin efusión · cuerpo ciliar normal |
-| **IV** MC | malformaciones · ángulo deformado | LA < 21 · 2.0 ≤ CA ≤ 2.5 · esclera PP < 1.4 · efusión (uveal) · alteración retiniana |
-| **V** Nanoftalmos | LA < 20 · esclera PP > 1.4 · efusión · ángulo cerrado/ocluible | LA ≥ 14.5 · CA < 2.0 · cuerpo ciliar anteriorizado · sin malformaciones · intumescencia |
+| Característica | I MAR | II MPR | III MS | IV MC | V Nanoftalmos |
+|---|---|---|---|---|---|
+| Longitud axial | > 22.5 | < 20 | 20 ≤ LA < 21 (−2 DE) | < 21 (−2 DE) | < 20 |
+| Cámara anterior | < 2.5 | > 2.5 | 2.0–2.5 | variable | < 2.0 |
+| Ángulo | estrecho/ocluible | abierto | estrecho o abierto | deformado | cerrado/ocluible |
+| Índice LT/AL | < 0.22 | < 0.20 | 0.18–0.20 | variable | > 0.22 |
+| Malformaciones | No | No | No | Sí (colobomas y disgenesias) | No |
+| WTW | < 11.0 | > 11.0 | < 11.0 | < 11.0 | < 11.0 |
 
-Medidas en mm. No influyen en la clasificación: **cristalino (LT)**, **refracción** y las alteraciones asociadas **leves** y **colobomas**. El LT se usa en la alerta facomórfica.
+Medidas en mm; el índice LT/AL es adimensional (LT ÷ LA). No influyen en la clasificación: **refracción** y **alteraciones asociadas**. El LT también se usa en la alerta facomórfica.
 
 ## Cómo clasifica
 
 1. Los tipos se evalúan en orden **V → IV → III → II → I**. El diagnóstico es el primero que cumple todos sus mayores.
 2. Si ninguno los cumple: **zona gris**, con los 2 tipos más cercanos y los criterios en conflicto.
-3. Se avisa cuando una medida está a ≤ 0.05 mm de un umbral.
+3. Se avisa cuando una medida está a ≤ 0.05 mm de un umbral (≤ 0.005 en el índice LT/AL).
 4. «LA < media − 2 DE» usa siempre el umbral fijo de **21 mm**.
 5. **Alerta facomórfica:** CA < 2.5 mm con LT > 4.5 mm o intumescencia.
 6. **Excepción del Tipo I:** con LA > 22.5, CA < 2.0 y LT > 5 mm, la técnica pasa a vitrectomía central por PP + rexis con Utrata + facochop.
@@ -62,7 +62,7 @@ Requiere Node.js ≥ 20.
 ```bash
 npm install
 npm run dev              # http://localhost:5173
-npm test                 # 110 pruebas (Vitest)
+npm test                 # 119 pruebas (Vitest)
 npm run build            # typecheck + build en dist/
 npm run docs:validacion  # regenera docs/VALIDACION_CLINICA.md
 ```
@@ -83,20 +83,13 @@ Operadores: `<` `<=` `>` `>=` · `entre` · `en` (lista) · `es` (sí/no) · `ba
 
 Campos:
 
-- **Números:** `longitudAxial`, `acd`, `grosorEscleral` (polo posterior), `grosorCristalino` (LT).
-- **Listas:** `angulo`, `cuerpoCiliar`, `refraccion`.
-- **Sí/No:** `efusionCoroidea`, `malformaciones`, `alteracionesRetinianas.*`, `alteracionesAsociadas.*`.
-
-La fila de texto `tabla` de cada tipo (refracción, alteraciones asociadas) solo se muestra en «Acerca de».
+- **Números:** `longitudAxial`, `acd`, `grosorCristalino` (LT), `wtw`, `indiceLTAL` (calculado: LT / LA).
+- **Listas:** `angulo`, `refraccion`.
+- **Sí/No:** `malformaciones`, `alteracionesRetinianas.*`, `alteracionesAsociadas.*`.
 
 ## Validación con la literatura
 
-Está en la página **Evidencia** y en [docs/VALIDACION_CLINICA.md](docs/VALIDACION_CLINICA.md): 11 puntos concuerdan, 8 parcialmente, 4 difieren y 1 sin evidencia. El autor debe decidir sobre los 4 que difieren:
-
-1. Efusión como criterio mayor del tipo V.
-2. Esclera del nanoftalmos: > 1.4 mm frente a > 1.7 mm.
-3. CA 2–2.5 mm en el MS.
-4. Esclera/efusión del MPR.
+Está en la página **Evidencia** y en [docs/VALIDACION_CLINICA.md](docs/VALIDACION_CLINICA.md): 12 puntos concuerdan, 6 parcialmente, 1 difiere y 2 sin evidencia. Pendiente del autor: la CA 2–2.5 mm en el MS y el respaldo bibliográfico de los cortes del índice LT/AL.
 
 ## Estructura
 

@@ -7,10 +7,9 @@ import type { ClinicalConfig, Criterio } from './types';
  * de forma explícita en lugar de clasificar con reglas corruptas.
  */
 
-const campoNumerico = z.enum(['longitudAxial', 'acd', 'grosorCristalino', 'grosorEscleral']);
-const campoEnum = z.enum(['angulo', 'cuerpoCiliar', 'cristalino', 'refraccion']);
+const campoNumerico = z.enum(['longitudAxial', 'acd', 'grosorCristalino', 'wtw', 'indiceLTAL']);
+const campoEnum = z.enum(['angulo', 'cristalino', 'refraccion']);
 const campoBooleano = z.enum([
-  'efusionCoroidea',
   'malformaciones',
   'pupilaSinequiada',
   'alteracionesRetinianas.retinitisPigmentaria',
@@ -31,7 +30,6 @@ const campoBooleano = z.enum([
 
 export const VALORES_ENUM: Record<z.infer<typeof campoEnum>, readonly string[]> = {
   angulo: ['abierto', 'estrecho', 'deformado', 'cerrado'],
-  cuerpoCiliar: ['normal', 'anteriorizado'],
   cristalino: ['normal', 'coloboma', 'intumescente'],
   refraccion: ['hipermetropiaLeve', 'hipermetropiaAlta', 'hipermetropiaModerada'],
 };
@@ -102,6 +100,7 @@ export const configSchema = z
     version: z.string(),
     fechaRevision: z.string(),
     toleranciaLimiteMm: z.number().min(0),
+    toleranciaLimiteIndice: z.number().min(0),
     ordenEvaluacion: z.array(z.string()).min(1),
     cercanosEnZonaGris: z.number().int().min(1),
     tipos: z
@@ -117,7 +116,6 @@ export const configSchema = z
             preoperatorio: z.array(z.string()),
             tecnica: z.array(z.string()),
             pendiente: z.string().optional(),
-            tabla: z.object({ cristalino: z.string(), refraccion: z.string(), alteracionesAsociadas: z.string() }).strict().optional(),
             esquema: esquemaSchema,
           })
           .strict()

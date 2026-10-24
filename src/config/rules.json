@@ -1,7 +1,8 @@
 {
-  "version": "2.11.0",
-  "fechaRevision": "2026-10-15",
+  "version": "3.0.0",
+  "fechaRevision": "2026-10-24",
   "toleranciaLimiteMm": 0.05,
+  "toleranciaLimiteIndice": 0.005,
   "ordenEvaluacion": ["V", "IV", "III", "II", "I"],
   "cercanosEnZonaGris": 2,
   "tipos": [
@@ -10,16 +11,14 @@
       "romano": "I",
       "sigla": "MAR",
       "nombre": "Microftalmo anterior relativo",
-      "descripcion": "Longitud axial normal con segmento anterior pequeño. Alteraciones asociadas leves.",
-      "tabla": { "cristalino": "< 4.3 mm", "refraccion": "—", "alteracionesAsociadas": "Leves" },
+      "descripcion": "Longitud axial normal con segmento anterior pequeño y microcórnea.",
       "criterios": [
         { "nivel": "mayor", "campo": "longitudAxial", "op": ">", "valor": 22.5 },
         { "nivel": "mayor", "campo": "acd", "op": "<", "valor": 2.5 },
         { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["estrecho"] },
-        { "campo": "grosorEscleral", "op": "<", "valor": 1.4 },
-        { "campo": "efusionCoroidea", "op": "es", "valor": false },
-        { "campo": "cuerpoCiliar", "op": "en", "valores": ["normal"] },
-        { "campo": "malformaciones", "op": "es", "valor": false }
+        { "nivel": "mayor", "campo": "indiceLTAL", "op": "<", "valor": 0.22 },
+        { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": false },
+        { "nivel": "mayor", "campo": "wtw", "op": "<", "valor": 11 }
       ],
       "preoperatorio": ["Manitol 30 min antes"],
       "tecnica": ["Rexis con cistótomo", "Stop and Chop"],
@@ -40,27 +39,14 @@
       "romano": "II",
       "sigla": "MPR",
       "nombre": "Microftalmos posterior relativo",
-      "descripcion": "Segmento anterior de dimensiones normales con segmento posterior corto e hipermetropía alta.",
-      "tabla": { "cristalino": "< 4.3 mm", "refraccion": "Hipermetropía alta", "alteracionesAsociadas": "Retinitis pigmentaria, foveosquisis, drusas del NO, pliegues papilomaculares, agujero macular" },
+      "descripcion": "Segmento anterior de dimensiones normales (CA > 2.5 mm, WTW > 11 mm) con segmento posterior corto.",
       "criterios": [
+        { "nivel": "mayor", "campo": "longitudAxial", "op": "<", "valor": 20 },
         { "nivel": "mayor", "campo": "acd", "op": ">", "valor": 2.5 },
-        { "nivel": "mayor", "campo": "longitudAxial", "op": "<", "valor": 22.5 },
-        { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["estrecho"] },
-        { "campo": "grosorEscleral", "op": "<", "valor": 1.4 },
-        { "campo": "efusionCoroidea", "op": "es", "valor": false },
-        { "campo": "cuerpoCiliar", "op": "en", "valores": ["normal"] },
-        { "campo": "malformaciones", "op": "es", "valor": false },
-        {
-          "op": "cualquiera",
-          "etiqueta": "Alteraciones retinianas (RP, foveosquisis, drusas del NO, pliegues papilomaculares, agujero macular)",
-          "criterios": [
-            { "campo": "alteracionesRetinianas.retinitisPigmentaria", "op": "es", "valor": true },
-            { "campo": "alteracionesRetinianas.foveosquisis", "op": "es", "valor": true },
-            { "campo": "alteracionesRetinianas.drusasNervioOptico", "op": "es", "valor": true },
-            { "campo": "alteracionesRetinianas.plieguesPapilomaculares", "op": "es", "valor": true },
-            { "campo": "alteracionesRetinianas.agujeroMacular", "op": "es", "valor": true }
-          ]
-        }
+        { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["abierto"] },
+        { "nivel": "mayor", "campo": "indiceLTAL", "op": "<", "valor": 0.2 },
+        { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": false },
+        { "nivel": "mayor", "campo": "wtw", "op": ">", "valor": 11 }
       ],
       "preoperatorio": ["Manitol 30 min antes"],
       "tecnica": ["Rexis con Utrata", "Facochop"],
@@ -70,7 +56,7 @@
         "escleraGruesa": false,
         "efusion": false,
         "cristalino": "normal",
-        "microcornea": true,
+        "microcornea": false,
         "cuerpoCiliarAnteriorizado": false,
         "plieguesRetina": true,
         "malformacion": false
@@ -82,16 +68,14 @@
       "sigla": "MS",
       "nombre": "Microftalmo simple",
       "descripcion": "Ojo globalmente pequeño y estructuralmente proporcional, sin malformaciones.",
-      "tabla": { "cristalino": "< 4.3 mm", "refraccion": "Hipermetropía moderada", "alteracionesAsociadas": "No" },
       "criterios": [
-        { "nivel": "mayor", "campo": "longitudAxial", "op": ">=", "valor": 20.0 },
-        { "nivel": "mayor", "campo": "longitudAxial", "op": "bajoDE", "nDE": 2, "opComparacion": "<", "valorRespaldo": 21.0 },
-        { "nivel": "mayor", "campo": "acd", "op": "entre", "min": 2.0, "max": 2.5, "opMin": ">=", "opMax": "<=" },
+        { "nivel": "mayor", "campo": "longitudAxial", "op": ">=", "valor": 20 },
+        { "nivel": "mayor", "campo": "longitudAxial", "op": "bajoDE", "nDE": 2, "opComparacion": "<", "valorRespaldo": 21 },
+        { "nivel": "mayor", "campo": "acd", "op": "entre", "min": 2, "max": 2.5, "opMin": ">=", "opMax": "<=" },
+        { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["estrecho", "abierto"], "etiqueta": "Ángulo estrecho (puede estar abierto)" },
+        { "nivel": "mayor", "campo": "indiceLTAL", "op": "entre", "min": 0.18, "max": 0.2, "opMin": ">=", "opMax": "<=" },
         { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": false },
-        { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["estrecho", "abierto"], "etiqueta": "Ángulo estrecho (podría estar abierto)" },
-        { "campo": "grosorEscleral", "op": "<", "valor": 1.4 },
-        { "campo": "efusionCoroidea", "op": "es", "valor": false },
-        { "campo": "cuerpoCiliar", "op": "en", "valores": ["normal"] }
+        { "nivel": "mayor", "campo": "wtw", "op": "<", "valor": 11 }
       ],
       "preoperatorio": ["Manitol 30 min antes"],
       "tecnica": ["Solo trocar 23 G", "Rexis + Utrata/cistótomo", "Facochop"],
@@ -101,7 +85,7 @@
         "escleraGruesa": false,
         "efusion": false,
         "cristalino": "normal",
-        "microcornea": false,
+        "microcornea": true,
         "cuerpoCiliarAnteriorizado": false,
         "plieguesRetina": false,
         "malformacion": false
@@ -113,26 +97,11 @@
       "sigla": "MC",
       "nombre": "Microftalmo complejo",
       "descripcion": "Ojo pequeño con malformaciones anatómicas (colobomas, disgenesias).",
-      "tabla": { "cristalino": "< 4.3 mm", "refraccion": "—", "alteracionesAsociadas": "Colobomas, alteración retiniana" },
       "criterios": [
-        { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": true },
-        { "campo": "longitudAxial", "op": "bajoDE", "nDE": 2, "opComparacion": "<", "valorRespaldo": 21.0 },
-        { "campo": "acd", "op": "entre", "min": 2.0, "max": 2.5, "opMin": ">=", "opMax": "<=" },
+        { "nivel": "mayor", "campo": "longitudAxial", "op": "bajoDE", "nDE": 2, "opComparacion": "<", "valorRespaldo": 21 },
         { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["deformado"] },
-        { "campo": "grosorEscleral", "op": "<", "valor": 1.4 },
-        { "campo": "efusionCoroidea", "op": "es", "valor": true, "etiqueta": "Efusión coroidea (uveal)" },
-        {
-          "op": "cualquiera",
-          "etiqueta": "Alteración retiniana asociada",
-          "criterios": [
-            { "campo": "alteracionesRetinianas.retinitisPigmentaria", "op": "es", "valor": true },
-            { "campo": "alteracionesRetinianas.foveosquisis", "op": "es", "valor": true },
-            { "campo": "alteracionesRetinianas.drusasNervioOptico", "op": "es", "valor": true },
-            { "campo": "alteracionesRetinianas.plieguesPapilomaculares", "op": "es", "valor": true },
-            { "campo": "alteracionesRetinianas.agujeroMacular", "op": "es", "valor": true },
-            { "campo": "alteracionesRetinianas.otra", "op": "es", "valor": true }
-          ]
-        }
+        { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": true },
+        { "nivel": "mayor", "campo": "wtw", "op": "<", "valor": 11 }
       ],
       "preoperatorio": ["Manitol 30 min antes"],
       "tecnica": ["Vitrectomía central por PP", "Rexis + Utrata"],
@@ -142,7 +111,7 @@
         "escleraGruesa": false,
         "efusion": true,
         "cristalino": "coloboma",
-        "microcornea": false,
+        "microcornea": true,
         "cuerpoCiliarAnteriorizado": false,
         "plieguesRetina": false,
         "malformacion": true
@@ -152,18 +121,14 @@
       "id": "V",
       "romano": "V",
       "nombre": "Nanoftalmos",
-      "descripcion": "Ojo corto con segmentos anterior y posterior cortos, esclera engrosada y tendencia a efusión uveal.",
-      "tabla": { "cristalino": "> 4.3 mm", "refraccion": "Hipermetropía alta", "alteracionesAsociadas": "Intumescencia" },
+      "descripcion": "Ojo corto con cámara anterior estrecha, ángulo cerrado y cristalino desproporcionado (LT/AL > 0.22).",
       "criterios": [
-        { "nivel": "mayor", "campo": "longitudAxial", "op": "<", "valor": 20.0 },
-        { "nivel": "mayor", "campo": "grosorEscleral", "op": ">", "valor": 1.4 },
-        { "nivel": "mayor", "campo": "efusionCoroidea", "op": "es", "valor": true },
-        { "campo": "longitudAxial", "op": ">=", "valor": 14.5 },
-        { "campo": "acd", "op": "<", "valor": 2.0 },
+        { "nivel": "mayor", "campo": "longitudAxial", "op": "<", "valor": 20 },
+        { "nivel": "mayor", "campo": "acd", "op": "<", "valor": 2 },
         { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["cerrado"] },
-        { "campo": "cuerpoCiliar", "op": "en", "valores": ["anteriorizado"] },
-        { "campo": "malformaciones", "op": "es", "valor": false },
-        { "campo": "alteracionesAsociadas.intumescencia", "op": "es", "valor": true }
+        { "nivel": "mayor", "campo": "indiceLTAL", "op": ">", "valor": 0.22 },
+        { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": false },
+        { "nivel": "mayor", "campo": "wtw", "op": "<", "valor": 11 }
       ],
       "preoperatorio": ["Manitol 30 min antes"],
       "tecnica": ["Vitrectomía central por PP", "Rexis + Utrata", "IHZV"],
@@ -182,32 +147,16 @@
   ],
   "alertasClinicas": [
     {
-      "id": "rasgos-nanoftalmos",
-      "titulo": "Rasgos de nanoftalmos sin diagnóstico de Tipo V",
-      "mensaje": "LA < 20 mm con esclera > 1.4 mm. No se asignó el Tipo V porque falta la efusión coroidea (criterio mayor propuesto), pero la literatura describe la efusión como una propensión y no como un requisito diagnóstico. Valore manejar el ojo como nanoftalmos.",
-      "criterios": [
-        { "campo": "longitudAxial", "op": "<", "valor": 20.0 },
-        { "campo": "grosorEscleral", "op": ">", "valor": 1.4 }
-      ],
-      "exceptoTipos": ["V"]
-    },
-    {
       "id": "excepcion-vitrectomia",
       "titulo": "Excepción: vitrectomía central por PP",
       "mensaje": "LA > 22.5 mm, CA < 2.0 mm y cristalino (LT) > 5 mm: en lugar de rexis con cistótomo + Stop and Chop, realizar vitrectomía central por pars plana + rexis con Utrata + facochop.",
       "criterios": [
         { "campo": "longitudAxial", "op": ">", "valor": 22.5 },
-        { "campo": "acd", "op": "<", "valor": 2.0 },
-        { "campo": "grosorCristalino", "op": ">", "valor": 5.0 }
+        { "campo": "acd", "op": "<", "valor": 2 },
+        { "campo": "grosorCristalino", "op": ">", "valor": 5 }
       ],
       "exceptoTipos": ["II", "III", "IV", "V"],
       "reemplazaTecnica": ["Vitrectomía central por PP", "Rexis con Utrata", "Facochop"]
-    },
-    {
-      "id": "efusion-preexistente",
-      "titulo": "Efusión coroidea preexistente",
-      "mensaje": "Hay efusión uveal antes de la cirugía. La literatura sugiere tratarla (cicloplégicos/esteroides) y, si se realizan ventanas esclerales, hacerlas semanas antes de la catarata.",
-      "criterios": [{ "campo": "efusionCoroidea", "op": "es", "valor": true }]
     }
   ],
   "glaucomaMaligno": {
@@ -215,9 +164,6 @@
       { "campo": "longitudAxial", "op": "<", "valor": 22.2 },
       { "campo": "acd", "op": "<", "valor": 2.2 },
       { "campo": "angulo", "op": "en", "valores": ["estrecho", "cerrado"], "etiqueta": "Ángulo estrecho o cerrado" },
-      { "campo": "grosorEscleral", "op": ">=", "valor": 1.4, "etiqueta": "Esclera/coroides ≥ 1.4 mm" },
-      { "campo": "efusionCoroidea", "op": "es", "valor": true },
-      { "campo": "cuerpoCiliar", "op": "en", "valores": ["anteriorizado"] },
       { "campo": "factoresRiesgo.pseudoexfoliacion", "op": "es", "valor": true },
       {
         "op": "cualquiera",
@@ -228,7 +174,7 @@
         ]
       }
     ],
-    "umbrales": { "moderadoDesde": 2, "altoDesde": 4 }
+    "umbrales": { "moderadoDesde": 2, "altoDesde": 3 }
   },
   "alertaFacomorfica": {
     "criterios": [
@@ -248,8 +194,16 @@
     "biometria": "Use biometría óptica (IOLMaster, Lenstar): en ojos cortos un error pequeño de LA produce un error refractivo mayor. La aplicación no calcula la potencia de la LIO.",
     "formulas": [
       { "nombre": "Kane", "url": "https://www.iolformula.com/", "nota": "La más precisa en LA < 22 mm en varios estudios comparativos." },
-      { "nombre": "Holladay 2", "url": "https://www.hicsoap.com/", "nota": "Usa CA, W-W, grosor del cristalino, refracción y edad. Software con licencia." },
-      { "nombre": "Barrett Universal II", "url": "https://calc.apacrs.org/barrett_universal2105/", "nota": "Menos predecible que Kane en ojos cortos en algunas series (Yosar 2021)." },
+      {
+        "nombre": "Holladay 2",
+        "url": "https://www.hicsoap.com/",
+        "nota": "Usa CA, WTW, grosor del cristalino, refracción y edad. Software con licencia."
+      },
+      {
+        "nombre": "Barrett Universal II",
+        "url": "https://calc.apacrs.org/barrett_universal2105/",
+        "nota": "Menos predecible que Kane en ojos cortos en algunas series (Yosar 2021)."
+      },
       { "nombre": "Hoffer QST", "url": "https://hofferqst.com/", "nota": "Sucesora de Hoffer Q, clásicamente recomendada en LA < 22 mm." },
       { "nombre": "Calculadora ESCRS", "url": "https://iolcalculator.escrs.org/", "nota": "Compara varias fórmulas modernas en una sola pantalla." }
     ],
@@ -267,9 +221,21 @@
       "condicion": { "campo": "angulo", "op": "en", "valores": ["estrecho"] }
     },
     { "texto": "Anestesia tópica asistida (con sedación)", "tipos": "todos" },
-    { "texto": "Rexis con cistótomo doblado por paracentesis; considerar azul tripano y viscoelástico cohesivo", "tipos": ["I"], "salvoAlerta": "excepcion-vitrectomia" },
-    { "texto": "Pinza de Utrata para la rexis; considerar azul tripano y viscoelástico cohesivo", "tipos": ["I"], "siAlerta": "excepcion-vitrectomia" },
-    { "texto": "Trocar-cánula y vitrector para vitrectomía central por pars plana (excepción: CA < 2.0 mm y LT > 5 mm)", "tipos": ["I"], "siAlerta": "excepcion-vitrectomia" },
+    {
+      "texto": "Rexis con cistótomo doblado por paracentesis; considerar azul tripano y viscoelástico cohesivo",
+      "tipos": ["I"],
+      "salvoAlerta": "excepcion-vitrectomia"
+    },
+    {
+      "texto": "Pinza de Utrata para la rexis; considerar azul tripano y viscoelástico cohesivo",
+      "tipos": ["I"],
+      "siAlerta": "excepcion-vitrectomia"
+    },
+    {
+      "texto": "Trocar-cánula y vitrector para vitrectomía central por pars plana (excepción: CA < 2.0 mm y LT > 5 mm)",
+      "tipos": ["I"],
+      "siAlerta": "excepcion-vitrectomia"
+    },
     { "texto": "Pinza de Utrata para la rexis; considerar azul tripano y viscoelástico cohesivo", "tipos": ["II", "IV", "V"] },
     { "texto": "Rexis con pinza de Utrata o cistótomo; considerar azul tripano y viscoelástico cohesivo", "tipos": ["III"] },
     { "texto": "Trocar de pars plana 23 G colocado, sin vitrectomía programada", "tipos": ["III"] },
@@ -281,18 +247,28 @@
   "glosario": [
     { "termino": "LA", "definicion": "Longitud axial." },
     { "termino": "CA", "definicion": "Profundidad de la cámara anterior, medida desde el endotelio." },
-    { "termino": "W-W", "definicion": "Diámetro corneal horizontal blanco-blanco. Microcórnea: < 11 mm." },
-    { "termino": "DE", "definicion": "Desviación estándar. «< media − 2 DE» se calcula con la media y la DE de referencia ingresadas; sin ellas, se usa LA < 21 mm." },
+    { "termino": "WTW", "definicion": "Diámetro corneal horizontal blanco-blanco (white-to-white). Microcórnea: < 11 mm." },
+    { "termino": "Índice LT/AL", "definicion": "Grosor del cristalino dividido por la longitud axial. La app lo calcula a partir de LT y LA." },
+    {
+      "termino": "DE",
+      "definicion": "Desviación estándar. «< media − 2 DE» se calcula con la media y la DE de referencia ingresadas; sin ellas, se usa LA < 21 mm."
+    },
     { "termino": "UBM", "definicion": "Biomicroscopía ultrasónica." },
     { "termino": "Rexis", "definicion": "Capsulorrexis circular continua." },
     { "termino": "Utrata", "definicion": "Pinza de capsulorrexis de Utrata." },
     { "termino": "Stop and Chop", "definicion": "Técnica de facoemulsificación: surco central y luego fragmentación (chop) de cada mitad." },
     { "termino": "Facochop", "definicion": "Facoemulsificación con técnica de chop." },
-    { "termino": "Solo trocar", "definicion": "Se coloca trocar de pars plana 23 G sin realizar vitrectomía (interpretación por confirmar con el autor)." },
+    {
+      "termino": "Solo trocar",
+      "definicion": "Se coloca trocar de pars plana 23 G sin realizar vitrectomía (interpretación por confirmar con el autor)."
+    },
     { "termino": "LT", "definicion": "Grosor del cristalino (lens thickness)." },
     { "termino": "PP", "definicion": "Pars plana." },
     { "termino": "IHZV", "definicion": "Irido-hialoido-zónulo-vitrectomía." },
-    { "termino": "MAR / MPR / MS / MC", "definicion": "Microftalmo anterior relativo / microftalmos posterior relativo / microftalmo simple / microftalmo complejo." },
+    {
+      "termino": "MAR / MPR / MS / MC",
+      "definicion": "Microftalmo anterior relativo / microftalmos posterior relativo / microftalmo simple / microftalmo complejo."
+    },
     { "termino": "Criterio mayor", "definicion": "Obligatorio: el tipo solo se asigna si se cumplen todos sus criterios mayores." },
     { "termino": "Criterio de apoyo", "definicion": "No decide el tipo; suma al porcentaje de concordancia." }
   ],
@@ -305,19 +281,17 @@
       "cita": "Yosar JC, Zagora SL, Grigg JR. Cataract surgery in short eyes, including nanophthalmos: visual outcomes, complications and refractive results. Clin Ophthalmol. 2021;15:4543–4551. doi:10.2147/OPTH.S344465",
       "url": "https://pubmed.ncbi.nlm.nih.gov/34866899/"
     },
-    {
-      "cita": "Silva Cayatopa F. Algoritmo del manejo de cirugía de catarata en ojo pequeño. Clínica La Luz (presentación institucional)."
-    }
+    { "cita": "Silva Cayatopa F. Algoritmo del manejo de cirugía de catarata en ojo pequeño. Clínica La Luz (presentación institucional)." }
   ],
   "supuestosPendientes": [
-    "Los criterios mayores son una propuesta y deben validarse. En especial, exigir efusión coroidea como mayor del Tipo V hace que un nanoftalmos sin efusión quede en zona gris (LA < 20 mm no entra en el Tipo III; la app lo advierte con una alerta).",
-    "Grosor escleral: se mide solo en el polo posterior (PP) y se compara con los umbrales < 1.4 / > 1.4 mm. Para el nanoftalmos la literatura suele citar > 1.7 mm (esclera + coroides, posterior).",
-    "Excepción de vitrectomía central por PP (solo Tipo I): CA < 2.0 mm, confirmado por el autor.",
-    "CA 2–2.5 mm en MS y MC: Hoffman 2015 describe CA normal en el microftalmo simple y complejo.",
-    "Efusión «Sí (uveal)» en MC y esclera < 1.4 mm / sin efusión en MPR: la literatura describe esclera normal en MC y engrosamiento esclerocoroideo con propensión a efusión en el microftalmos posterior.",
+    "Todas las filas de la tabla (LA, CA, ángulo, índice LT/AL, malformaciones y WTW) son criterios mayores: si una no se cumple, el ojo queda en zona gris con los tipos más cercanos.",
+    "Límites exactos sin tipo: WTW = 11.0 mm no cumple < 11.0 (tipos I, III, IV y V) ni > 11.0 (tipo II); índice LT/AL = 0.22 no cumple < 0.22 (tipo I) ni > 0.22 (tipo V).",
+    "Tipo II: LA < 20 mm (la tabla anterior decía < 22.5 mm). Un microftalmos posterior con LA de 20 a 22.5 mm queda en zona gris.",
+    "Tipo IV: la CA (≤ o > 2.5 mm) y el índice LT/AL son variables, así que no se evalúan.",
+    "Excepción de vitrectomía central por PP (solo Tipo I): LA > 22.5 mm, CA < 2.0 mm y LT > 5 mm. Con LA de hasta ~22.7 mm, un LT > 5 mm da un índice LT/AL ≥ 0.22, que ya excluye el Tipo I.",
+    "CA 2–2.5 mm en MS: Hoffman 2015 describe CA normal en el microftalmo simple.",
     "Significado de «Solo trocar» en el Tipo III (se asume trocar de pars plana 23 G sin vitrectomía programada; Hoffman cita 25G).",
-    "Límite inferior de LA de 14.5 mm en nanoftalmos: no se encontró fuente publicada.",
-    "Los umbrales del semáforo de glaucoma maligno y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.",
+    "Los umbrales del semáforo de glaucoma maligno (alto desde 3 factores, al retirarse esclera, efusión y cuerpo ciliar) y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.",
     "El ángulo es criterio mayor en los 5 tipos: un microftalmo complejo (malformaciones) sin ángulo deformado queda en zona gris."
   ]
 }

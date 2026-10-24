@@ -48,29 +48,24 @@ function base(defaults: Defaults) {
 
 /** Ojo prototípico de cada tipo según la tabla; los overrides mueven un criterio a la vez. */
 export const tipoI = base({
-  longitudAxial: 23.0, acd: 2.0, angulo: 'estrecho', grosorEscleral: 1.0, efusionCoroidea: false,
-  cuerpoCiliar: 'normal', cristalino: 'normal', malformaciones: false,
+  longitudAxial: 23.0, acd: 2.0, angulo: 'estrecho', grosorCristalino: 4.6, malformaciones: false, wtw: 10.5,
 });
 
 export const tipoII = base({
-  longitudAxial: 18.5, acd: 2.8, angulo: 'estrecho', grosorEscleral: 1.0, efusionCoroidea: false,
-  cuerpoCiliar: 'normal', cristalino: 'normal', malformaciones: false,
+  longitudAxial: 18.5, acd: 2.8, angulo: 'abierto', grosorCristalino: 3.5, malformaciones: false, wtw: 11.5,
   alteracionesRetinianas: { plieguesPapilomaculares: true },
 });
 
 export const tipoIII = base({
-  longitudAxial: 20.5, acd: 2.2, angulo: 'estrecho', grosorEscleral: 1.1, efusionCoroidea: false,
-  cuerpoCiliar: 'normal', cristalino: 'normal', malformaciones: false,
+  longitudAxial: 20.5, acd: 2.2, angulo: 'estrecho', grosorCristalino: 3.9, malformaciones: false, wtw: 10.5,
 });
 
 export const tipoIV = base({
-  longitudAxial: 19.8, acd: 2.2, angulo: 'deformado', grosorEscleral: 1.1, efusionCoroidea: true,
-  cuerpoCiliar: 'normal', cristalino: 'coloboma', malformaciones: true,
+  longitudAxial: 19.8, acd: 2.2, angulo: 'deformado', grosorCristalino: 4.0, cristalino: 'coloboma', malformaciones: true, wtw: 10.5,
   alteracionesRetinianas: { otra: true },
 });
 
 export const tipoV = base({
-  longitudAxial: 18.0, acd: 1.7, angulo: 'cerrado', grosorEscleral: 1.8, efusionCoroidea: true,
-  cuerpoCiliar: 'anteriorizado', cristalino: 'intumescente', malformaciones: false,
+  longitudAxial: 18.0, acd: 1.7, angulo: 'cerrado', grosorCristalino: 4.5, malformaciones: false, wtw: 10.0,
   alteracionesAsociadas: { leves: false, colobomas: false, intumescencia: true },
 });

@@ -15,12 +15,11 @@ export const NOMBRE_CAMPO: Record<CampoNumerico | CampoEnum | CampoBooleano, str
   longitudAxial: 'LA',
   acd: 'CA',
   grosorCristalino: 'Cristalino (LT)',
-  grosorEscleral: 'Esclera polo posterior',
+  wtw: 'WTW',
+  indiceLTAL: 'Índice LT/AL',
   angulo: 'Ángulo',
-  cuerpoCiliar: 'Cuerpo ciliar',
   cristalino: 'Cristalino',
   refraccion: 'Refracción',
-  efusionCoroidea: 'Efusión coroidea',
   malformaciones: 'Malformaciones anatómicas',
   pupilaSinequiada: 'Pupila sinequiada',
   'alteracionesRetinianas.retinitisPigmentaria': 'Retinitis pigmentaria',
@@ -72,6 +71,35 @@ export function formatNumero(n: number): string {
   return s.includes('.') ? s : n.toFixed(1);
 }
 
+/** Valor con su unidad: "22.5 mm"; el índice LT/AL es adimensional y va con decimales fijos ("0.20"). */
+export function formatMedida(campo: CampoNumerico, n: number, decimalesIndice = 2): string {
+  return campo === 'indiceLTAL' ? n.toFixed(decimalesIndice) : `${formatNumero(n)} mm`;
+}
+
+/** Umbral sin unidad (el límite inferior de un rango): "2.0", "0.18". */
+function formatUmbral(campo: CampoNumerico, n: number): string {
+  return campo === 'indiceLTAL' ? n.toFixed(2) : formatNumero(n);
+}
+
+/**
+ * Índice LT/AL = grosor del cristalino / longitud axial; null si falta alguno.
+ * Se redondea a 6 decimales para que 4.4 / 22 cuente como 0.20 exacto en los límites.
+ */
+export function indiceLTAL(input: Pick<EyeInput, 'grosorCristalino' | 'longitudAxial'>): number | null {
+  const lt = input.grosorCristalino;
+  const la = input.longitudAxial;
+  return typeof lt === 'number' && Number.isFinite(lt) && Number.isFinite(la) && la > 0 ? Math.round((lt / la) * 1e6) / 1e6 : null;
+}
+
+/** Distancia a un umbral por debajo de la cual el valor se marca "en el límite". */
+export interface Tolerancia {
+  mm: number;
+  indice: number;
+}
+
+const SIN_TOLERANCIA: Tolerancia = { mm: 0, indice: 0 };
+const tolerancia = (t: Tolerancia, campo: CampoNumerico) => (campo === 'indiceLTAL' ? t.indice : t.mm);
+
 function comparar(x: number, op: OpComparacion, v: number): boolean {
   switch (op) {
     case '<':
@@ -86,6 +114,7 @@ function comparar(x: number, op: OpComparacion, v: number): boolean {
 }
 
 function leerNumero(input: EyeInput, campo: CampoNumerico): number | null {
+  if (campo === 'indiceLTAL') return indiceLTAL(input);
   const v = input[campo];
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
 }
@@ -101,7 +130,7 @@ function leerBooleano(input: EyeInput, campo: CampoBooleano): boolean {
     const obj = (input as unknown as Record<string, Record<string, boolean> | undefined>)[grupo];
     return Boolean(obj?.[clave]);
   }
-  return Boolean(input[campo as 'efusionCoroidea' | 'malformaciones' | 'pupilaSinequiada']);
+  return Boolean(input[campo as 'malformaciones' | 'pupilaSinequiada']);
 }
 
 /** Umbral de LA "media − n·DE" si el usuario ingresó referencia válida; si no, null. */
@@ -123,9 +152,9 @@ export function etiquetaCriterio(c: Criterio, input?: EyeInput): string {
   if (c.etiqueta) return c.etiqueta;
   switch (c.op) {
     case 'entre':
-      return `${formatNumero(c.min)} ${c.opMin === '>=' ? '≤' : '<'} ${NOMBRE_CAMPO[c.campo]} ${
+      return `${formatUmbral(c.campo, c.min)} ${c.opMin === '>=' ? '≤' : '<'} ${NOMBRE_CAMPO[c.campo]} ${
         c.opMax === '<=' ? '≤' : '<'
-      } ${formatNumero(c.max)} mm`;
+      } ${formatMedida(c.campo, c.max)}`;
     case 'en':
       return `${NOMBRE_CAMPO[c.campo]} ${c.valores.map((v) => NOMBRE_VALOR[v] ?? v).join(' o ')}`;
     case 'es':
@@ -141,18 +170,18 @@ export function etiquetaCriterio(c: Criterio, input?: EyeInput): string {
     case 'cualquiera':
       return c.etiqueta;
     default:
-      return `${NOMBRE_CAMPO[c.campo]} ${SIMBOLO[c.op]} ${formatNumero(c.valor)} mm`;
+      return `${NOMBRE_CAMPO[c.campo]} ${SIMBOLO[c.op]} ${formatMedida(c.campo, c.valor)}`;
   }
 }
 
-export function evaluarCriterio(c: Criterio, input: EyeInput, toleranciaLimite = 0): CriterioEvaluado {
+export function evaluarCriterio(c: Criterio, input: EyeInput, tol: Tolerancia = SIN_TOLERANCIA): CriterioEvaluado {
   const etiqueta = etiquetaCriterio(c, input);
   const base = { etiqueta, peso: c.peso ?? 1, nivel: c.nivel ?? 'apoyo', enLimite: false, sinDato: false } as const;
   const sinDato = (campo?: string): CriterioEvaluado => ({ ...base, campo, cumple: false, sinDato: true, observado: 'sin dato' });
 
   switch (c.op) {
     case 'cualquiera': {
-      const hijos = c.criterios.map((h) => evaluarCriterio(h, input, toleranciaLimite));
+      const hijos = c.criterios.map((h) => evaluarCriterio(h, input, tol));
       const presentes = hijos.filter((h) => h.cumple);
       return {
         ...base,
@@ -189,7 +218,7 @@ export function evaluarCriterio(c: Criterio, input: EyeInput, toleranciaLimite =
         campo: c.campo,
         cumple: comparar(x, c.opComparacion, umbral),
         observado: `${formatNumero(x)} mm`,
-        enLimite: Math.abs(x - umbral) <= toleranciaLimite + EPS,
+        enLimite: Math.abs(x - umbral) <= tol.mm + EPS,
       };
     }
     case 'entre': {
@@ -200,8 +229,8 @@ export function evaluarCriterio(c: Criterio, input: EyeInput, toleranciaLimite =
         ...base,
         campo: c.campo,
         cumple: comparar(x, c.opMin, c.min) && comparar(x, c.opMax, c.max),
-        observado: `${formatNumero(x)} mm`,
-        enLimite: dist <= toleranciaLimite + EPS,
+        observado: formatMedida(c.campo, x, 3),
+        enLimite: dist <= tolerancia(tol, c.campo) + EPS,
       };
     }
     default: {
@@ -211,8 +240,8 @@ export function evaluarCriterio(c: Criterio, input: EyeInput, toleranciaLimite =
         ...base,
         campo: c.campo,
         cumple: comparar(x, c.op, c.valor),
-        observado: `${formatNumero(x)} mm`,
-        enLimite: Math.abs(x - c.valor) <= toleranciaLimite + EPS,
+        observado: formatMedida(c.campo, x, 3),
+        enLimite: Math.abs(x - c.valor) <= tolerancia(tol, c.campo) + EPS,
       };
     }
   }

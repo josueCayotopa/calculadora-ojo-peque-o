@@ -19,7 +19,7 @@ describe('Validación de config/rules.json', () => {
 
   it('rechaza un valor de ángulo mal escrito', () => {
     const r = clon();
-    r.tipos[0].criterios[3].valores = ['estrecha'];
+    r.tipos[0].criterios[2].valores = ['estrecha'];
     expect(() => parseConfig(r)).toThrow();
   });
 
@@ -67,8 +67,10 @@ describe('Etiquetas generadas desde el criterio', () => {
     [{ campo: 'grosorCristalino', op: '>', valor: 5 }, 'Cristalino (LT) > 5.0 mm'],
     [{ campo: 'acd', op: 'entre', min: 2, max: 2.2, opMin: '>=', opMax: '<=' }, '2.0 ≤ CA ≤ 2.2 mm'],
     [{ campo: 'angulo', op: 'en', valores: ['cerrado'] }, 'Ángulo cerrado/ocluible'],
-    [{ campo: 'cuerpoCiliar', op: 'en', valores: ['anteriorizado'] }, 'Cuerpo ciliar anteriorizado'],
-    [{ campo: 'efusionCoroidea', op: 'es', valor: false }, 'Sin efusión coroidea'],
+    [{ campo: 'wtw', op: '<', valor: 11 }, 'WTW < 11.0 mm'],
+    [{ campo: 'indiceLTAL', op: '>', valor: 0.22 }, 'Índice LT/AL > 0.22'],
+    [{ campo: 'indiceLTAL', op: 'entre', min: 0.18, max: 0.2, opMin: '>=', opMax: '<=' }, '0.18 ≤ Índice LT/AL ≤ 0.20'],
+    [{ campo: 'malformaciones', op: 'es', valor: false }, 'Sin malformaciones anatómicas'],
     [{ campo: 'longitudAxial', op: 'bajoDE', nDE: 2, opComparacion: '<', valorRespaldo: 21 }, 'LA < media − 2 DE (o < 21.0 mm)'],
   ] as const)('%j → %s', (c, esperado) => {
     expect(etiquetaCriterio(c as any)).toBe(esperado);

@@ -27,7 +27,7 @@ import type {
  *    más cercanos y sus criterios mayores en conflicto. Nunca se fuerza.
  */
 export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoClasificacion {
-  const tol = config.toleranciaLimiteMm;
+  const tol = { mm: config.toleranciaLimiteMm, indice: config.toleranciaLimiteIndice };
   const orden = new Map(config.ordenEvaluacion.map((id, i) => [id, i]));
 
   const evaluados = config.tipos.map((tipo): TipoEvaluado => {

@@ -1,6 +1,6 @@
 # Validación clínica — Clasificación del Ojo Pequeño
 
-> Documento generado automáticamente desde `src/config/evidencia.json` (revisión 2026-10-09) para las reglas v2.11.0.
+> Documento generado automáticamente desde `src/config/evidencia.json` (revisión 2026-10-24) para las reglas v3.0.0.
 > **Herramienta de apoyo clínico. La decisión final corresponde al cirujano.**
 
 ## Metodología
@@ -11,17 +11,14 @@ Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las re
 
 | Estado | N.º de puntos |
 |---|---|
-| ✅ Concuerda | 11 |
-| 🟡 Parcial | 8 |
-| 🔴 Difiere | 4 |
-| ⚪ Sin evidencia | 1 |
+| ✅ Concuerda | 12 |
+| 🟡 Parcial | 6 |
+| 🔴 Difiere | 1 |
+| ⚪ Sin evidencia | 2 |
 
 ### Puntos que requieren decisión del Dr. Silva
 
-- **Tipo II (MPR) · Esclera y efusión.** Un MPR con esclera gruesa o efusión igual se clasifica como II (son criterios de apoyo), pero conviene revisar la tabla.
 - **Tipo III (MS) · Cámara anterior y ángulo.** La CA 2–2.5 mm es criterio mayor del Tipo III, así que un microftalmo simple con CA normal (> 2.5 mm, como lo describe la literatura) no sería Tipo III. Conviene validarlo con el autor.
-- **Tipo V (nanoftalmos) · Grosor escleral.** 1.4 mm es más sensible y 1.7 mm más específico. Hay que confirmar si el valor de 1.4 corresponde a esclera sola o a esclera + coroides, y en qué región se mide.
-- **Tipo V (nanoftalmos) · Efusión coroidea como criterio mayor.** Exigir efusión deja fuera a la mayoría de los nanoftalmos, que quedarían en zona gris. Se recomienda que la efusión sea criterio de apoyo. Mientras tanto, la app emite una alerta cuando hay LA < 20 mm y esclera > 1.4 mm sin efusión.
 
 ## Comparación detallada
 
@@ -30,19 +27,16 @@ Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las re
 | Clasificación general | 5 tipos: MAR, MPR, MS, MC y nanoftalmos. | Hoffman 2015 describe el espectro del ojo pequeño como microftalmo simple, microftalmo complejo, nanoftalmos y microftalmo anterior relativo, más el microftalmos posterior como entidad muy rara. La cohorte de Hammer et al. (2025) estudió 300 ojos seleccionados para implante de LIO >30 D, con LA media 20.68 ± 0.92 mm e incluyó MAR entre sus morfologías; por ser una cohorte quirúrgica seleccionada no establece un rango normal poblacional. [1][11] | ✅ Concuerda |  |
 | Tipo I (MAR) · Longitud axial | LA > 22.5 mm (umbral operativo del Dr. Fermín según su experiencia y práctica clínica en Perú; tabla actualizada) | El Dr. Fermín confirma que considera > 22.6 mm como referencia de LA normal y utiliza un umbral operativo propio para su clasificación (> 22.2 mm en la versión anterior, > 22.5 mm en la tabla actual), basándose en su experiencia y en los tamaños observados en los ojos de los pacientes que atiende en Perú. Esto documenta experiencia clínica local, no un rango normativo de toda la población peruana. Para MAR, Hoffman 2015 describe LA > 20.5 mm y Auffarth 2000, en la definición original, LA > 20 mm. La cohorte reciente de Hammer et al. (2025) incluye MAR, pero estudia ojos con LIO >30 D y no evalúa estos umbrales como límites de normalidad. [1][3][11] | 🟡 Parcial | Los valores > 22.6 mm y > 22.5 mm quedan documentados como referencias clínicas del Dr. Fermín, basadas en su práctica y en los tamaños observados en sus pacientes en Perú. Se usa > 22.5 mm para el cálculo. Los cortes de Hoffman y Auffarth son definiciones publicadas distintas para MAR; la experiencia local no se presenta como estudio poblacional ni como consenso bibliográfico. |
 | Tipo I (MAR) · Cámara anterior | CA < 2.5 mm | Hoffman 2015: CA igual o menor de 2.2 mm. Auffarth 2000: CA característica de alrededor de 2 mm. [1][3] | 🟡 Parcial | El umbral de la tabla (< 2.5 mm) es más amplio que el publicado (≤ 2.2 mm): incluye en el MAR ojos con CA entre 2.2 y 2.5 mm. Es configurable. |
-| Tipo I (MAR) · Diámetro corneal | Microcórnea, W-W < 11 mm | Hoffman 2015: diámetro corneal < 11.0 mm. Auffarth 2000: ≤ 11 mm. [1][3] | ✅ Concuerda |  |
-| Tipo I (MAR) · Ángulo, esclera y malformaciones | Ángulo estrecho/ocluible, esclera < 1.4 mm, sin malformaciones. | Hoffman 2015: alta incidencia de glaucoma de ángulo estrecho, esclera de grosor normal y sin malformaciones anatómicas. Suele subdiagnosticarse por tener LA normal. [1] | ✅ Concuerda |  |
-| Tipo II (MPR) · Anatomía | CA > 2.5 mm, segmento anterior normal y posterior corto, hipermetropía alta, alteraciones retinianas. | Hoffman 2015 y series de casos: segmento anterior de dimensiones normales, segmento posterior corto, hipermetropía alta, pliegues retinianos papilomaculares o retinopatía pigmentaria. [1][6][7] | ✅ Concuerda |  |
-| Tipo II (MPR) · Longitud axial | LA < 22.5 mm | En las series publicadas las LA suelen ser mucho menores (del orden de 15.5 a 18.6 mm en una serie con hipermetropía de +11 a +15.75 D). [6] | 🟡 Parcial | El umbral de 22.5 mm es amplio. La app ya no evalúa los segmentos anterior y posterior, así que los criterios mayores del Tipo II son la CA > 2.5 mm, la LA < 22.5 mm y el ángulo estrecho/ocluible. |
-| Tipo II (MPR) · Esclera y efusión | Esclera < 1.4 mm, sin efusión. | Hoffman 2015 describe en el microftalmos posterior engrosamiento esclerocoroideo y propensión a efusión uveal. [1] | 🔴 Difiere | Un MPR con esclera gruesa o efusión igual se clasifica como II (son criterios de apoyo), pero conviene revisar la tabla. |
+| Tipo I (MAR) · Diámetro corneal | Microcórnea, WTW < 11.0 mm | Hoffman 2015: diámetro corneal < 11.0 mm. Auffarth 2000: ≤ 11 mm. [1][3] | ✅ Concuerda |  |
+| Tipo I (MAR) · Ángulo y malformaciones | Ángulo ocluible (estrecho), sin malformaciones. | Hoffman 2015: alta incidencia de glaucoma de ángulo estrecho, esclera de grosor normal y sin malformaciones anatómicas. Suele subdiagnosticarse por tener LA normal. [1] | ✅ Concuerda |  |
+| Tipo II (MPR) · Anatomía | CA > 2.5 mm, ángulo abierto, WTW > 11.0 mm, índice LT/AL < 0.20 y sin malformaciones: segmento anterior de dimensiones normales. | Hoffman 2015 y series de casos: segmento anterior de dimensiones normales, segmento posterior corto, hipermetropía alta, pliegues retinianos papilomaculares o retinopatía pigmentaria. [1][6][7] | ✅ Concuerda |  |
+| Tipo II (MPR) · Longitud axial | LA < 20 mm | En las series publicadas las LA suelen ser mucho menores (del orden de 15.5 a 18.6 mm en una serie con hipermetropía de +11 a +15.75 D). [6] | ✅ Concuerda | La tabla actual baja el umbral de < 22.5 mm a < 20 mm, más cerca de las LA publicadas. Un MPR con LA de 20 a 22.5 mm queda ahora en zona gris. |
 | Tipo III (MS) · Longitud axial | LA 20–21 mm (< media − 2 DE) | Hoffman 2015: LA más de 2 DE bajo la media para la edad; históricamente < 20.5 mm y, según estudios epidemiológicos, < 21.0 mm en adultos. Yosar 2021 define «ojo corto» como LA < 21.0 mm (2 DE bajo la media). [1][2][5] | ✅ Concuerda | El límite superior concuerda. El límite inferior de 20 mm (que separa el MS del nanoftalmos, < 20 mm) es propio de la tabla. |
 | Tipo III (MS) · Cámara anterior y ángulo | CA 2–2.5 mm (estructuralmente proporcional); ángulo estrecho (podría estar abierto). | Hoffman 2015 y EyeWiki: el microftalmo simple es hipermétrope pero con CA normal, esclera normal y sin riesgo de cierre angular. [1][5] | 🔴 Difiere | La CA 2–2.5 mm es criterio mayor del Tipo III, así que un microftalmo simple con CA normal (> 2.5 mm, como lo describe la literatura) no sería Tipo III. Conviene validarlo con el autor. |
-| Tipo IV (MC) · Malformaciones | Malformaciones anatómicas (colobomas, disgenesias); cristalino con coloboma; ángulo deformado. | Hoffman 2015: LA corta con malformaciones como coloboma de iris o coriorretiniano, vasculatura fetal persistente o displasia retiniana. Las malformaciones asociadas se relacionan con peor resultado visual. [1] | ✅ Concuerda |  |
-| Tipo IV (MC) · Efusión y esclera | Efusión Sí (uveal); esclera < 1.4 mm. | Hoffman 2015 describe esclera de grosor normal en el MC y no menciona la efusión como rasgo. [1] | 🟡 Parcial | La esclera normal concuerda; la efusión como rasgo del MC no aparece en las fuentes revisadas. Es criterio de apoyo, no mayor. |
-| Tipo V (nanoftalmos) · Longitud axial | LA < 20 mm (con límite inferior de 14.5 mm como criterio de apoyo) | No hay consenso: Hoffman 2015 cita umbrales de < 20.5, < 20.0, < 18.0 y < 17.0 mm; EyeWiki usa < 21 mm. [1][5][4] | 🟡 Parcial | 20 mm coincide con una de las definiciones publicadas. No se encontró fuente para el límite inferior de 14.5 mm. |
-| Tipo V (nanoftalmos) · Grosor escleral | Esclera > 1.4 mm | Hoffman 2015 y EyeWiki: esclera y coroides engrosadas, habitualmente > 1.7 mm en el polo posterior. [1][5] | 🔴 Difiere | 1.4 mm es más sensible y 1.7 mm más específico. Hay que confirmar si el valor de 1.4 corresponde a esclera sola o a esclera + coroides, y en qué región se mide. |
-| Tipo V (nanoftalmos) · Efusión coroidea como criterio mayor | Efusión: Sí (propuesto como criterio mayor) | Hoffman 2015: el nanoftalmos tiene propensión a la efusión uveal por la esclera y coroides engrosadas, y algunos ojos presentan efusión de bajo grado antes de operar. En la serie de Yosar 2021 (71 ojos con LA < 21 mm) no hubo ningún caso de efusión. [1][2] | 🔴 Difiere | Exigir efusión deja fuera a la mayoría de los nanoftalmos, que quedarían en zona gris. Se recomienda que la efusión sea criterio de apoyo. Mientras tanto, la app emite una alerta cuando hay LA < 20 mm y esclera > 1.4 mm sin efusión. |
-| Tipo V (nanoftalmos) · Resto de rasgos | CA < 2.0 mm, ángulo cerrado/ocluible (criterio mayor), intumescencia, cuerpo ciliar anteriorizado, hipermetropía alta. | Hoffman 2015 y EyeWiki: CA estrecha (< 2.2 mm), iris convexo con ángulo estrecho, cristalino normal o engrosado y desproporcionado, posible microcórnea < 11 mm y alto riesgo de glaucoma de ángulo cerrado. La UBM ayuda a valorar la esclera y la desproporción del cristalino. [1][5][4] | ✅ Concuerda |  |
+| Tipo IV (MC) · Malformaciones | Malformaciones anatómicas (colobomas y disgenesias), ángulo deformado, LA < 21 mm (−2 DE) y WTW < 11.0 mm. CA e índice LT/AL variables. | Hoffman 2015: LA corta con malformaciones como coloboma de iris o coriorretiniano, vasculatura fetal persistente o displasia retiniana. Las malformaciones asociadas se relacionan con peor resultado visual. [1] | ✅ Concuerda |  |
+| Tipo V (nanoftalmos) · Longitud axial | LA < 20 mm | No hay consenso: Hoffman 2015 cita umbrales de < 20.5, < 20.0, < 18.0 y < 17.0 mm; EyeWiki usa < 21 mm. [1][5][4] | 🟡 Parcial | 20 mm coincide con una de las definiciones publicadas. |
+| Tipo V (nanoftalmos) · Resto de rasgos | CA < 2.0 mm, ángulo cerrado/ocluible, índice LT/AL > 0.22, WTW < 11.0 mm y sin malformaciones. | Hoffman 2015 y EyeWiki: CA estrecha (< 2.2 mm), iris convexo con ángulo estrecho, cristalino normal o engrosado y desproporcionado, posible microcórnea < 11 mm y alto riesgo de glaucoma de ángulo cerrado. La UBM ayuda a valorar la esclera y la desproporción del cristalino. [1][5][4] | ✅ Concuerda |  |
+| Índice LT/AL (todos los tipos) | Tipo I < 0.22 · Tipo II < 0.20 · Tipo III 0.18–0.20 · Tipo IV variable · Tipo V > 0.22 | Pendiente de revisión: aún no se contrastaron con la literatura los puntos de corte del cociente grosor del cristalino / longitud axial para distinguir los tipos de ojo pequeño.  | ⚪ Sin evidencia | La app calcula el índice como LT / LA. Los cortes son los de la tabla del Dr. Silva y son criterio mayor en los tipos I, II, III y V. |
 | Manitol preoperatorio | Manitol 30 min antes (todos los tipos). | Hoffman 2015: manitol y acetazolamida IV 30 min antes reducen el volumen vítreo. Una revisión de 2024 describe manitol al 20 % (100 mL) 30 a 60 min antes para bajar la PIO y profundizar la CA. [1][8] | ✅ Concuerda |  |
 | Rexis con cistótomo (Tipo I) | Rexis con cistótomo + Stop and Chop | Hoffman 2015: capsulorrexis con cistótomo doblado por paracentesis (o pinza microincisional) para no perder viscoelástico; el azul tripano facilita la capsulorrexis. [1] | ✅ Concuerda |  |
 | Trocar y vitrectomía por pars plana (tipos III, IV y V) | Tipo III: solo trocar 23 G · Tipos IV y V: vitrectomía central por PP · Excepción (Tipo I): LA > 22.5 mm, CA < 2.0 mm y LT > 5 mm → vitrectomía central por PP + rexis con Utrata + facochop (en lugar de cistótomo + Stop and Chop) | Hoffman 2015: en casos extremos, un tap vítreo o una vitrectomía limitada profundiza la cámara. Recomienda un sistema de trocar-cánula (cita 25G) por la pars plana anómala y examinar la retina periférica después. [1] | 🟡 Parcial | La técnica concuerda; el calibre del trocar es una elección del cirujano. |
@@ -54,14 +48,14 @@ Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las re
 
 ## Supuestos pendientes en la configuración
 
-1. Los criterios mayores son una propuesta y deben validarse. En especial, exigir efusión coroidea como mayor del Tipo V hace que un nanoftalmos sin efusión quede en zona gris (LA < 20 mm no entra en el Tipo III; la app lo advierte con una alerta).
-2. Grosor escleral: se mide solo en el polo posterior (PP) y se compara con los umbrales < 1.4 / > 1.4 mm. Para el nanoftalmos la literatura suele citar > 1.7 mm (esclera + coroides, posterior).
-3. Excepción de vitrectomía central por PP (solo Tipo I): CA < 2.0 mm, confirmado por el autor.
-4. CA 2–2.5 mm en MS y MC: Hoffman 2015 describe CA normal en el microftalmo simple y complejo.
-5. Efusión «Sí (uveal)» en MC y esclera < 1.4 mm / sin efusión en MPR: la literatura describe esclera normal en MC y engrosamiento esclerocoroideo con propensión a efusión en el microftalmos posterior.
-6. Significado de «Solo trocar» en el Tipo III (se asume trocar de pars plana 23 G sin vitrectomía programada; Hoffman cita 25G).
-7. Límite inferior de LA de 14.5 mm en nanoftalmos: no se encontró fuente publicada.
-8. Los umbrales del semáforo de glaucoma maligno y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.
+1. Todas las filas de la tabla (LA, CA, ángulo, índice LT/AL, malformaciones y WTW) son criterios mayores: si una no se cumple, el ojo queda en zona gris con los tipos más cercanos.
+2. Límites exactos sin tipo: WTW = 11.0 mm no cumple < 11.0 (tipos I, III, IV y V) ni > 11.0 (tipo II); índice LT/AL = 0.22 no cumple < 0.22 (tipo I) ni > 0.22 (tipo V).
+3. Tipo II: LA < 20 mm (la tabla anterior decía < 22.5 mm). Un microftalmos posterior con LA de 20 a 22.5 mm queda en zona gris.
+4. Tipo IV: la CA (≤ o > 2.5 mm) y el índice LT/AL son variables, así que no se evalúan.
+5. Excepción de vitrectomía central por PP (solo Tipo I): LA > 22.5 mm, CA < 2.0 mm y LT > 5 mm. Con LA de hasta ~22.7 mm, un LT > 5 mm da un índice LT/AL ≥ 0.22, que ya excluye el Tipo I.
+6. CA 2–2.5 mm en MS: Hoffman 2015 describe CA normal en el microftalmo simple.
+7. Significado de «Solo trocar» en el Tipo III (se asume trocar de pars plana 23 G sin vitrectomía programada; Hoffman cita 25G).
+8. Los umbrales del semáforo de glaucoma maligno (alto desde 3 factores, al retirarse esclera, efusión y cuerpo ciliar) y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.
 9. El ángulo es criterio mayor en los 5 tipos: un microftalmo complejo (malformaciones) sin ángulo deformado queda en zona gris.
 
 ## Fuentes

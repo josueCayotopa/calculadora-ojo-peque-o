@@ -10,16 +10,16 @@ describe('Riesgo de glaucoma maligno', () => {
     const r = riesgoGlaucomaMaligno(tipoI(), config);
     expect(r.presentes).toBe(2);
     expect(r.nivel).toBe('moderado');
-    expect(r.total).toBe(8);
+    expect(r.total).toBe(5);
   });
 
   it('1 factor → bajo', () => {
     expect(riesgoGlaucomaMaligno(tipoI({ angulo: 'abierto' }), config).nivel).toBe('bajo');
   });
 
-  it('4 factores → alto (umbral exacto)', () => {
-    const r = riesgoGlaucomaMaligno(tipoI({ factoresRiesgo: { pseudoexfoliacion: true, cirugiaFiltrantePrevia: true } }), config);
-    expect(r.presentes).toBe(4);
+  it('3 factores → alto (umbral exacto)', () => {
+    const r = riesgoGlaucomaMaligno(tipoI({ factoresRiesgo: { pseudoexfoliacion: true } }), config);
+    expect(r.presentes).toBe(3);
     expect(r.nivel).toBe('alto');
   });
 
@@ -75,7 +75,7 @@ describe('Checklist preoperatorio', () => {
   });
 
   it('I con excepción (CA < 2.0, LT > 5): Utrata y vitrector en lugar de cistótomo', () => {
-    const t = textos(tipoI({ acd: 1.9, grosorCristalino: 5.2 }));
+    const t = textos(tipoI({ longitudAxial: 24.0, acd: 1.9, grosorCristalino: 5.2 }));
     expect(t.some((x) => x.includes('cistótomo'))).toBe(false);
     expect(t.some((x) => x.includes('Utrata'))).toBe(true);
     expect(t.some((x) => x.includes('vitrectomía central'))).toBe(true);

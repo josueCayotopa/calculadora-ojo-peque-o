@@ -180,7 +180,7 @@ export function listaAlertas(e: EvaluacionCompleta): AlertaItem[] {
   if (c.advertenciasLimite.length) {
     items.push({
       titulo: 'Valores en el límite de un umbral',
-      texto: `A ≤ ${clinicalConfig.toleranciaLimiteMm} mm de un umbral; considere repetir la medición: ${c.advertenciasLimite
+      texto: `A ≤ ${clinicalConfig.toleranciaLimiteMm} mm (o ≤ ${clinicalConfig.toleranciaLimiteIndice} de índice LT/AL) de un umbral; considere repetir la medición: ${c.advertenciasLimite
         .map((a) => `${a.medida} = ${a.observado} (${a.criterios.join('; ')})`)
         .join(' · ')}.`,
     });

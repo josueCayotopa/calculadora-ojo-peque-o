@@ -1,5 +1,5 @@
 {
-  "fechaRevision": "2026-10-09",
+  "fechaRevision": "2026-10-24",
   "metodologia": "Se contrastó cada criterio y cada conducta de la tabla del Dr. Silva con las referencias base y complementarias disponibles, incluida una cohorte reciente de ojos extremadamente pequeños publicada en 2025. Las fuentes se distinguen por el tipo de evidencia y población estudiada; los resultados de cohortes quirúrgicas seleccionadas no se interpretan como rangos poblacionales de normalidad. Se muestra como «concuerda» cuando la fuente respalda el criterio; «parcial» cuando lo respalda con otro umbral u operador; «difiere» cuando la fuente describe algo distinto; y «sin evidencia» cuando no se encontró una fuente específica. Esta revisión no sustituye una revisión sistemática.",
   "comparaciones": [
     {
@@ -27,40 +27,32 @@
     },
     {
       "tema": "Tipo I (MAR) · Diámetro corneal",
-      "silva": "Microcórnea, W-W < 11 mm",
+      "silva": "Microcórnea, WTW < 11.0 mm",
       "literatura": "Hoffman 2015: diámetro corneal < 11.0 mm. Auffarth 2000: ≤ 11 mm.",
       "concordancia": "concuerda",
       "fuentes": ["hoffman2015", "auffarth2000"]
     },
     {
-      "tema": "Tipo I (MAR) · Ángulo, esclera y malformaciones",
-      "silva": "Ángulo estrecho/ocluible, esclera < 1.4 mm, sin malformaciones.",
+      "tema": "Tipo I (MAR) · Ángulo y malformaciones",
+      "silva": "Ángulo ocluible (estrecho), sin malformaciones.",
       "literatura": "Hoffman 2015: alta incidencia de glaucoma de ángulo estrecho, esclera de grosor normal y sin malformaciones anatómicas. Suele subdiagnosticarse por tener LA normal.",
       "concordancia": "concuerda",
       "fuentes": ["hoffman2015"]
     },
     {
       "tema": "Tipo II (MPR) · Anatomía",
-      "silva": "CA > 2.5 mm, segmento anterior normal y posterior corto, hipermetropía alta, alteraciones retinianas.",
+      "silva": "CA > 2.5 mm, ángulo abierto, WTW > 11.0 mm, índice LT/AL < 0.20 y sin malformaciones: segmento anterior de dimensiones normales.",
       "literatura": "Hoffman 2015 y series de casos: segmento anterior de dimensiones normales, segmento posterior corto, hipermetropía alta, pliegues retinianos papilomaculares o retinopatía pigmentaria.",
       "concordancia": "concuerda",
       "fuentes": ["hoffman2015", "posterior2016", "posterior2019"]
     },
     {
       "tema": "Tipo II (MPR) · Longitud axial",
-      "silva": "LA < 22.5 mm",
+      "silva": "LA < 20 mm",
       "literatura": "En las series publicadas las LA suelen ser mucho menores (del orden de 15.5 a 18.6 mm en una serie con hipermetropía de +11 a +15.75 D).",
-      "concordancia": "parcial",
-      "comentario": "El umbral de 22.5 mm es amplio. La app ya no evalúa los segmentos anterior y posterior, así que los criterios mayores del Tipo II son la CA > 2.5 mm, la LA < 22.5 mm y el ángulo estrecho/ocluible.",
+      "concordancia": "concuerda",
+      "comentario": "La tabla actual baja el umbral de < 22.5 mm a < 20 mm, más cerca de las LA publicadas. Un MPR con LA de 20 a 22.5 mm queda ahora en zona gris.",
       "fuentes": ["posterior2016"]
-    },
-    {
-      "tema": "Tipo II (MPR) · Esclera y efusión",
-      "silva": "Esclera < 1.4 mm, sin efusión.",
-      "literatura": "Hoffman 2015 describe en el microftalmos posterior engrosamiento esclerocoroideo y propensión a efusión uveal.",
-      "concordancia": "difiere",
-      "comentario": "Un MPR con esclera gruesa o efusión igual se clasifica como II (son criterios de apoyo), pero conviene revisar la tabla.",
-      "fuentes": ["hoffman2015"]
     },
     {
       "tema": "Tipo III (MS) · Longitud axial",
@@ -80,49 +72,33 @@
     },
     {
       "tema": "Tipo IV (MC) · Malformaciones",
-      "silva": "Malformaciones anatómicas (colobomas, disgenesias); cristalino con coloboma; ángulo deformado.",
+      "silva": "Malformaciones anatómicas (colobomas y disgenesias), ángulo deformado, LA < 21 mm (−2 DE) y WTW < 11.0 mm. CA e índice LT/AL variables.",
       "literatura": "Hoffman 2015: LA corta con malformaciones como coloboma de iris o coriorretiniano, vasculatura fetal persistente o displasia retiniana. Las malformaciones asociadas se relacionan con peor resultado visual.",
       "concordancia": "concuerda",
       "fuentes": ["hoffman2015"]
     },
     {
-      "tema": "Tipo IV (MC) · Efusión y esclera",
-      "silva": "Efusión Sí (uveal); esclera < 1.4 mm.",
-      "literatura": "Hoffman 2015 describe esclera de grosor normal en el MC y no menciona la efusión como rasgo.",
-      "concordancia": "parcial",
-      "comentario": "La esclera normal concuerda; la efusión como rasgo del MC no aparece en las fuentes revisadas. Es criterio de apoyo, no mayor.",
-      "fuentes": ["hoffman2015"]
-    },
-    {
       "tema": "Tipo V (nanoftalmos) · Longitud axial",
-      "silva": "LA < 20 mm (con límite inferior de 14.5 mm como criterio de apoyo)",
+      "silva": "LA < 20 mm",
       "literatura": "No hay consenso: Hoffman 2015 cita umbrales de < 20.5, < 20.0, < 18.0 y < 17.0 mm; EyeWiki usa < 21 mm.",
       "concordancia": "parcial",
-      "comentario": "20 mm coincide con una de las definiciones publicadas. No se encontró fuente para el límite inferior de 14.5 mm.",
+      "comentario": "20 mm coincide con una de las definiciones publicadas.",
       "fuentes": ["hoffman2015", "eyewiki", "carricondo2018"]
-    },
-    {
-      "tema": "Tipo V (nanoftalmos) · Grosor escleral",
-      "silva": "Esclera > 1.4 mm",
-      "literatura": "Hoffman 2015 y EyeWiki: esclera y coroides engrosadas, habitualmente > 1.7 mm en el polo posterior.",
-      "concordancia": "difiere",
-      "comentario": "1.4 mm es más sensible y 1.7 mm más específico. Hay que confirmar si el valor de 1.4 corresponde a esclera sola o a esclera + coroides, y en qué región se mide.",
-      "fuentes": ["hoffman2015", "eyewiki"]
-    },
-    {
-      "tema": "Tipo V (nanoftalmos) · Efusión coroidea como criterio mayor",
-      "silva": "Efusión: Sí (propuesto como criterio mayor)",
-      "literatura": "Hoffman 2015: el nanoftalmos tiene propensión a la efusión uveal por la esclera y coroides engrosadas, y algunos ojos presentan efusión de bajo grado antes de operar. En la serie de Yosar 2021 (71 ojos con LA < 21 mm) no hubo ningún caso de efusión.",
-      "concordancia": "difiere",
-      "comentario": "Exigir efusión deja fuera a la mayoría de los nanoftalmos, que quedarían en zona gris. Se recomienda que la efusión sea criterio de apoyo. Mientras tanto, la app emite una alerta cuando hay LA < 20 mm y esclera > 1.4 mm sin efusión.",
-      "fuentes": ["hoffman2015", "yosar2021"]
     },
     {
       "tema": "Tipo V (nanoftalmos) · Resto de rasgos",
-      "silva": "CA < 2.0 mm, ángulo cerrado/ocluible (criterio mayor), intumescencia, cuerpo ciliar anteriorizado, hipermetropía alta.",
+      "silva": "CA < 2.0 mm, ángulo cerrado/ocluible, índice LT/AL > 0.22, WTW < 11.0 mm y sin malformaciones.",
       "literatura": "Hoffman 2015 y EyeWiki: CA estrecha (< 2.2 mm), iris convexo con ángulo estrecho, cristalino normal o engrosado y desproporcionado, posible microcórnea < 11 mm y alto riesgo de glaucoma de ángulo cerrado. La UBM ayuda a valorar la esclera y la desproporción del cristalino.",
       "concordancia": "concuerda",
       "fuentes": ["hoffman2015", "eyewiki", "carricondo2018"]
+    },
+    {
+      "tema": "Índice LT/AL (todos los tipos)",
+      "silva": "Tipo I < 0.22 · Tipo II < 0.20 · Tipo III 0.18–0.20 · Tipo IV variable · Tipo V > 0.22",
+      "literatura": "Pendiente de revisión: aún no se contrastaron con la literatura los puntos de corte del cociente grosor del cristalino / longitud axial para distinguir los tipos de ojo pequeño.",
+      "concordancia": "sin_evidencia",
+      "comentario": "La app calcula el índice como LT / LA. Los cortes son los de la tabla del Dr. Silva y son criterio mayor en los tipos I, II, III y V.",
+      "fuentes": []
     },
     {
       "tema": "Manitol preoperatorio",

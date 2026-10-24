@@ -1,11 +1,12 @@
 import { useState, type ReactNode } from 'react';
-import { Controller, useForm, type Control, type Path } from 'react-hook-form';
+import { Controller, useForm, useWatch, type Control, type Path } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Calculator, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ChoiceGroup, CheckboxField, NumberField, type Opcion } from '@/components/FormFields';
 import { RANGOS, eyeInputSchema, parseDecimal, type EyeInputForm } from '@/schemas/eyeInput';
+import { indiceLTAL } from '@/engine';
 import type { EyeInput, Ojo, Refraccion, Sinequias } from '@/engine/types';
 import { resumenResultado, useEvaluaciones } from '@/state/EvaluationContext';
 import { guardarEnHistorial } from '@/state/history';
@@ -74,6 +75,18 @@ function Choice<T extends string | boolean | null>({ control, name, ...rest }: C
         />
       )}
     />
+  );
+}
+
+/** Índice LT/AL calculado en vivo a partir de LT y LA (no se ingresa). */
+function IndiceLTAL({ control }: { control: Control<EyeInputForm, unknown, EyeInput> }) {
+  const [lt, la] = useWatch({ control, name: ['grosorCristalino', 'longitudAxial'] });
+  const valido = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n);
+  const indice = valido(lt) && valido(la) ? indiceLTAL({ grosorCristalino: lt, longitudAxial: la }) : null;
+  return (
+    <p className="mt-1 text-xs text-slateGray" aria-live="polite">
+      Índice LT/AL (calculado): <strong className="text-ink">{indice === null ? '—' : indice.toFixed(3)}</strong>
+    </p>
   );
 }
 
@@ -179,33 +192,8 @@ export function EvaluationPage() {
           />
         </Fila>
         <Fila>
-          <NumberField label="Grosor escleral – polo posterior (PP)" unidad="mm" hint={rango(RANGOS.grosorEscleral)} ayuda="Grosor escleral en el polo posterior, por ecografía / UBM" registro={register('grosorEscleral', num)} error={errors.grosorEscleral} />
-        </Fila>
-        <Fila>
-          <Choice<boolean>
-            control={control}
-            name="efusionCoroidea"
-            legend="Efusión coroidea"
-            opciones={[
-              { value: false, label: 'No' },
-              { value: true, label: 'Sí' },
-            ]}
-          />
-        </Fila>
-        <Fila>
-          <Choice
-            control={control}
-            name="cuerpoCiliar"
-            legend="Cuerpo ciliar"
-            ayuda="UBM"
-            opciones={[
-              { value: 'normal', label: 'Normal' },
-              { value: 'anteriorizado', label: 'Anteriorizado' },
-            ]}
-          />
-        </Fila>
-        <Fila>
-          <NumberField label="Cristalino (LT)" unidad="mm" hint={rango(RANGOS.grosorCristalino)} ayuda="Grosor del cristalino" registro={register('grosorCristalino', num)} error={errors.grosorCristalino} />
+          <NumberField label="Cristalino (LT)" unidad="mm" hint={rango(RANGOS.grosorCristalino)} ayuda="Grosor del cristalino; con la LA se calcula el índice LT/AL" registro={register('grosorCristalino', num)} error={errors.grosorCristalino} />
+          <IndiceLTAL control={control} />
         </Fila>
         <Fila>
           <Choice<boolean>
@@ -217,6 +205,9 @@ export function EvaluationPage() {
               { value: true, label: 'Sí (colobomas y disgenesias)' },
             ]}
           />
+        </Fila>
+        <Fila>
+          <NumberField label="WTW" unidad="mm" hint={rango(RANGOS.wtw)} ayuda="Diámetro corneal horizontal blanco-blanco" registro={register('wtw', num)} error={errors.wtw} />
         </Fila>
         <Fila>
           <Choice<Refraccion>

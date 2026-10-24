@@ -19,6 +19,6 @@ export function evaluarOjo(input: EyeInput, config: ClinicalConfig): EvaluacionC
 export { clasificar } from './classifier';
 export { TECNICA_SINEQUIAS, alertaFacomorfica, checklistPreoperatorio, conSinequias, recomendacionLio, riesgoGlaucomaMaligno, tecnicasAlternativas } from './modules';
 export type { TecnicaAlternativa } from './modules';
-export { evaluarCriterio, etiquetaCriterio, formatNumero, NOMBRE_CAMPO, NOMBRE_VALOR, siNo } from './criteria';
+export { evaluarCriterio, etiquetaCriterio, formatMedida, formatNumero, indiceLTAL, NOMBRE_CAMPO, NOMBRE_VALOR, siNo } from './criteria';
 export { parseConfig, configSchema } from './configSchema';
 export type * from './types';

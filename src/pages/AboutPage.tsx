@@ -4,29 +4,19 @@ import { Tabs } from '@/components/ui/tabs';
 import { Referencias } from '@/components/result/Panels';
 import { EyeSchematic } from '@/components/result/EyeSchematic';
 import { clinicalConfig } from '@/config';
-import { NOMBRE_VALOR, etiquetaCriterio, formatNumero, siNo, tecnicasAlternativas } from '@/engine';
-import type { Criterio, TipoClinico } from '@/engine/types';
+import { NOMBRE_VALOR, etiquetaCriterio, formatMedida, formatNumero, siNo, tecnicasAlternativas } from '@/engine';
+import type { Criterio } from '@/engine/types';
 
 /** Filas de la tabla: qué campo(s) muestra cada fila (mismo orden que la diapositiva). */
-type FilaTabla = {
-  titulo: string;
-  campos?: string[];
-  /** Fila sin valores: los médicos ya los conocen. */
-  vacia?: boolean;
-  texto?: keyof NonNullable<TipoClinico['tabla']>;
-};
+type FilaTabla = { titulo: string; campos: string[] };
 
 const FILAS: FilaTabla[] = [
   { titulo: 'Longitud axial (LA)', campos: ['longitudAxial'] },
   { titulo: 'Cámara anterior (CA)', campos: ['acd'] },
   { titulo: 'Ángulo', campos: ['angulo'] },
-  { titulo: 'Grosor escleral', campos: ['grosorEscleral'] },
-  { titulo: 'Efusión coroidea', campos: ['efusionCoroidea'] },
-  { titulo: 'Cuerpo ciliar', campos: ['cuerpoCiliar'] },
-  { titulo: 'Cristalino (LT)', texto: 'cristalino' },
+  { titulo: 'Índice LT/AL', campos: ['indiceLTAL'] },
   { titulo: 'Malformaciones anatómicas', campos: ['malformaciones'] },
-  { titulo: 'Refracción', texto: 'refraccion' },
-  { titulo: 'Alteraciones asociadas', texto: 'alteracionesAsociadas' },
+  { titulo: 'WTW', campos: ['wtw'] },
 ];
 
 const SIM: Record<string, string> = { '<': '<', '<=': '≤', '>': '>', '>=': '≥' };
@@ -41,7 +31,7 @@ function claveCriterio(c: Criterio): string {
 function celda(c: Criterio): string {
   switch (c.op) {
     case 'entre':
-      return `${formatNumero(c.min)}–${formatNumero(c.max)} mm`;
+      return c.campo === 'indiceLTAL' ? `${c.min.toFixed(2)}–${c.max.toFixed(2)}` : `${formatNumero(c.min)}–${formatNumero(c.max)} mm`;
     case 'en':
       return c.valores.map((v) => NOMBRE_VALOR[v] ?? v).join(' o ');
     case 'es':
@@ -58,7 +48,7 @@ function celda(c: Criterio): string {
     case 'cualquiera':
       return c.etiqueta.startsWith('Alteraciones') ? 'Retinianas' : c.etiqueta;
     default:
-      return `${SIM[c.op]} ${formatNumero(c.valor)} mm`;
+      return `${SIM[c.op]} ${formatMedida(c.campo, c.valor)}`;
   }
 }
 
@@ -100,13 +90,11 @@ function TablaClasificacion() {
                 {f.titulo}
               </th>
               {cfg.tipos.map((t) => {
-                if (f.vacia) return <td key={t.id} className={td} />;
-                if (f.texto) return <td key={t.id} className={td}>{t.tabla?.[f.texto] ?? '—'}</td>;
-                const crit = t.criterios.filter((c) => f.campos?.includes(claveCriterio(c)));
+                const crit = t.criterios.filter((c) => f.campos.includes(claveCriterio(c)));
                 return (
                   <td key={t.id} className={td}>
                     {crit.length === 0
-                      ? '—'
+                      ? <span className="text-slateGray">Variable</span>
                       : crit.map((c) => (
                           <span
                             key={etiquetaCriterio(c)}
@@ -230,7 +218,7 @@ function Modulos() {
           <strong>Alertas clínicas:</strong> {cfg.alertasClinicas.map((a) => a.titulo).join('; ')}.
         </p>
         <p>
-          <strong>Valores en el límite:</strong> aviso a ≤ {cfg.toleranciaLimiteMm} mm de un umbral.
+          <strong>Valores en el límite:</strong> aviso a ≤ {cfg.toleranciaLimiteMm} mm (o ≤ {cfg.toleranciaLimiteIndice} en el índice LT/AL) de un umbral.
         </p>
       </div>
     </div>
