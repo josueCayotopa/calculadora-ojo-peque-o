@@ -22,10 +22,12 @@ export const NOMBRE_CAMPO: Record<CampoNumerico | CampoEnum | CampoBooleano, str
 };
 
 export const NOMBRE_VALOR: Record<string, string> = {
-  abierto: 'abierto',
-  estrecho: 'estrecho/ocluible',
+  shaffer0: 'Shaffer 0',
+  shaffer1: 'Shaffer 1',
+  shaffer2: 'Shaffer 2',
+  shaffer3: 'Shaffer 3',
+  shaffer4: 'Shaffer 4',
   deformado: 'deformado',
-  cerrado: 'cerrado/ocluible',
   normal: 'normal',
   corto: 'corto',
   anteriorizado: 'anteriorizado',
@@ -97,9 +99,20 @@ function leerNumero(input: EyeInput, campo: CampoNumerico): number | null {
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
 }
 
+/** Las opciones marcadas del campo (el ángulo admite varias). */
+function leerLista(input: EyeInput, campo: CampoEnum): string[] {
+  const v = input[campo] as unknown;
+  return Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string' && x !== '') : typeof v === 'string' && v !== '' ? [v] : [];
+}
+
 function leerEnum(input: EyeInput, campo: CampoEnum): string | null {
-  const v = input[campo] as string | null | undefined;
-  return typeof v === 'string' && v !== '' ? v : null;
+  return leerLista(input, campo)[0] ?? null;
+}
+
+/** Texto del ángulo con una o varias opciones: «Shaffer 1 + Shaffer 2». */
+export function formatAngulo(angulo: readonly string[] | string | null | undefined): string {
+  const lista = Array.isArray(angulo) ? angulo : angulo ? [angulo] : [];
+  return lista.length ? lista.map((v) => NOMBRE_VALOR[v] ?? v).join(' + ') : 'sin dato';
 }
 
 function leerBooleano(input: EyeInput, campo: CampoBooleano): boolean {
@@ -153,9 +166,10 @@ export function evaluarCriterio(c: Criterio, input: EyeInput, tol: Tolerancia = 
       };
     }
     case 'en': {
-      const v = leerEnum(input, c.campo);
-      if (v === null) return sinDato(c.campo);
-      return { ...base, campo: c.campo, cumple: c.valores.includes(v), observado: NOMBRE_VALOR[v] ?? v };
+      const marcadas = leerLista(input, c.campo);
+      if (marcadas.length === 0) return sinDato(c.campo);
+      const cumple = c.modo === 'alguno' ? marcadas.some((v) => c.valores.includes(v)) : marcadas.every((v) => c.valores.includes(v));
+      return { ...base, campo: c.campo, cumple, observado: formatAngulo(marcadas) };
     }
     case 'es': {
       const v = leerBooleano(input, c.campo);

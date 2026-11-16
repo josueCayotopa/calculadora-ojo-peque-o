@@ -1,7 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
 import type { EvaluacionCompleta, EyeInput } from '@/engine/types';
-import { NOMBRE_VALOR, formatNumero, indiceLTAL, siNo, tecnicasAlternativas } from '@/engine';
+import { formatAngulo, formatNumero, indiceLTAL, siNo, tecnicasAlternativas } from '@/engine';
 import { clinicalConfig, terminosUsados } from '@/config';
 import { nombreTipo, resumenResultado } from '@/state/EvaluationContext';
 
@@ -47,7 +47,7 @@ function datosIngresados(e: EyeInput): [string, string][] {
   return [
     ['Longitud axial (LA)', `${formatNumero(e.longitudAxial)} mm`],
     ['Cámara anterior (CA)', `${formatNumero(e.acd)} mm`],
-    ['Ángulo (gonioscopía)', NOMBRE_VALOR[e.angulo]],
+    ['Ángulo (gonioscopía)', formatAngulo(e.angulo)],
     ['Cristalino (LT)', e.grosorCristalino != null ? `${formatNumero(e.grosorCristalino)} mm` : 'No ingresado'],
     ['Índice LT/AL (calculado)', indiceLTAL(e)?.toFixed(3) ?? 'Sin dato'],
     ['Malformaciones anatómicas', siNo('malformaciones', e.malformaciones)],
@@ -138,9 +138,9 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
     titulo('Diagnóstico');
     parrafo(resumenResultado(e), { bold: true, size: 13, color: c.estado === 'clasificado' ? GRANATE : [146, 64, 14] });
     if (c.estado !== 'clasificado') {
-      parrafo('Ningún tipo cumple todos sus criterios mayores. No se fuerza un diagnóstico.');
+      parrafo('Ningún tipo cumple todos sus criterios mayores y el mínimo de criterios totales. No se fuerza un diagnóstico.');
       parrafo(
-        `Criterios mayores en conflicto: ${c.conflictos
+        `Criterios en conflicto: ${c.conflictos
           .map((k) => `Tipo ${k.tipo}: ${k.etiqueta} (${k.sinDato ? 'sin dato' : `observado: ${k.observado}`})`)
           .join('; ')}`,
       );
@@ -148,16 +148,14 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
     c.alertas.forEach((a) => parrafo(`${a.titulo}: ${a.mensaje}`, { color: [153, 27, 27] }));
     for (const tipo of c.masCercanos) {
       parrafo(
-        `Tipo ${tipo.romano} · ${nombreTipo(tipo)}: mayores ${tipo.mayores.cumplidos}/${tipo.mayores.total}${
-          tipo.apoyo.total ? `, apoyo ${tipo.apoyo.cumplidos}/${tipo.apoyo.total} (${Math.round(tipo.apoyo.porcentaje * 100)} %)` : ''
-        }`,
+        `Tipo ${tipo.romano} · ${nombreTipo(tipo)}: mayores ${tipo.mayores.cumplidos}/${tipo.mayores.total}, total ${tipo.totales.cumplidos}/${tipo.totales.total} (mínimo ${tipo.minimo})`,
         { color: GRIS },
       );
       tabla(
         ['Criterio', 'Nivel', 'Observado', 'Cumple'],
         tipo.criterios.map((k) => [
           k.etiqueta + (k.enLimite ? ' (valor en el límite)' : ''),
-          k.nivel === 'mayor' ? 'Mayor' : 'Apoyo',
+          k.nivel === 'mayor' ? 'Mayor' : 'Menor',
           k.observado,
           k.sinDato ? 'Sin dato' : k.cumple ? 'Sí' : 'No',
         ]),

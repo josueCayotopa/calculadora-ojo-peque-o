@@ -6,7 +6,7 @@ const valido = {
   longitudAxial: 21.5,
   acd: 2.3,
   grosorCristalino: 4.2,
-  angulo: 'estrecho',
+  angulo: ['shaffer2'],
   wtw: 10.5,
   malformaciones: false,
 };
@@ -51,7 +51,7 @@ describe('eyeInputSchema', () => {
   });
 
   it('acepta el ángulo "deformado"', () => {
-    expect(eyeInputSchema.safeParse({ ...valido, angulo: 'deformado' }).success).toBe(true);
+    expect(eyeInputSchema.safeParse({ ...valido, angulo: ['deformado'] }).success).toBe(true);
   });
 
   it('exige el cristalino (LT) y lo valida en rango', () => {

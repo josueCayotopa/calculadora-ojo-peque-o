@@ -128,7 +128,7 @@ export function ChoiceGroup<T extends string | boolean | null>({
       </legend>
       <div
         className={cn(
-          'flex rounded-xl border bg-white p-0.5',
+          'flex rounded-full border glass-field p-0.5',
           largo && 'flex-wrap gap-0.5 sm:flex-nowrap sm:gap-0',
           error ? 'border-red-700' : 'border-gray-300',
         )}
@@ -172,10 +172,12 @@ interface SelectFieldProps {
   opciones: Opcion<string>[];
   registro: UseFormRegisterReturn;
   error?: FieldError;
+  /** Texto descriptivo de la opción elegida, bajo el desplegable. */
+  detalle?: ReactNode;
 }
 
 /** Desplegable nativo con opción vacía «-- Seleccione --» (cómodo en tablet y móvil). */
-export function SelectField({ label, ayuda, opciones, registro, error }: SelectFieldProps) {
+export function SelectField({ label, ayuda, opciones, registro, error, detalle }: SelectFieldProps) {
   const id = useId();
   const ayudaId = `${id}-ayuda`;
   const errorId = `${id}-error`;
@@ -201,6 +203,7 @@ export function SelectField({ label, ayuda, opciones, registro, error }: SelectF
           </option>
         ))}
       </NativeSelect>
+      {detalle && <p className="whitespace-pre-line text-xs leading-snug text-slateGray">{detalle}</p>}
       {ayuda && (
         <span id={ayudaId} className="sr-only">
           {ayuda}
@@ -219,7 +222,7 @@ export function CampoCalculado({ label, valor, ayuda }: { label: string; valor: 
         <span className={cn(etiquetaCls, 'truncate')}>{label}</span>
         <span className="shrink-0 text-[11px] text-slateGray">calculado</span>
       </div>
-      <output aria-live="polite" className="flex min-h-10 items-center rounded-xl border border-gray-200 bg-lightBg px-4 py-1.5 text-base font-semibold text-ink">
+      <output aria-live="polite" className="flex min-h-10 items-center rounded-2xl glass-soft px-4 py-1.5 text-base font-semibold text-ink">
         {valor}
       </output>
       {ayuda && <span className="sr-only">{ayuda}</span>}

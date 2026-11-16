@@ -6,7 +6,7 @@ export function Card({
   as: Comp = 'div',
   ...props
 }: React.HTMLAttributes<HTMLElement> & { as?: 'div' | 'section' | 'article' }) {
-  return <Comp className={cn('rounded-3xl border border-gray-100 bg-white shadow-sm', className)} {...props} />;
+  return <Comp className={cn('glass rounded-3xl', className)} {...props} />;
 }
 
 export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {

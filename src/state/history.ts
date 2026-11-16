@@ -8,7 +8,7 @@ import { eyeInputSchema } from '@/schemas/eyeInput';
  * re-evalúa con las reglas vigentes.
  */
 
-const KEY = 'ojo-pequeno:historial:v2';
+const KEY = 'ojo-pequeno:historial:v4';
 const MAX_ENTRADAS = 50;
 
 export interface EntradaHistorial {
@@ -16,7 +16,7 @@ export interface EntradaHistorial {
   fecha: string;
   ojo: Ojo;
   entrada: EyeInput;
-  /** Resumen legible en el momento de guardar (p. ej. "Tipo 2 · MAR con ángulo estrecho"). */
+  /** Resumen legible en el momento de guardar (p. ej. "Tipo 2 · MAR con Shaffer 1"). */
   resumen: string;
 }
 

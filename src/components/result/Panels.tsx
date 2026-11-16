@@ -143,7 +143,7 @@ export function Tratamiento({ evaluacion }: { evaluacion: EvaluacionCompleta }) 
         })}
       </ul>
       {glosario.length > 0 && (
-        <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 rounded-xl bg-lightBg p-2.5 text-xs">
+        <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 rounded-xl glass-soft p-2.5 text-xs">
           {glosario.map((g) => (
             <div key={g.termino} className="contents">
               <dt className="font-bold text-ink">{g.termino}</dt>
@@ -254,7 +254,7 @@ export function ChecklistPreoperatorio({ evaluacion }: { evaluacion: EvaluacionC
         <li key={item.texto}>
           <label
             className={cn(
-              'flex min-h-9 cursor-pointer items-start gap-2.5 rounded-lg px-1.5 py-1.5 hover:bg-lightBg',
+              'flex min-h-9 cursor-pointer items-start gap-2.5 rounded-lg px-1.5 py-1.5 hover:bg-white/50',
               marcados[item.texto] && 'text-slateGray line-through',
             )}
           >

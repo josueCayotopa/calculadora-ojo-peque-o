@@ -88,7 +88,7 @@ function TablaClasificacion() {
         </thead>
         <tbody>
           {FILAS.map((f) => (
-            <tr key={f.titulo} className="border-b border-gray-100">
+            <tr key={f.titulo} className="border-b border-white/60">
               <th scope="row" className={`${td} font-semibold text-slateGray`}>
                 {f.titulo}
               </th>
@@ -111,7 +111,7 @@ function TablaClasificacion() {
               })}
             </tr>
           ))}
-          <tr className="border-b border-gray-100 bg-lightBg">
+          <tr className="border-b border-white/60 bg-white/40">
             <th scope="row" className={`${td} font-bold text-ink`}>
               Preoperatorio
             </th>
@@ -121,7 +121,7 @@ function TablaClasificacion() {
               </td>
             ))}
           </tr>
-          <tr className="bg-lightBg">
+          <tr className="bg-white/40">
             <th scope="row" className={`${td} font-bold text-ink`}>
               Técnica
             </th>
@@ -149,21 +149,21 @@ function ComoDecide() {
       {[
         {
           n: 1,
-          t: 'Criterios mayores y de apoyo',
-          d: 'Cada criterio es mayor (obligatorio) o de apoyo (suma al % de concordancia, no decide el tipo).',
+          t: 'Mayores, menores y 4 de 6',
+          d: `Los criterios mayores son obligatorios. Los menores no lo son, pero el tipo debe cumplir al menos ${cfg.minimoCriterios ?? 'todos los'} criterios en total (4 de 6).`,
         },
         {
           n: 2,
           t: `Orden ${cfg.ordenEvaluacion.join(' → ')}`,
-          d: 'Los rangos se superponen (un nanoftalmos también tiene LA < 21 mm). El diagnóstico es el primer tipo que cumple todos sus criterios mayores.',
+          d: 'Los rangos se superponen (un nanoftalmos también tiene LA < 21 mm). El diagnóstico es el primer tipo que cumple todos sus mayores y el mínimo de criterios.',
         },
         {
           n: 3,
           t: 'Zona gris',
-          d: `Si ningún tipo cumple sus mayores: «No clasificable», con los ${cfg.cercanosEnZonaGris} tipos más cercanos y los criterios en conflicto. Nunca se fuerza un diagnóstico.`,
+          d: `Si ningún tipo cumple sus mayores y el mínimo: «No clasificable», con los ${cfg.cercanosEnZonaGris} tipos más cercanos y los criterios en conflicto. Nunca se fuerza un diagnóstico.`,
         },
       ].map((p) => (
-        <div key={p.n} className="rounded-2xl bg-lightBg p-4">
+        <div key={p.n} className="rounded-2xl glass-soft p-4">
           <span className="flex size-7 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">{p.n}</span>
           <h3 className="mt-2 font-bold">{p.t}</h3>
           <p className="mt-1 text-slateGray">{p.d}</p>
@@ -185,7 +185,7 @@ function Glosario() {
   return (
     <dl className="grid gap-x-6 gap-y-2 text-sm md:grid-cols-2">
       {clinicalConfig.glosario.map((g) => (
-        <div key={g.termino} className="flex gap-2 border-b border-gray-100 pb-1.5">
+        <div key={g.termino} className="flex gap-2 border-b border-white/60 pb-1.5">
           <dt className="w-32 shrink-0 font-bold text-ink">{g.termino}</dt>
           <dd className="text-slateGray">{g.definicion}</dd>
         </div>
@@ -198,7 +198,7 @@ function Modulos() {
   const cfg = clinicalConfig;
   return (
     <div className="grid gap-3 text-sm md:grid-cols-2">
-      <div className="rounded-2xl bg-lightBg p-4">
+      <div className="rounded-2xl glass-soft p-4">
         <h3 className="font-bold text-ink">Riesgo de glaucoma maligno</h3>
         <p className="text-xs text-slateGray">
           Bajo 0–{cfg.glaucomaMaligno.umbrales.moderadoDesde - 1} · Moderado {cfg.glaucomaMaligno.umbrales.moderadoDesde}–
@@ -210,7 +210,7 @@ function Modulos() {
           ))}
         </ul>
       </div>
-      <div className="space-y-2 rounded-2xl bg-lightBg p-4 text-xs">
+      <div className="space-y-2 rounded-2xl glass-soft p-4 text-xs">
         <p>
           <strong>Alerta facomórfica:</strong> {cfg.alertaFacomorfica.criterios.map((c) => etiquetaCriterio(c)).join(' y ')}.
         </p>
@@ -247,7 +247,7 @@ export function AboutPage() {
         <h1 className="text-xl font-black tracking-tight text-ink">Algoritmo del manejo de cirugía de catarata en ojo pequeño</h1>
         <p className="text-xs text-slateGray">Dr. Fermín Silva Cayatopa · Clínica La Luz</p>
       </div>
-      <section aria-label="Clasificación" className="flex min-h-0 flex-1 flex-col rounded-3xl bg-white px-4 pb-4 pt-1 shadow-sm">
+      <section aria-label="Clasificación" className="flex min-h-0 flex-1 flex-col rounded-3xl glass px-4 pb-4 pt-1">
         <Tabs
           label="Secciones de la clasificación"
           activo={pestana}

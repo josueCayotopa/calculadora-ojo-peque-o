@@ -28,7 +28,7 @@ function Icono({ c }: { c: CriterioEvaluado }) {
 export function CriteriaList({ criterios }: { criterios: CriterioEvaluado[] }) {
   const grupos = [
     { titulo: 'Criterios mayores (obligatorios)', items: criterios.filter((c) => c.nivel === 'mayor') },
-    { titulo: 'Criterios de apoyo', items: criterios.filter((c) => c.nivel === 'apoyo') },
+    { titulo: 'Criterios menores (suman al mínimo de 4 de 6)', items: criterios.filter((c) => c.nivel === 'apoyo') },
   ].filter((g) => g.items.length > 0);
 
   return (
@@ -39,7 +39,7 @@ export function CriteriaList({ criterios }: { criterios: CriterioEvaluado[] }) {
           <ul
             className={cn(
               'divide-y divide-gray-100 rounded-2xl border',
-              g.items[0].nivel === 'mayor' ? 'border-primary-200 bg-primary-50/40' : 'border-gray-100',
+              g.items[0].nivel === 'mayor' ? 'border-primary-200 bg-primary-50/40' : 'border-white/60',
             )}
           >
             {g.items.map((c) => (

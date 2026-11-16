@@ -12,7 +12,7 @@ const campoEnum = z.enum(['angulo']);
 const campoBooleano = z.enum(['malformaciones']);
 
 export const VALORES_ENUM: Record<z.infer<typeof campoEnum>, readonly string[]> = {
-  angulo: ['abierto', 'estrecho', 'deformado', 'cerrado'],
+  angulo: ['shaffer0', 'shaffer1', 'shaffer2', 'shaffer3', 'shaffer4', 'deformado'],
 };
 
 const comunes = {
@@ -37,10 +37,10 @@ export const criterioSchema: z.ZodType<Criterio> = z.lazy(() =>
       .strict()
       .refine((c) => c.min < c.max, { message: 'En un criterio "entre", min debe ser menor que max' }),
     z
-      .object({ ...comunes, campo: campoEnum, op: z.literal('en'), valores: z.array(z.string()).min(1) })
+      .object({ ...comunes, campo: campoEnum, op: z.literal('en'), valores: z.array(z.string()).min(1), modo: z.enum(['todos', 'alguno']).optional() })
       .strict()
       .refine((c) => c.valores.every((v) => VALORES_ENUM[c.campo].includes(v)), {
-        message: 'Valor no permitido para el campo (revise la ortografía: abierto/estrecho/deformado/cerrado)',
+        message: 'Valor no permitido para el campo (revise la ortografía: shaffer0…shaffer4/deformado)',
       }),
     z.object({ ...comunes, campo: campoBooleano, op: z.literal('es'), valor: z.boolean() }).strict(),
     z
@@ -73,6 +73,7 @@ export const configSchema = z
     toleranciaLimiteMm: z.number().min(0),
     toleranciaLimiteIndice: z.number().min(0),
     ordenEvaluacion: z.array(z.string()).min(1),
+    minimoCriterios: z.number().int().min(1).optional(),
     cercanosEnZonaGris: z.number().int().min(1),
     tipos: z
       .array(

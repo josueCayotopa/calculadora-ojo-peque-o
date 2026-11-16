@@ -18,6 +18,7 @@ import type {
  *
  * Algoritmo:
  * 1. Se evalúan todos los criterios de todos los tipos.
+ *    Además de todos los mayores, el tipo debe cumplir `minimoCriterios` criterios en total (p. ej. 4 de 6).
  * 2. Se recorren los tipos en `ordenEvaluacion` (V → IV → III → II → I, porque
  *    los rangos se superponen) y se asigna el PRIMERO que cumple todos sus
  *    criterios MAYORES.
@@ -36,6 +37,8 @@ export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoCl
     const evaluables = apoyoCrit.filter((c) => !c.sinDato);
     const pesoTotal = evaluables.reduce((s, c) => s + c.peso, 0);
     const pesoCumplido = evaluables.reduce((s, c) => s + (c.cumple ? c.peso : 0), 0);
+    const totales = contar(criterios);
+    const minimo = Math.min(config.minimoCriterios ?? criterios.length, criterios.length);
     return {
       id: tipo.id,
       romano: tipo.romano,
@@ -44,7 +47,9 @@ export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoCl
       criterios,
       mayores,
       apoyo: { ...contar(apoyoCrit), porcentaje: pesoTotal > 0 ? pesoCumplido / pesoTotal : 0 },
-      cumpleMayores: mayores.total > 0 && mayores.cumplidos === mayores.total,
+      totales,
+      minimo,
+      cumpleMayores: mayores.total > 0 && mayores.cumplidos === mayores.total && totales.cumplidos >= minimo,
       preoperatorio: tipo.preoperatorio,
       tecnica: tipo.tecnica,
       tecnicaPorExcepcion: null,
@@ -69,7 +74,11 @@ export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoCl
   const masCercanos = tipo ? [tipo] : ranking.slice(0, config.cercanosEnZonaGris);
   const conflictos = tipo
     ? []
-    : masCercanos.flatMap((t) => t.criterios.filter((c) => c.nivel === 'mayor' && !c.cumple).map((c) => ({ ...c, tipo: t.romano })));
+    : masCercanos.flatMap((t) => {
+        // Con todos los mayores cumplidos pero sin llegar al mínimo, los menores no cumplidos son el conflicto.
+        const soloMayores = t.mayores.cumplidos < t.mayores.total;
+        return t.criterios.filter((c) => !c.cumple && (soloMayores ? c.nivel === 'mayor' : true)).map((c) => ({ ...c, tipo: t.romano }));
+      });
 
   const alertas: AlertaActiva[] = config.alertasClinicas
     .filter((a) => !(tipo && a.exceptoTipos?.includes(tipo.id)))

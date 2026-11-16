@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const campoBase =
-  'flex min-h-12 w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-base text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary aria-[invalid=true]:border-red-700';
+  'flex min-h-12 w-full glass-field rounded-2xl px-4 py-2 text-base text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary aria-[invalid=true]:border-red-700';
 
 export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, ref) => (

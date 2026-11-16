@@ -1,9 +1,16 @@
 {
   "version": "3.1.0",
-  "fechaRevision": "2026-10-24",
+  "fechaRevision": "2026-11-16",
   "toleranciaLimiteMm": 0.05,
   "toleranciaLimiteIndice": 0.005,
-  "ordenEvaluacion": ["V", "IV", "III", "II", "I"],
+  "minimoCriterios": 4,
+  "ordenEvaluacion": [
+    "V",
+    "IV",
+    "III",
+    "II",
+    "I"
+  ],
   "cercanosEnZonaGris": 2,
   "tipos": [
     {
@@ -13,15 +20,57 @@
       "nombre": "Microftalmo anterior relativo",
       "descripcion": "Longitud axial normal con segmento anterior pequeño y microcórnea.",
       "criterios": [
-        { "nivel": "mayor", "campo": "longitudAxial", "op": ">", "valor": 22.5 },
-        { "nivel": "mayor", "campo": "acd", "op": "<", "valor": 2.5 },
-        { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["estrecho"] },
-        { "nivel": "mayor", "campo": "indiceLTAL", "op": "<", "valor": 0.22 },
-        { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": false },
-        { "nivel": "mayor", "campo": "wtw", "op": "<", "valor": 11 }
+        {
+          "nivel": "mayor",
+          "campo": "longitudAxial",
+          "op": ">",
+          "valor": 22.5
+        },
+        {
+          "nivel": "mayor",
+          "campo": "acd",
+          "op": "<",
+          "valor": 2.5
+        },
+        {
+          "nivel": "mayor",
+          "campo": "angulo",
+          "op": "en",
+          "valores": [
+            "shaffer1",
+            "shaffer2"
+          ],
+          "etiqueta": "Ángulo Shaffer 1–2 (MT posterior no visible ≥ 180°; abre con indentación, aposicional)"
+        },
+        {
+          "nivel": "apoyo",
+          "campo": "indiceLTAL",
+          "op": "<",
+          "valor": 0.22
+        },
+        {
+          "nivel": "mayor",
+          "campo": "malformaciones",
+          "op": "es",
+          "valor": false
+        },
+        {
+          "nivel": "apoyo",
+          "campo": "wtw",
+          "op": "<",
+          "valor": 11
+        }
       ],
-      "preoperatorio": ["Manitol 30 min antes"],
-      "tecnica": ["Rexis con cistótomo", "Stop and Chop"],
+      "preoperatorio": [
+        "Manitol 20 % IV 30 min antes",
+        "Azul de tripán"
+      ],
+      "tecnica": [
+        "Rexis con cistótomo",
+        "Stop and Chop",
+        "IP quirúrgica",
+        "Goniosinequiálisis si el cierre es sinequial"
+      ],
       "esquema": {
         "segmentoAnterior": "corto",
         "segmentoPosterior": "normal",
@@ -41,15 +90,55 @@
       "nombre": "Microftalmos posterior relativo",
       "descripcion": "Segmento anterior de dimensiones normales (CA > 2.5 mm, WTW > 11 mm) con segmento posterior corto.",
       "criterios": [
-        { "nivel": "mayor", "campo": "longitudAxial", "op": "<", "valor": 20 },
-        { "nivel": "mayor", "campo": "acd", "op": ">", "valor": 2.5 },
-        { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["abierto"] },
-        { "nivel": "mayor", "campo": "indiceLTAL", "op": "<", "valor": 0.2 },
-        { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": false },
-        { "nivel": "mayor", "campo": "wtw", "op": ">", "valor": 11 }
+        {
+          "nivel": "mayor",
+          "campo": "longitudAxial",
+          "op": "<",
+          "valor": 20
+        },
+        {
+          "nivel": "mayor",
+          "campo": "acd",
+          "op": ">",
+          "valor": 2.5
+        },
+        {
+          "nivel": "mayor",
+          "campo": "angulo",
+          "op": "en",
+          "valores": [
+            "shaffer3",
+            "shaffer4"
+          ],
+          "etiqueta": "Ángulo Shaffer 3–4 (todas las estructuras visibles)"
+        },
+        {
+          "nivel": "apoyo",
+          "campo": "indiceLTAL",
+          "op": "<",
+          "valor": 0.2
+        },
+        {
+          "nivel": "mayor",
+          "campo": "malformaciones",
+          "op": "es",
+          "valor": false
+        },
+        {
+          "nivel": "apoyo",
+          "campo": "wtw",
+          "op": ">",
+          "valor": 11
+        }
       ],
-      "preoperatorio": ["Manitol 30 min antes"],
-      "tecnica": ["Rexis con Utrata", "Facochop"],
+      "preoperatorio": [
+        "Manitol 20 % IV 30 min antes",
+        "Azul de tripán"
+      ],
+      "tecnica": [
+        "Rexis con Utrata",
+        "Facochop (cámara amplia)"
+      ],
       "esquema": {
         "segmentoAnterior": "normal",
         "segmentoPosterior": "corto",
@@ -69,15 +158,67 @@
       "nombre": "Microftalmo simple",
       "descripcion": "Ojo globalmente pequeño y estructuralmente proporcional, sin malformaciones.",
       "criterios": [
-        { "nivel": "mayor", "campo": "longitudAxial", "op": "entre", "min": 20, "max": 21, "opMin": ">=", "opMax": "<", "etiqueta": "20 ≤ LA < 21 mm (−2 DE)" },
-        { "nivel": "mayor", "campo": "acd", "op": "entre", "min": 2, "max": 2.5, "opMin": ">=", "opMax": "<=" },
-        { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["estrecho", "abierto"], "etiqueta": "Ángulo estrecho (puede estar abierto)" },
-        { "nivel": "mayor", "campo": "indiceLTAL", "op": "entre", "min": 0.18, "max": 0.2, "opMin": ">=", "opMax": "<=" },
-        { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": false },
-        { "nivel": "mayor", "campo": "wtw", "op": "<", "valor": 11 }
+        {
+          "nivel": "mayor",
+          "campo": "longitudAxial",
+          "op": "entre",
+          "min": 20,
+          "max": 21,
+          "opMin": ">=",
+          "opMax": "<",
+          "etiqueta": "20 ≤ LA < 21 mm (−2 DE)"
+        },
+        {
+          "nivel": "mayor",
+          "campo": "acd",
+          "op": "entre",
+          "min": 2,
+          "max": 2.5,
+          "opMin": ">=",
+          "opMax": "<="
+        },
+        {
+          "nivel": "mayor",
+          "campo": "angulo",
+          "op": "en",
+          "valores": [
+            "shaffer2",
+            "shaffer3"
+          ],
+          "etiqueta": "Ángulo Shaffer 2, a veces 3 (MT visible; cierre < 180°)"
+        },
+        {
+          "nivel": "apoyo",
+          "campo": "indiceLTAL",
+          "op": "entre",
+          "min": 0.18,
+          "max": 0.2,
+          "opMin": ">=",
+          "opMax": "<="
+        },
+        {
+          "nivel": "mayor",
+          "campo": "malformaciones",
+          "op": "es",
+          "valor": false
+        },
+        {
+          "nivel": "apoyo",
+          "campo": "wtw",
+          "op": "<",
+          "valor": 11
+        }
       ],
-      "preoperatorio": ["Manitol 30 min antes"],
-      "tecnica": ["Solo trocar 23 G", "Rexis + Utrata/cistótomo", "Facochop"],
+      "preoperatorio": [
+        "Manitol 20 % IV 30 min antes",
+        "Azul de tripán"
+      ],
+      "tecnica": [
+        "Un solo trocar para descomprimir el vítreo",
+        "Viscoelástico pesado",
+        "Rexis con Utrata",
+        "Facochop"
+      ],
       "esquema": {
         "segmentoAnterior": "corto",
         "segmentoPosterior": "corto",
@@ -97,13 +238,46 @@
       "nombre": "Microftalmo complejo",
       "descripcion": "Ojo pequeño con malformaciones anatómicas (colobomas, disgenesias).",
       "criterios": [
-        { "nivel": "mayor", "campo": "longitudAxial", "op": "<", "valor": 21, "etiqueta": "LA < 21 mm (−2 DE)" },
-        { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["deformado"] },
-        { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": true },
-        { "nivel": "mayor", "campo": "wtw", "op": "<", "valor": 11 }
+        {
+          "nivel": "mayor",
+          "campo": "longitudAxial",
+          "op": "<",
+          "valor": 21,
+          "etiqueta": "LA < 21 mm (−2 DE)"
+        },
+        {
+          "nivel": "mayor",
+          "campo": "angulo",
+          "op": "en",
+          "valores": [
+            "deformado"
+          ],
+          "etiqueta": "Ángulo deformado (Shaffer variable + anomalía estructural: inserción alta, remanentes, tejido colobomatoso)",
+          "modo": "alguno"
+        },
+        {
+          "nivel": "mayor",
+          "campo": "malformaciones",
+          "op": "es",
+          "valor": true
+        },
+        {
+          "nivel": "apoyo",
+          "campo": "wtw",
+          "op": "<",
+          "valor": 11
+        }
       ],
-      "preoperatorio": ["Manitol 30 min antes"],
-      "tecnica": ["Vitrectomía central por PP", "Rexis + Utrata"],
+      "preoperatorio": [
+        "Manitol 20 % IV 30 min antes",
+        "Azul de tripán"
+      ],
+      "tecnica": [
+        "VAPP en seco 5–10 s",
+        "Rexis con Utrata",
+        "Facochop",
+        "IP quirúrgica"
+      ],
       "esquema": {
         "segmentoAnterior": "corto",
         "segmentoPosterior": "corto",
@@ -120,17 +294,59 @@
       "id": "V",
       "romano": "V",
       "nombre": "Nanoftalmos",
-      "descripcion": "Ojo corto con cámara anterior estrecha, ángulo cerrado y cristalino desproporcionado (LT/AL > 0.22).",
+      "descripcion": "Ojo corto con cámara anterior estrecha, ángulo cerrado y cristalino desproporcionado (LT/AL > 0.22). Confirmatorio: grosor escleral / retinocoroideoescleral posterior > 1.6 mm (ecografía B).",
       "criterios": [
-        { "nivel": "mayor", "campo": "longitudAxial", "op": "<", "valor": 20 },
-        { "nivel": "mayor", "campo": "acd", "op": "<", "valor": 2 },
-        { "nivel": "mayor", "campo": "angulo", "op": "en", "valores": ["cerrado"] },
-        { "nivel": "mayor", "campo": "indiceLTAL", "op": ">", "valor": 0.22 },
-        { "nivel": "mayor", "campo": "malformaciones", "op": "es", "valor": false },
-        { "nivel": "mayor", "campo": "wtw", "op": "<", "valor": 11 }
+        {
+          "nivel": "mayor",
+          "campo": "longitudAxial",
+          "op": "<",
+          "valor": 20
+        },
+        {
+          "nivel": "mayor",
+          "campo": "acd",
+          "op": "<",
+          "valor": 2
+        },
+        {
+          "nivel": "mayor",
+          "campo": "angulo",
+          "op": "en",
+          "valores": [
+            "shaffer0"
+          ],
+          "etiqueta": "Ángulo Shaffer 0 (indentación aposicional vs sinequial + extensión en grados)"
+        },
+        {
+          "nivel": "apoyo",
+          "campo": "indiceLTAL",
+          "op": ">",
+          "valor": 0.22
+        },
+        {
+          "nivel": "mayor",
+          "campo": "malformaciones",
+          "op": "es",
+          "valor": false
+        },
+        {
+          "nivel": "apoyo",
+          "campo": "wtw",
+          "op": "<",
+          "valor": 11
+        }
       ],
-      "preoperatorio": ["Manitol 30 min antes"],
-      "tecnica": ["Vitrectomía central por PP", "Rexis + Utrata", "IHZV"],
+      "preoperatorio": [
+        "Manitol 20 % IV 30 min antes",
+        "Azul de tripán"
+      ],
+      "tecnica": [
+        "VAPP",
+        "Rexis con Utrata",
+        "Facochop",
+        "Goniosinequiálisis",
+        "IZHV (ojo unicameral)"
+      ],
       "esquema": {
         "segmentoAnterior": "corto",
         "segmentoPosterior": "corto",
@@ -146,37 +362,80 @@
   ],
   "alertasClinicas": [
     {
-      "id": "excepcion-vitrectomia",
-      "titulo": "Excepción: vitrectomía central por PP",
-      "mensaje": "LA > 22.5 mm, CA < 2.0 mm y cristalino (LT) > 5 mm: en lugar de rexis con cistótomo + Stop and Chop, realizar vitrectomía central por pars plana + rexis con Utrata + facochop.",
+      "id": "excepcion-vapp",
+      "titulo": "Excepción: VAPP",
+      "mensaje": "LA > 22.5 mm, CA < 2.0 mm y LT/AL > 0.22: considerar VAPP (vitrectomía anterior por pars plana).",
       "criterios": [
-        { "campo": "longitudAxial", "op": ">", "valor": 22.5 },
-        { "campo": "acd", "op": "<", "valor": 2 },
-        { "campo": "grosorCristalino", "op": ">", "valor": 5 }
-      ],
-      "exceptoTipos": ["II", "III", "IV", "V"],
-      "reemplazaTecnica": ["Vitrectomía central por PP", "Rexis con Utrata", "Facochop"]
+        {
+          "campo": "longitudAxial",
+          "op": ">",
+          "valor": 22.5
+        },
+        {
+          "campo": "acd",
+          "op": "<",
+          "valor": 2
+        },
+        {
+          "campo": "indiceLTAL",
+          "op": ">",
+          "valor": 0.22
+        }
+      ]
     }
   ],
   "glaucomaMaligno": {
     "factores": [
-      { "campo": "longitudAxial", "op": "<", "valor": 22.2 },
-      { "campo": "acd", "op": "<", "valor": 2.2 },
-      { "campo": "angulo", "op": "en", "valores": ["estrecho", "cerrado"], "etiqueta": "Ángulo estrecho o cerrado" }
+      {
+        "campo": "longitudAxial",
+        "op": "<",
+        "valor": 22.2
+      },
+      {
+        "campo": "acd",
+        "op": "<",
+        "valor": 2.2
+      },
+      {
+        "campo": "angulo",
+        "op": "en",
+        "valores": [
+          "shaffer0",
+          "shaffer1",
+          "shaffer2"
+        ],
+        "etiqueta": "Ángulo estrecho o cerrado (Shaffer 0–2)",
+        "modo": "alguno"
+      }
     ],
-    "umbrales": { "moderadoDesde": 2, "altoDesde": 3 }
+    "umbrales": {
+      "moderadoDesde": 2,
+      "altoDesde": 3
+    }
   },
   "alertaFacomorfica": {
     "criterios": [
-      { "campo": "acd", "op": "<", "valor": 2.5 },
-      { "campo": "grosorCristalino", "op": ">", "valor": 4.5 }
+      {
+        "campo": "acd",
+        "op": "<",
+        "valor": 2.5
+      },
+      {
+        "campo": "grosorCristalino",
+        "op": ">",
+        "valor": 4.5
+      }
     ],
     "mensaje": "Cámara anterior estrecha con cristalino grueso: evaluar mecanismo facomórfico con UBM."
   },
   "lio": {
     "biometria": "Use biometría óptica (IOLMaster, Lenstar): en ojos cortos un error pequeño de LA produce un error refractivo mayor. La aplicación no calcula la potencia de la LIO.",
     "formulas": [
-      { "nombre": "Kane", "url": "https://www.iolformula.com/", "nota": "La más precisa en LA < 22 mm en varios estudios comparativos." },
+      {
+        "nombre": "Kane",
+        "url": "https://www.iolformula.com/",
+        "nota": "La más precisa en LA < 22 mm en varios estudios comparativos."
+      },
       {
         "nombre": "Holladay 2",
         "url": "https://www.hicsoap.com/",
@@ -187,8 +446,16 @@
         "url": "https://calc.apacrs.org/barrett_universal2105/",
         "nota": "Menos predecible que Kane en ojos cortos en algunas series (Yosar 2021)."
       },
-      { "nombre": "Hoffer QST", "url": "https://hofferqst.com/", "nota": "Sucesora de Hoffer Q, clásicamente recomendada en LA < 22 mm." },
-      { "nombre": "Calculadora ESCRS", "url": "https://iolcalculator.escrs.org/", "nota": "Compara varias fórmulas modernas en una sola pantalla." }
+      {
+        "nombre": "Hoffer QST",
+        "url": "https://hofferqst.com/",
+        "nota": "Sucesora de Hoffer Q, clásicamente recomendada en LA < 22 mm."
+      },
+      {
+        "nombre": "Calculadora ESCRS",
+        "url": "https://iolcalculator.escrs.org/",
+        "nota": "Compara varias fórmulas modernas en una sola pantalla."
+      }
     ],
     "piggyback": {
       "longitudAxialAnticipadaMm": 20.5,
@@ -196,64 +463,173 @@
     }
   },
   "checklistPreoperatorio": [
-    { "texto": "Manitol IV 30 min antes de la cirugía (valorar función renal y cardiovascular)", "tipos": "todos" },
-    { "texto": "Midriasis farmacológica máxima", "tipos": "todos" },
     {
-      "texto": "Valorar iridotomía láser previa (ángulo estrecho/ocluible)",
-      "tipos": "todos",
-      "condicion": { "campo": "angulo", "op": "en", "valores": ["estrecho"] }
-    },
-    { "texto": "Anestesia tópica asistida (con sedación)", "tipos": "todos" },
-    {
-      "texto": "Rexis con cistótomo doblado por paracentesis; considerar azul tripano y viscoelástico cohesivo",
-      "tipos": ["I"],
-      "salvoAlerta": "excepcion-vitrectomia"
+      "texto": "Manitol 20 % IV 30 min antes de la cirugía (valorar función renal y cardiovascular)",
+      "tipos": "todos"
     },
     {
-      "texto": "Pinza de Utrata para la rexis; considerar azul tripano y viscoelástico cohesivo",
-      "tipos": ["I"],
-      "siAlerta": "excepcion-vitrectomia"
+      "texto": "Azul de tripán para la rexis",
+      "tipos": "todos"
     },
     {
-      "texto": "Trocar-cánula y vitrector para vitrectomía central por pars plana (excepción: CA < 2.0 mm y LT > 5 mm)",
-      "tipos": ["I"],
-      "siAlerta": "excepcion-vitrectomia"
+      "texto": "Midriasis farmacológica máxima",
+      "tipos": "todos"
     },
-    { "texto": "Pinza de Utrata para la rexis; considerar azul tripano y viscoelástico cohesivo", "tipos": ["II", "IV", "V"] },
-    { "texto": "Rexis con pinza de Utrata o cistótomo; considerar azul tripano y viscoelástico cohesivo", "tipos": ["III"] },
-    { "texto": "Trocar de pars plana 23 G colocado, sin vitrectomía programada", "tipos": ["III"] },
-    { "texto": "Trocar-cánula y vitrector para vitrectomía central por pars plana", "tipos": ["IV", "V"] },
-    { "texto": "Planificar IHZV (irido-hialoido-zónulo-vitrectomía)", "tipos": ["V"] },
-    { "texto": "Examinar la retina periférica después de la vitrectomía por pars plana", "tipos": ["IV", "V"] },
-    { "texto": "Biometría óptica y fórmula de LIO moderna (Kane, Holladay 2, Barrett UII o Hoffer QST)", "tipos": "todos" }
+    {
+      "texto": "Anestesia tópica asistida (con sedación)",
+      "tipos": "todos"
+    },
+    {
+      "texto": "Rexis con cistótomo doblado por paracentesis",
+      "tipos": [
+        "I"
+      ]
+    },
+    {
+      "texto": "IP quirúrgica",
+      "tipos": [
+        "I",
+        "IV"
+      ]
+    },
+    {
+      "texto": "Goniosinequiálisis si el cierre es sinequial",
+      "tipos": [
+        "I"
+      ]
+    },
+    {
+      "texto": "Rexis con pinza de Utrata",
+      "tipos": [
+        "II",
+        "III",
+        "IV",
+        "V"
+      ]
+    },
+    {
+      "texto": "Un solo trocar para descomprimir el vítreo; viscoelástico pesado",
+      "tipos": [
+        "III"
+      ]
+    },
+    {
+      "texto": "VAPP en seco 5–10 s",
+      "tipos": [
+        "IV"
+      ]
+    },
+    {
+      "texto": "VAPP",
+      "tipos": [
+        "V"
+      ]
+    },
+    {
+      "texto": "Goniosinequiálisis",
+      "tipos": [
+        "V"
+      ]
+    },
+    {
+      "texto": "Planificar IZHV (ojo unicameral)",
+      "tipos": [
+        "V"
+      ]
+    },
+    {
+      "texto": "Examinar la retina periférica después de la vitrectomía por pars plana",
+      "tipos": [
+        "IV",
+        "V"
+      ]
+    },
+    {
+      "texto": "Biometría óptica y fórmula de LIO moderna (Kane, Holladay 2, Barrett UII o Hoffer QST)",
+      "tipos": "todos"
+    }
   ],
   "glosario": [
-    { "termino": "LA", "definicion": "Longitud axial." },
-    { "termino": "CA", "definicion": "Profundidad de la cámara anterior, medida desde el endotelio." },
-    { "termino": "WTW", "definicion": "Diámetro corneal horizontal blanco-blanco (white-to-white). Microcórnea: < 11 mm." },
-    { "termino": "Índice LT/AL", "definicion": "Grosor del cristalino dividido por la longitud axial. La app lo calcula a partir de LT y LA." },
+    {
+      "termino": "LA",
+      "definicion": "Longitud axial."
+    },
+    {
+      "termino": "CA",
+      "definicion": "Profundidad de la cámara anterior, medida desde el endotelio."
+    },
+    {
+      "termino": "WTW",
+      "definicion": "Diámetro corneal horizontal blanco-blanco (white-to-white). Microcórnea: < 11 mm."
+    },
+    {
+      "termino": "Índice LT/AL",
+      "definicion": "Grosor del cristalino dividido por la longitud axial. La app lo calcula a partir de LT y LA."
+    },
     {
       "termino": "DE",
       "definicion": "Desviación estándar. El «−2 DE» de la tabla se aplica como LA < 21 mm."
     },
-    { "termino": "UBM", "definicion": "Biomicroscopía ultrasónica." },
-    { "termino": "Rexis", "definicion": "Capsulorrexis circular continua." },
-    { "termino": "Utrata", "definicion": "Pinza de capsulorrexis de Utrata." },
-    { "termino": "Stop and Chop", "definicion": "Técnica de facoemulsificación: surco central y luego fragmentación (chop) de cada mitad." },
-    { "termino": "Facochop", "definicion": "Facoemulsificación con técnica de chop." },
     {
-      "termino": "Solo trocar",
-      "definicion": "Se coloca trocar de pars plana 23 G sin realizar vitrectomía (interpretación por confirmar con el autor)."
+      "termino": "UBM",
+      "definicion": "Biomicroscopía ultrasónica."
     },
-    { "termino": "LT", "definicion": "Grosor del cristalino (lens thickness)." },
-    { "termino": "PP", "definicion": "Pars plana." },
-    { "termino": "IHZV", "definicion": "Irido-hialoido-zónulo-vitrectomía." },
+    {
+      "termino": "Rexis",
+      "definicion": "Capsulorrexis circular continua."
+    },
+    {
+      "termino": "Utrata",
+      "definicion": "Pinza de capsulorrexis de Utrata."
+    },
+    {
+      "termino": "Stop and Chop",
+      "definicion": "Técnica de facoemulsificación: surco central y luego fragmentación (chop) de cada mitad."
+    },
+    {
+      "termino": "Facochop",
+      "definicion": "Facoemulsificación con técnica de chop."
+    },
+    {
+      "termino": "LT",
+      "definicion": "Grosor del cristalino (lens thickness)."
+    },
+    {
+      "termino": "MT",
+      "definicion": "Malla trabecular."
+    },
+    {
+      "termino": "Shaffer",
+      "definicion": "Clasificación gonioscópica del ángulo (0–4); la tabla lo describe por gonioscopía objetiva, con indentación."
+    },
+    {
+      "termino": "PP",
+      "definicion": "Pars plana."
+    },
+    {
+      "termino": "VAPP",
+      "definicion": "Vitrectomía anterior por pars plana."
+    },
+    {
+      "termino": "IP",
+      "definicion": "Iridectomía/iridotomía periférica, tal como figura en la presentación («IP quirúrgica»)."
+    },
+    {
+      "termino": "IZHV",
+      "definicion": "Irido-zónulo-hialoido-vitrectomía."
+    },
     {
       "termino": "MAR / MPR / MS / MC",
       "definicion": "Microftalmo anterior relativo / microftalmos posterior relativo / microftalmo simple / microftalmo complejo."
     },
-    { "termino": "Criterio mayor", "definicion": "Obligatorio: el tipo solo se asigna si se cumplen todos sus criterios mayores." },
-    { "termino": "Criterio de apoyo", "definicion": "No decide el tipo; suma al porcentaje de concordancia." }
+    {
+      "termino": "Criterio mayor",
+      "definicion": "Obligatorio: el tipo solo se asigna si se cumplen todos sus criterios mayores y, además, al menos 4 criterios en total (regla «4 de 6»)."
+    },
+    {
+      "termino": "Criterio menor",
+      "definicion": "No es obligatorio por sí solo, pero cuenta para el mínimo de 4 criterios cumplidos."
+    }
   ],
   "referencias": [
     {
@@ -264,18 +640,78 @@
       "cita": "Yosar JC, Zagora SL, Grigg JR. Cataract surgery in short eyes, including nanophthalmos: visual outcomes, complications and refractive results. Clin Ophthalmol. 2021;15:4543–4551. doi:10.2147/OPTH.S344465",
       "url": "https://pubmed.ncbi.nlm.nih.gov/34866899/"
     },
-    { "cita": "Silva Cayatopa F. Algoritmo del manejo de cirugía de catarata en ojo pequeño. Clínica La Luz (presentación institucional)." }
+    {
+      "cita": "Silva Cayatopa F. Algoritmo del manejo de cirugía de catarata en ojo pequeño. Clínica La Luz (presentación institucional)."
+    },
+    {
+      "cita": "Yin Y, et al. Staged surgical management of an acute angle-closure crisis. Medicine. 2026;105(44):e51326. doi:10.1097/MD.0000000000051326",
+      "url": "https://doi.org/10.1097/MD.0000000000051326"
+    },
+    {
+      "cita": "Wangtiraumnuay N, et al. Genetic findings of extreme refractive errors in Thai children. Ophthalmic Genet. 2026. doi:10.1080/13816810.2026.2731369",
+      "url": "https://doi.org/10.1080/13816810.2026.2731369"
+    },
+    {
+      "cita": "Sachdev R, et al. Limited vitrectomy in phacomorphic glaucoma. Indian J Ophthalmol. 2017;65(12):1422-4. doi:10.4103/ijo.IJO_668_17",
+      "url": "https://doi.org/10.4103/ijo.IJO_668_17"
+    },
+    {
+      "cita": "Nossair AA, et al. Vitreous tap using needle aspiration for shallow anterior chamber during phaco. J Ophthalmol. 2017. doi:10.1155/2017/2801025",
+      "url": "https://doi.org/10.1155/2017/2801025"
+    },
+    {
+      "cita": "Wei Y, et al. Effect of combined surgery in patients with complex nanophthalmos. J Clin Med. 2022;11(19). doi:10.3390/jcm11195909",
+      "url": "https://doi.org/10.3390/jcm11195909"
+    },
+    {
+      "cita": "Wang L, et al. Cataract surgery in eyes with microphthalmos and/or uveal coloboma. Ophthalmic Res. 2025;68(1):147-55. doi:10.1159/000544002",
+      "url": "https://doi.org/10.1159/000544002"
+    },
+    {
+      "cita": "Gao Y, et al. Modular surgical approach for angle-closure glaucoma secondary to nanophthalmos. Int J Ophthalmol. 2026;19(4):709-19. doi:10.18240/ijo.2026.04.10",
+      "url": "https://doi.org/10.18240/ijo.2026.04.10"
+    },
+    {
+      "cita": "Mou D, et al. Phaco combined glaucoma surgeries in nanophthalmos with secondary ACG. Graefes Arch. 2025;263(6):1667-74. doi:10.1007/s00417-025-06770-4",
+      "url": "https://doi.org/10.1007/s00417-025-06770-4"
+    },
+    {
+      "cita": "Grzybowski A, Kanclerz P. Acute and chronic fluid misdirection syndrome. Graefes Arch. 2018;256(1):135-54. doi:10.1007/s00417-017-3837-0",
+      "url": "https://doi.org/10.1007/s00417-017-3837-0"
+    },
+    {
+      "cita": "Rajendrababu S, et al. Biometric parameters: nanophthalmos vs primary angle closure disease. BMC Ophthalmol. 2026;26(1). doi:10.1186/s12886-026-04923-5",
+      "url": "https://doi.org/10.1186/s12886-026-04923-5"
+    },
+    {
+      "cita": "Zhu H, et al. Phaco with goniosynechialysis for nanophthalmos with secondary angle-closure. BMC Ophthalmol. 2026;26(1). doi:10.1186/s12886-026-04942-2",
+      "url": "https://doi.org/10.1186/s12886-026-04942-2"
+    },
+    {
+      "cita": "Claudel H, et al. Cataract surgery in eyes with nanophthalmos: refractive outcomes. J Fr Ophtalmol. 2026;49(7):104925. doi:10.1016/j.jfo.2026.104925",
+      "url": "https://doi.org/10.1016/j.jfo.2026.104925"
+    },
+    {
+      "cita": "Silva Cayatopa F, González Méndez AL, Barrientos Ortiz R, et al. Central pars plana vitrectomy + phaco + IOL in small eyes, cataract and narrow anterior chambers. Clin Ophthalmol. 2021;15:4181-7. doi:10.2147/OPTH.S336929",
+      "url": "https://doi.org/10.2147/OPTH.S336929"
+    },
+    {
+      "cita": "Zheng Li R, et al. Cataract and glaucoma surgery in microphthalmic, nanophthalmic and high hyperopic eyes: meta-analysis. Front Ophthalmol. 2026. doi:10.3389/fopht.2026.1872292",
+      "url": "https://doi.org/10.3389/fopht.2026.1872292"
+    }
   ],
   "supuestosPendientes": [
-    "Todas las filas de la tabla (LA, CA, ángulo, índice LT/AL, malformaciones y WTW) son criterios mayores: si una no se cumple, el ojo queda en zona gris con los tipos más cercanos.",
-    "Límites exactos sin tipo: WTW = 11.0 mm no cumple < 11.0 (tipos I, III, IV y V) ni > 11.0 (tipo II); índice LT/AL = 0.22 no cumple < 0.22 (tipo I) ni > 0.22 (tipo V).",
+    "Criterios mayores (obligatorios): LA, CA, ángulo y malformaciones en los tipos I, II, III y V; LA, ángulo y malformaciones en el tipo IV (su CA y su índice LT/AL son variables). Menores: índice LT/AL y WTW. Un tipo se asigna si cumple todos sus mayores y al menos 4 criterios en total (regla «4 de 6»; el tipo IV tiene 4 criterios evaluados, así que debe cumplirlos todos). Propuesta de la app: la presentación no define cuáles son mayores.",
+    "Límites exactos: WTW = 11.0 mm no cumple < 11.0 ni > 11.0, e índice LT/AL = 0.22 no cumple < 0.22 ni > 0.22; como son criterios menores, no impiden el tipo si se cumplen los mayores y 4 de 6 en total.",
     "Tipo II: LA < 20 mm (la tabla anterior decía < 22.5 mm). Un microftalmos posterior con LA de 20 a 22.5 mm queda en zona gris.",
     "Tipo IV: la CA (≤ o > 2.5 mm) y el índice LT/AL son variables, así que no se evalúan.",
-    "Excepción de vitrectomía central por PP (solo Tipo I): LA > 22.5 mm, CA < 2.0 mm y LT > 5 mm. Con LA de hasta ~22.7 mm, un LT > 5 mm da un índice LT/AL ≥ 0.22, que ya excluye el Tipo I.",
+    "Excepción VAPP (vitrectomía anterior por pars plana): LA > 22.5 mm, CA < 2.0 mm y LT/AL > 0.22. Es una alerta; no reemplaza la técnica del tipo asignado. Un ojo con LT/AL > 0.22 incumple ese criterio menor del Tipo I, pero puede seguir siéndolo si cumple los demás (4 de 6).",
     "CA 2–2.5 mm en MS: Hoffman 2015 describe CA normal en el microftalmo simple.",
-    "Significado de «Solo trocar» en el Tipo III (se asume trocar de pars plana 23 G sin vitrectomía programada; Hoffman cita 25G).",
     "Solo se ingresan las variables de la tabla (LA, CA, ángulo, LT para el índice LT/AL, malformaciones y WTW); el tratamiento es el del tipo, sin técnicas añadidas por otras variables.",
     "Los umbrales del semáforo de glaucoma maligno (LA, CA y ángulo; alto con los 3) y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.",
-    "El ángulo es criterio mayor en los 5 tipos: un microftalmo complejo (malformaciones) sin ángulo deformado queda en zona gris."
+    "El ángulo es criterio mayor en los 5 tipos: un microftalmo complejo (malformaciones) sin ángulo deformado queda en zona gris.",
+    "Técnicas por tipo según la diapositiva «Propuesta quirúrgica por tipo» de la presentación del autor. «IP quirúrgica» se muestra tal cual (se asume iridectomía periférica quirúrgica).",
+    "«VAPP» se expande como vitrectomía anterior por pars plana; la referencia 13 de la presentación la menciona como «VAPP central»: confirmar con el autor.",
+    "El ángulo se ingresa marcando una o varias opciones: Shaffer 0–4 o «deformado» (Shaffer variable + anomalía estructural). El criterio se cumple si todas las opciones marcadas caben en el rango del tipo (Tipo I: 1–2; II: 3–4; III: 2–3; V: 0); en el Tipo IV basta con marcar «deformado». Shaffer 2 cumple el Tipo I y el III; Shaffer 3, el II y el III («a veces 3»)."
   ]
 }

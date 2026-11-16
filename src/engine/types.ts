@@ -3,7 +3,8 @@
  */
 
 export type Ojo = 'OD' | 'OI';
-export type Angulo = 'abierto' | 'estrecho' | 'deformado' | 'cerrado';
+/** Ángulo por gonioscopía (Shaffer 0–4) o deformado (anomalía estructural: Shaffer variable). */
+export type Angulo = 'shaffer0' | 'shaffer1' | 'shaffer2' | 'shaffer3' | 'shaffer4' | 'deformado';
 export type Cristalino = 'normal' | 'coloboma' | 'intumescente';
 /** Solo se usa en el esquema (dibujo) del tipo. */
 export type Segmento = 'normal' | 'corto';
@@ -21,7 +22,8 @@ export interface EyeInput {
   grosorCristalino?: number | null;
   /** Diámetro corneal horizontal blanco-blanco (WTW). */
   wtw: number;
-  angulo: Angulo;
+  /** Una o varias opciones del ángulo (p. ej. Shaffer 1 y 2). */
+  angulo: Angulo[];
   malformaciones: boolean;
 }
 
@@ -66,6 +68,8 @@ export interface CriterioEnum extends Base {
   campo: CampoEnum;
   op: 'en';
   valores: string[];
+  /** 'todos' (por defecto): todas las opciones marcadas deben estar en `valores`; 'alguno': basta una. */
+  modo?: 'todos' | 'alguno';
 }
 
 export interface CriterioBooleano extends Base {
@@ -163,6 +167,8 @@ export interface ClinicalConfig {
   toleranciaLimiteIndice: number;
   /** Orden de evaluación: se asigna el primer tipo que cumple todos sus criterios mayores. */
   ordenEvaluacion: string[];
+  /** Mínimo de criterios (mayores + menores) que debe cumplir un tipo, además de todos sus mayores (p. ej. 4 de 6). */
+  minimoCriterios?: number;
   /** Cuántos tipos cercanos mostrar en zona gris. */
   cercanosEnZonaGris: number;
   tipos: TipoClinico[];
@@ -219,7 +225,11 @@ export interface TipoEvaluado {
     /** Fracción ponderada de criterios de apoyo cumplidos sobre los evaluables (con dato), 0–1. */
     porcentaje: number;
   };
-  /** true si cumple todos sus criterios mayores. */
+  /** Todos los criterios (mayores + menores) cumplidos sobre el total. */
+  totales: Conteo;
+  /** Mínimo de criterios totales exigido a este tipo (config.minimoCriterios acotado al nº de criterios del tipo). */
+  minimo: number;
+  /** true si cumple todos sus criterios mayores y el mínimo de criterios totales (p. ej. 4 de 6). */
   cumpleMayores: boolean;
   preoperatorio: string[];
   tecnica: string[];

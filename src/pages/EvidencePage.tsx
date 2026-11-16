@@ -50,7 +50,7 @@ function Detalle({ c }: { c: Comparacion }) {
           <h3 className="text-[11px] font-bold uppercase tracking-wide text-primary-800">Tabla del Dr. Silva</h3>
           <p className="mt-1 text-sm font-semibold text-ink">{c.silva}</p>
         </div>
-        <div className="rounded-2xl bg-lightBg p-3">
+        <div className="rounded-2xl glass-soft p-3">
           <h3 className="text-[11px] font-bold uppercase tracking-wide text-slateGray">Literatura</h3>
           <p className="mt-1 text-sm text-ink">
             {c.literatura} {c.fuentes.map((id) => `[${fuentePorId.get(id)?.n}]`).join('')}
@@ -82,7 +82,7 @@ function Resumen({ onIr }: { onIr: (tema: string) => void }) {
         <h2 className="text-lg font-bold text-ink">Resumen de la validación</h2>
         <ul className="grid grid-cols-4 gap-2 text-center">
           {(Object.keys(ESTADOS) as Concordancia[]).map((k) => (
-            <li key={k} className="rounded-2xl bg-lightBg p-2">
+            <li key={k} className="rounded-2xl glass-soft p-2">
               <p className="text-2xl font-black text-ink">{cuenta(k)}</p>
               <p className="flex items-center justify-center gap-1 text-[11px] font-semibold text-slateGray">
                 <span className={cn('size-2 rounded-full', ESTADOS[k].punto)} aria-hidden="true" />
@@ -127,13 +127,13 @@ export function EvidencePage() {
       </div>
 
       <div className="grid gap-3 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,21rem)_minmax(0,1fr)]">
-        <nav aria-label="Temas revisados" className="flex flex-col gap-2 rounded-3xl bg-white p-3 shadow-sm lg:min-h-0">
+        <nav aria-label="Temas revisados" className="flex flex-col gap-2 rounded-3xl glass p-3 lg:min-h-0">
           <label className="flex items-center gap-2 text-xs font-semibold text-ink">
             Mostrar
             <select
               value={filtro}
               onChange={(e) => setFiltro(e.target.value as Concordancia | 'todas')}
-              className="min-h-9 flex-1 rounded-lg border border-gray-300 bg-white px-2 text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="min-h-9 flex-1 rounded-lg glass-field px-2 text-xs font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               <option value="todas">Todos los temas ({evidencia.comparaciones.length})</option>
               {(Object.keys(ESTADOS) as Concordancia[]).map((k) => (
@@ -152,7 +152,7 @@ export function EvidencePage() {
                   onClick={() => setSel(c.tema)}
                   className={cn(
                     'flex w-full items-center gap-2 rounded-lg px-2 py-0.5 text-left text-xs leading-tight',
-                    sel === c.tema ? 'bg-primary-50 font-bold text-primary-900' : 'font-medium text-ink hover:bg-lightBg',
+                    sel === c.tema ? 'bg-primary-50 font-bold text-primary-900' : 'font-medium text-ink hover:bg-white/50',
                   )}
                 >
                   <span className={cn('size-2 shrink-0 rounded-full', ESTADOS[c.concordancia].punto)} role="img" aria-label={ESTADOS[c.concordancia].label} />
@@ -163,7 +163,7 @@ export function EvidencePage() {
           </ul>
         </nav>
 
-        <section className="flex flex-col gap-3 rounded-3xl bg-white p-5 shadow-sm lg:min-h-0">
+        <section className="flex flex-col gap-3 rounded-3xl glass p-5 lg:min-h-0">
           <div role="group" aria-label="Vistas generales" className="flex shrink-0 flex-wrap gap-1">
             {[
               { id: RESUMEN, label: 'Resumen y metodología', Icon: BookOpen },

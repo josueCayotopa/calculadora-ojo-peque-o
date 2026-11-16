@@ -3,7 +3,7 @@ import { FileDown, Plus } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert } from '@/components/ui/alert';
-import { NOMBRE_VALOR, formatNumero, indiceLTAL, siNo } from '@/engine';
+import { formatAngulo, formatNumero, indiceLTAL, siNo } from '@/engine';
 import type { EvaluacionCompleta, NivelRiesgo, Ojo } from '@/engine/types';
 import { resumenResultado, useEvaluaciones } from '@/state/EvaluationContext';
 import { useExportarPdf } from './ResultPage';
@@ -32,7 +32,7 @@ const FILAS: Fila[] = [
     label: 'Criterios',
     valor: (e) => {
       const t = e.clasificacion.tipo ?? e.clasificacion.masCercanos[0];
-      return `Mayores ${t.mayores.cumplidos}/${t.mayores.total}${t.apoyo.total ? ` · apoyo ${Math.round(t.apoyo.porcentaje * 100)} %` : ''}`;
+      return `Mayores ${t.mayores.cumplidos}/${t.mayores.total} · total ${t.totales.cumplidos}/${t.totales.total}`;
     },
   },
   { label: 'Alertas clínicas', valor: (e) => (e.clasificacion.alertas.length ? e.clasificacion.alertas.map((a) => a.titulo).join('; ') : '—') },
@@ -48,7 +48,7 @@ const FILAS: Fila[] = [
   { label: 'Aviso piggyback', valor: (e) => (e.lio.piggyback.activa ? <Badge variant="warning">Sí</Badge> : 'No') },
   { label: 'Longitud axial', valor: (e) => mm(e.entrada.longitudAxial), dif: (a, b) => delta(a.entrada.longitudAxial, b.entrada.longitudAxial) },
   { label: 'Cámara anterior', valor: (e) => mm(e.entrada.acd), dif: (a, b) => delta(a.entrada.acd, b.entrada.acd) },
-  { label: 'Ángulo', valor: (e) => NOMBRE_VALOR[e.entrada.angulo] },
+  { label: 'Ángulo', valor: (e) => formatAngulo(e.entrada.angulo) },
   { label: 'Cristalino (LT)', valor: (e) => mm(e.entrada.grosorCristalino), dif: (a, b) => delta(a.entrada.grosorCristalino, b.entrada.grosorCristalino) },
   { label: 'Índice LT/AL', valor: (e) => indiceLTAL(e.entrada)?.toFixed(3) ?? '—' },
   { label: 'Malformaciones', valor: (e) => siNo('malformaciones', e.entrada.malformaciones) },
@@ -91,7 +91,7 @@ export function ComparePage() {
       )}
 
       {faltantes.length > 0 && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl bg-white p-4 shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl glass p-4">
           <p className="text-sm text-slateGray">
             {faltantes.length === 2
               ? 'Aún no hay evaluaciones en esta sesión.'
@@ -99,7 +99,7 @@ export function ComparePage() {
           </p>
           <div className="flex gap-2">
             {faltantes.map((o) => (
-              <Link key={o} to={`/evaluacion?ojo=${o}`} className={buttonVariants({ size: 'sm' })}>
+              <Link key={o} to={`/?ojo=${o}`} className={buttonVariants({ size: 'sm' })}>
                 <Plus aria-hidden="true" />
                 Evaluar {o}
               </Link>
@@ -109,7 +109,7 @@ export function ComparePage() {
       )}
 
       {(od || oi) && (
-        <section aria-label="Resumen comparativo" className="relative overflow-x-auto rounded-3xl bg-white px-4 py-2 shadow-sm">
+        <section aria-label="Resumen comparativo" className="relative overflow-x-auto rounded-3xl glass px-4 py-2">
           <table className="w-full min-w-[36rem] text-left text-[13px]">
             <thead>
               <tr className="border-b-2 border-primary text-ink">
@@ -125,7 +125,7 @@ export function ComparePage() {
             </thead>
             <tbody>
               {FILAS.map((f) => (
-                <tr key={f.label} className="border-b border-gray-100 last:border-0">
+                <tr key={f.label} className="border-b border-white/60 last:border-0">
                   <th scope="row" className="py-1 pr-4 font-semibold text-slateGray">{f.label}</th>
                   <td className="py-1 pr-4">{od ? f.valor(od) : '—'}</td>
                   <td className="py-1 pr-4">{oi ? f.valor(oi) : '—'}</td>

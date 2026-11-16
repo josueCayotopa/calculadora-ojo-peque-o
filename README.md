@@ -46,7 +46,7 @@ Medidas en mm; el índice LT/AL es adimensional (LT ÷ LA). El tratamiento es el
 3. Se avisa cuando una medida está a ≤ 0.05 mm de un umbral (≤ 0.005 en el índice LT/AL).
 4. El «−2 DE» de la LA (tipos III y IV) se aplica como umbral fijo de **21 mm**.
 5. **Alerta facomórfica:** CA < 2.5 mm con LT > 4.5 mm.
-6. **Excepción del Tipo I:** con LA > 22.5, CA < 2.0 y LT > 5 mm, la técnica pasa a vitrectomía central por PP + rexis con Utrata + facochop.
+6. **Excepción VAPP:** con LA > 22.5, CA < 2.0 y LT/AL > 0.22 (el ojo queda en zona gris, pues el Tipo I exige LT/AL < 0.22), la app muestra la alerta de VAPP (vitrectomía anterior por pars plana).
 
 ### Limitaciones conocidas
 

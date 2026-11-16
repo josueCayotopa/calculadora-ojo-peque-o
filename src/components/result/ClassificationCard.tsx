@@ -9,7 +9,7 @@ import { EyeSchematic, describirEsquema } from './EyeSchematic';
 import { TratamientoIndicado } from './Panels';
 
 /** Alertas que no deben quedar escondidas en una pestaña: se muestran junto al diagnóstico. */
-export const ALERTAS_CRITICAS = new Set(['excepcion-vitrectomia']);
+export const ALERTAS_CRITICAS = new Set(['excepcion-vapp']);
 
 /** Fracción de criterios mayores cumplidos (todas las filas de la tabla son mayores). */
 const fraccionMayores = (t: TipoEvaluado) => (t.mayores.total ? t.mayores.cumplidos / t.mayores.total : 0);
@@ -21,7 +21,7 @@ export function DiagnosticoHero({ evaluacion, onVerAlertas }: { evaluacion: Eval
   const tipo = c.estado === 'clasificado' ? c.tipo : null;
   const criticas = c.alertas.filter((a) => ALERTAS_CRITICAS.has(a.id));
   return (
-    <section aria-labelledby="titulo-clasificacion" className="overflow-hidden rounded-3xl bg-white shadow-sm">
+    <section aria-labelledby="titulo-clasificacion" className="overflow-hidden rounded-3xl glass">
       <div className={tipo ? 'bg-primary px-5 py-4 text-white' : 'bg-amber-100 px-5 py-4 text-amber-950'}>
         <div className="flex items-center justify-between gap-2">
           <p className="text-xs font-bold uppercase tracking-wide opacity-90">{tipo ? 'Diagnóstico' : 'Resultado'}</p>
@@ -71,14 +71,14 @@ export function PanelEsquema({ evaluacion }: { evaluacion: EvaluacionCompleta })
   const c = evaluacion.clasificacion;
   const t = c.tipo ?? c.masCercanos[0];
   return (
-    <section aria-labelledby="titulo-esquema" className="rounded-3xl bg-white p-4 shadow-sm">
+    <section aria-labelledby="titulo-esquema" className="rounded-3xl glass p-4">
       <h2 id="titulo-esquema" className="text-sm font-bold text-ink">
         Esquema {c.tipo ? 'del tipo' : 'del más cercano'} · {t.romano}
       </h2>
       <EyeSchematic esquema={t.esquema} titulo={`Tipo ${t.romano}`} compacto />
       <ul className="flex flex-wrap gap-1">
         {describirEsquema(t.esquema).map((r) => (
-          <li key={r} className="rounded-full bg-lightBg px-2 py-0.5 text-[11px] font-medium text-ink">
+          <li key={r} className="rounded-full bg-white/50 px-2 py-0.5 text-[11px] font-medium text-ink">
             {r}
           </li>
         ))}
@@ -123,7 +123,7 @@ export function PanelCriterios({ evaluacion }: { evaluacion: EvaluacionCompleta 
   const actual = c.masCercanos[Math.min(sel, c.masCercanos.length - 1)];
 
   return (
-    <section aria-labelledby="titulo-criterios" className="flex min-h-0 flex-col gap-2 rounded-3xl bg-white p-4 shadow-sm">
+    <section aria-labelledby="titulo-criterios" className="flex min-h-0 flex-col gap-2 rounded-3xl glass p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 id="titulo-criterios" className="text-sm font-bold text-ink">
           {vista === 'tipos' ? 'Concordancia con los 5 tipos' : tipo ? `¿Por qué Tipo ${tipo.romano}?` : 'Tipos más cercanos'}
@@ -196,7 +196,7 @@ export function RankingTipos({ evaluacion }: { evaluacion: EvaluacionCompleta })
           <p className="text-xs font-semibold text-ink">
             Tipo {t.romano} · {nombreTipo(t)}{' '}
             <span className="font-normal text-slateGray">
-              (mayores {t.mayores.cumplidos}/{t.mayores.total}
+              (mayores {t.mayores.cumplidos}/{t.mayores.total} · total {t.totales.cumplidos}/{t.totales.total}
               {t.cumpleMayores ? ' ✓' : ''})
             </span>
           </p>

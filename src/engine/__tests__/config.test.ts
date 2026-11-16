@@ -66,7 +66,7 @@ describe('Etiquetas generadas desde el criterio', () => {
     [{ campo: 'longitudAxial', op: '<=', valor: 20.5 }, 'LA ≤ 20.5 mm'],
     [{ campo: 'grosorCristalino', op: '>', valor: 5 }, 'Cristalino (LT) > 5.0 mm'],
     [{ campo: 'acd', op: 'entre', min: 2, max: 2.2, opMin: '>=', opMax: '<=' }, '2.0 ≤ CA ≤ 2.2 mm'],
-    [{ campo: 'angulo', op: 'en', valores: ['cerrado'] }, 'Ángulo cerrado/ocluible'],
+    [{ campo: 'angulo', op: 'en', valores: ['shaffer0'] }, 'Ángulo Shaffer 0'],
     [{ campo: 'wtw', op: '<', valor: 11 }, 'WTW < 11.0 mm'],
     [{ campo: 'indiceLTAL', op: '>', valor: 0.22 }, 'Índice LT/AL > 0.22'],
     [{ campo: 'indiceLTAL', op: 'entre', min: 0.18, max: 0.2, opMin: '>=', opMax: '<=' }, '0.18 ≤ Índice LT/AL ≤ 0.20'],

@@ -50,7 +50,7 @@ export function ResultPage() {
       <div className="mx-auto max-w-xl space-y-4 pt-10 text-center">
         <h1 className="text-2xl font-black text-ink">No hay resultado para mostrar</h1>
         <p className="text-slateGray">Los resultados solo se conservan mientras la pestaña está abierta. Inicie una nueva evaluación.</p>
-        <Link to="/evaluacion" className={buttonVariants({ size: 'lg' })}>
+        <Link to="/" className={buttonVariants({ size: 'lg' })}>
           Nueva evaluación
         </Link>
       </div>
@@ -69,11 +69,11 @@ export function ResultPage() {
             <FileDown aria-hidden="true" />
             {exportando ? 'Generando…' : 'Exportar PDF'}
           </Button>
-          <Button size="sm" variant="outline" onClick={() => navigate(evaluaciones[otro] ? '/comparar' : `/evaluacion?ojo=${otro}`)}>
+          <Button size="sm" variant="outline" onClick={() => navigate(evaluaciones[otro] ? '/comparar' : `/?ojo=${otro}`)}>
             <Columns2 aria-hidden="true" />
             {evaluaciones[otro] ? 'Comparar OD/OI' : `Evaluar ${otro} y comparar`}
           </Button>
-          <Link to={`/evaluacion?ojo=${ojo}&editar=1`} className={buttonVariants({ variant: 'secondary', size: 'sm' })}>
+          <Link to={`/?ojo=${ojo}&editar=1`} className={buttonVariants({ variant: 'secondary', size: 'sm' })}>
             <Pencil aria-hidden="true" />
             Editar datos
           </Link>
@@ -82,7 +82,7 @@ export function ResultPage() {
             variant="secondary"
             onClick={() => {
               limpiar();
-              navigate('/evaluacion');
+              navigate('/');
             }}
           >
             <Plus aria-hidden="true" />
@@ -104,7 +104,7 @@ export function ResultPage() {
 
         <PanelCriterios evaluacion={evaluacion} />
 
-        <section aria-label="Tratamiento y módulos complementarios" className="flex min-h-0 flex-col rounded-3xl bg-white px-4 pb-4 pt-2 shadow-sm">
+        <section aria-label="Tratamiento y módulos complementarios" className="flex min-h-0 flex-col rounded-3xl glass px-4 pb-4 pt-2">
           <Tabs
             label="Detalle del resultado"
             activo={pestana}

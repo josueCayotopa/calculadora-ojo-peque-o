@@ -32,7 +32,12 @@ export const eyeInputSchema = z.object({
   longitudAxial: numero('Longitud axial', RANGOS.longitudAxial),
   acd: numero('Cámara anterior', RANGOS.acd),
   grosorCristalino: numero('Cristalino (LT)', RANGOS.grosorCristalino),
-  angulo: obligatorio(['abierto', 'estrecho', 'deformado', 'cerrado'], 'Seleccione el ángulo por gonioscopía'),
+  angulo: z
+    .array(z.enum(['shaffer0', 'shaffer1', 'shaffer2', 'shaffer3', 'shaffer4', 'deformado']), {
+      required_error: 'Seleccione al menos una opción del ángulo',
+      invalid_type_error: 'Seleccione al menos una opción del ángulo',
+    })
+    .min(1, 'Seleccione al menos una opción del ángulo'),
   wtw: numero('WTW', RANGOS.wtw),
   malformaciones: siNo('Indique si hay malformaciones anatómicas'),
 }) satisfies z.ZodType<EyeInput, z.ZodTypeDef, unknown>;

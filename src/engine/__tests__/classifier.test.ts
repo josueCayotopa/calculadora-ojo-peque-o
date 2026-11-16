@@ -21,13 +21,27 @@ describe('Tipo I — Microftalmo anterior relativo (MAR)', () => {
     const r = clasificar(input, config);
     expect(r.estado).toBe('clasificado');
     expect(r.tipo?.id).toBe('I');
-    expect(r.tipo?.mayores).toMatchObject({ cumplidos: 6, total: 6 });
+    expect(r.tipo?.mayores).toMatchObject({ cumplidos: 4, total: 4 });
+    expect(r.tipo?.totales).toMatchObject({ cumplidos: 6, total: 6 });
   });
 
-  it('sin LT no se calcula el índice LT/AL → zona gris', () => {
+  it('sin LT el índice LT/AL queda sin dato (criterio menor) y el tipo se asigna con 5 de 6', () => {
     const r = clasificar(tipoI({ grosorCristalino: null }), config);
+    expect(r.estado).toBe('clasificado');
+    expect(r.tipo?.totales).toMatchObject({ cumplidos: 5, total: 6, sinDato: 1 });
+  });
+
+  it('regla 4 de 6: con los mayores cumplidos, basta 1 criterio menor; con 0 → zona gris', () => {
+    expect(diagnostico(tipoI({ wtw: 11.5 }))).toBe('I'); // 5 de 6
+    expect(diagnostico(tipoI({ wtw: 11.5, grosorCristalino: 5.5 }))).toBe('I'); // 4 de 6
+    const sin = clasificar(tipoI({ wtw: 11.5, grosorCristalino: null }), config); // 4 de 6 (LT sin dato)
+    expect(sin.estado).toBe('clasificado');
+  });
+
+  it('un criterio mayor incumplido impide el tipo aunque se cumplan 5 de 6', () => {
+    const r = clasificar(tipoI({ acd: 2.6 }), config);
     expect(r.estado).toBe('zona_gris');
-    expect(r.conflictos).toContainEqual(expect.objectContaining({ tipo: 'I', etiqueta: 'Índice LT/AL < 0.22', sinDato: true }));
+    expect(r.conflictos).toContainEqual(expect.objectContaining({ tipo: 'I', etiqueta: 'CA < 2.5 mm' }));
   });
 });
 
@@ -47,8 +61,8 @@ describe('Tipo II — Microftalmos posterior relativo (MPR)', () => {
   });
 
   it('exige ángulo abierto y WTW > 11 mm', () => {
-    expect(diagnostico(tipoII({ angulo: 'estrecho' }))).toBe('zona_gris');
-    expect(diagnostico(tipoII({ wtw: 10.5 }))).toBe('zona_gris');
+    expect(diagnostico(tipoII({ angulo: ['shaffer1'] }))).toBe('zona_gris');
+    expect(diagnostico(tipoII({ wtw: 10.5 }))).toBe('II'); // WTW es menor: 5 de 6
   });
 });
 
@@ -58,7 +72,7 @@ describe('Tipo III — Microftalmo simple (MS)', () => {
     ['LA = 20 mm exactos (límite inferior)', tipoIII({ longitudAxial: 20.0 })],
     ['justo dentro de los límites', tipoIII({ longitudAxial: 20.99, acd: 2.0 })],
     ['CA = 2.5 mm exactos', tipoIII({ acd: 2.5 })],
-    ['con ángulo abierto', tipoIII({ angulo: 'abierto' })],
+    ['con Shaffer 3 (a veces 3)', tipoIII({ angulo: ['shaffer3'] })],
   ])('%s → III', (_, input) => {
     expect(diagnostico(input)).toBe('III');
   });
@@ -66,8 +80,52 @@ describe('Tipo III — Microftalmo simple (MS)', () => {
   it('índice LT/AL 0.18–0.20 incluye ambos extremos', () => {
     expect(diagnostico(tipoIII({ longitudAxial: 20.0, grosorCristalino: 3.6 }))).toBe('III');
     expect(diagnostico(tipoIII({ longitudAxial: 20.0, grosorCristalino: 4.0 }))).toBe('III');
-    expect(diagnostico(tipoIII({ longitudAxial: 20.0, grosorCristalino: 3.5 }))).toBe('zona_gris');
-    expect(diagnostico(tipoIII({ longitudAxial: 20.0, grosorCristalino: 4.1 }))).toBe('zona_gris');
+    // fuera del rango el índice LT/AL (criterio menor) no impide el tipo
+    const fuera = clasificar(tipoIII({ longitudAxial: 20.0, grosorCristalino: 3.5 }), config);
+    expect(fuera.tipo?.id).toBe('III');
+    expect(fuera.tipo?.totales.cumplidos).toBe(5);
+  });
+});
+
+describe('Ángulo por grado Shaffer', () => {
+  it.each([
+    ['Shaffer 0 → V', tipoV({ angulo: ['shaffer0'] }), 'V'],
+    ['Shaffer 1 → I', tipoI({ angulo: ['shaffer1'] }), 'I'],
+    ['Shaffer 2 → I (1–2)', tipoI({ angulo: ['shaffer2'] }), 'I'],
+    ['Shaffer 2 → III', tipoIII({ angulo: ['shaffer2'] }), 'III'],
+    ['Shaffer 3 → II (3–4)', tipoII({ angulo: ['shaffer3'] }), 'II'],
+    ['Shaffer 4 → II', tipoII({ angulo: ['shaffer4'] }), 'II'],
+    ['Shaffer 3 → III (a veces 3)', tipoIII({ angulo: ['shaffer3'] }), 'III'],
+  ])('%s', (_, input, esperado) => {
+    expect(diagnostico(input)).toBe(esperado);
+  });
+
+  it('Shaffer 4 no cumple el MS ni el MAR; Shaffer 0 no cumple el MPR', () => {
+    expect(diagnostico(tipoIII({ angulo: ['shaffer4'] }))).toBe('zona_gris');
+    expect(diagnostico(tipoII({ angulo: ['shaffer0'] }))).toBe('zona_gris');
+  });
+});
+
+describe('Ángulo con varias opciones', () => {
+  it.each([
+    ['Shaffer 1 + 2 → I', tipoI({ angulo: ['shaffer1', 'shaffer2'] }), 'I'],
+    ['Shaffer 3 + 4 → II', tipoII({ angulo: ['shaffer3', 'shaffer4'] }), 'II'],
+    ['Shaffer 2 + 3 → III', tipoIII({ angulo: ['shaffer2', 'shaffer3'] }), 'III'],
+    ['Shaffer 2 + deformado → IV (basta marcar deformado)', tipoIV({ angulo: ['shaffer2', 'deformado'] }), 'IV'],
+  ])('%s', (_, input, esperado) => {
+    expect(diagnostico(input)).toBe(esperado);
+  });
+
+  it('todas las opciones marcadas deben caber en el tipo', () => {
+    expect(diagnostico(tipoI({ angulo: ['shaffer1', 'shaffer3'] }))).toBe('zona_gris');
+    expect(diagnostico(tipoIII({ angulo: ['shaffer1', 'shaffer2'] }))).toBe('zona_gris');
+    expect(diagnostico(tipoV({ angulo: ['shaffer0', 'shaffer1'] }))).toBe('zona_gris');
+  });
+
+  it('sin ninguna opción marcada el ángulo queda sin dato', () => {
+    const r = clasificar(tipoI({ angulo: [] }), config);
+    expect(r.estado).toBe('zona_gris');
+    expect(r.conflictos).toContainEqual(expect.objectContaining({ tipo: 'I', sinDato: true }));
   });
 });
 
@@ -76,7 +134,7 @@ describe('Tipo IV — Microftalmo complejo (MC)', () => {
     ['caso típico', tipoIV()],
     ['CA amplia (la CA es variable)', tipoIV({ acd: 2.8 })],
     ['cristalino grueso (el índice LT/AL es variable)', tipoIV({ grosorCristalino: 5.5 })],
-    ['malformación con ángulo deformado sobre un ojo con perfil de MS', tipoIII({ malformaciones: true, angulo: 'deformado' })],
+    ['malformación con ángulo deformado sobre un ojo con perfil de MS', tipoIII({ malformaciones: true, angulo: ['deformado'] })],
   ])('%s → IV', (_, input) => {
     expect(diagnostico(input)).toBe('IV');
   });
@@ -100,7 +158,7 @@ describe('Tipo V — Nanoftalmos', () => {
   });
 
   it('índice LT/AL = 0.22 no cumple > 0.22', () => {
-    expect(diagnostico(tipoV({ grosorCristalino: 3.96 }))).toBe('zona_gris');
+    expect(clasificar(tipoV({ grosorCristalino: 3.96 }), config).tipo?.totales.cumplidos).toBe(5);
     expect(diagnostico(tipoV({ grosorCristalino: 3.97 }))).toBe('V');
   });
 });
@@ -122,7 +180,7 @@ describe('Orden de evaluación V → IV → III → II → I', () => {
     const v = cfg.tipos.find((t) => t.id === 'V')!;
     v.criterios = v.criterios.filter((c) => !('campo' in c && c.campo === 'malformaciones'));
     const anguloIV = cfg.tipos.find((t) => t.id === 'IV')!.criterios.find((c) => 'campo' in c && c.campo === 'angulo');
-    if (anguloIV && anguloIV.op === 'en') anguloIV.valores = ['deformado', 'cerrado'];
+    if (anguloIV && anguloIV.op === 'en') anguloIV.valores = ['deformado', 'shaffer0'];
     expect(diagnostico(tipoV({ malformaciones: true }), cfg)).toBe('V');
     cfg.ordenEvaluacion = ['IV', 'V', 'III', 'II', 'I'];
     expect(diagnostico(tipoV({ malformaciones: true }), cfg)).toBe('IV');
@@ -168,18 +226,18 @@ describe('Límites exactos', () => {
   });
 
   it('WTW 11.0: no es < 11.0 (MAR) ni > 11.0 (MPR)', () => {
-    expect(diagnostico(tipoI({ wtw: 11.0 }))).toBe('zona_gris');
-    expect(diagnostico(tipoII({ wtw: 11.0 }))).toBe('zona_gris');
+    expect(clasificar(tipoI({ wtw: 11.0 }), config).tipo?.totales.cumplidos).toBe(5);
+    expect(clasificar(tipoII({ wtw: 11.0 }), config).tipo?.totales.cumplidos).toBe(5);
     expect(diagnostico(tipoII({ wtw: 11.01 }))).toBe('II');
   });
 
   it('índice LT/AL 0.22: no cumple < 0.22 del MAR', () => {
     expect(diagnostico(tipoI({ grosorCristalino: 5.05 }))).toBe('I');
-    expect(diagnostico(tipoI({ grosorCristalino: 5.06 }))).toBe('zona_gris');
+    expect(clasificar(tipoI({ grosorCristalino: 5.06 }), config).tipo?.totales.cumplidos).toBe(5);
   });
 
   it('índice LT/AL exactamente 0.20 (3.7 / 18.5) no cumple < 0.20 del MPR pese a la coma flotante', () => {
-    expect(diagnostico(tipoII({ grosorCristalino: 3.7 }))).toBe('zona_gris');
+    expect(clasificar(tipoII({ grosorCristalino: 3.7 }), config).tipo?.totales.cumplidos).toBe(5);
   });
 });
 
@@ -217,29 +275,29 @@ describe('Zona gris — nunca se fuerza un resultado', () => {
 });
 
 describe('Alertas clínicas', () => {
-  // LA 24 mm para que LT 5.2 mm mantenga el índice LT/AL < 0.22 del Tipo I.
-  const excepcion = (o: Partial<EyeInput> = {}) => tipoI({ longitudAxial: 24.0, acd: 1.9, grosorCristalino: 5.2, ...o });
+  // LA 23 mm y LT 5.2 mm → LT/AL ≈ 0.226 (> 0.22), con CA 1.9 mm.
+  const excepcion = (o: Partial<EyeInput> = {}) => tipoI({ longitudAxial: 23.0, acd: 1.9, grosorCristalino: 5.2, ...o });
 
-  it('excepción: LA > 22.5, CA < 2.0 y LT > 5 → vitrectomía central por PP + rexis con Utrata + facochop', () => {
+  it('excepción VAPP: LA > 22.5, CA < 2.0 y LT/AL > 0.22 → alerta (el Tipo I se asigna con 5 de 6)', () => {
     const r = clasificar(excepcion(), config);
     expect(r.tipo?.id).toBe('I');
-    expect(r.alertas.map((a) => a.id)).toContain('excepcion-vitrectomia');
-    expect(r.tipo?.tecnica).toEqual(['Vitrectomía central por PP', 'Rexis con Utrata', 'Facochop']);
-    expect(r.tipo?.tecnicaPorExcepcion).toBe('Excepción: vitrectomía central por PP');
+    expect(r.alertas.map((a) => a.id)).toContain('excepcion-vapp');
   });
 
-  it('sin la excepción, el Tipo I conserva rexis con cistótomo + Stop and Chop', () => {
+  it('la excepción no reemplaza la técnica del Tipo I', () => {
     const r = clasificar(tipoI(), config);
-    expect(r.tipo?.tecnica).toEqual(['Rexis con cistótomo', 'Stop and Chop']);
+    expect(r.tipo?.tecnica).toEqual(['Rexis con cistótomo', 'Stop and Chop', 'IP quirúrgica', 'Goniosinequiálisis si el cierre es sinequial']);
     expect(r.tipo?.tecnicaPorExcepcion).toBeNull();
+    expect(r.alertas.map((a) => a.id)).not.toContain('excepcion-vapp');
   });
 
   it.each([
     ['con CA = 2.0 mm', excepcion({ acd: 2.0 })],
-    ['LT = 5 mm', excepcion({ grosorCristalino: 5.0 })],
+    ['con LT/AL = 0.22', excepcion({ longitudAxial: 25.0, grosorCristalino: 5.5 })],
+    ['con LA = 22.5 mm', excepcion({ longitudAxial: 22.5, grosorCristalino: 5.2 })],
     ['sin dato de LT', excepcion({ grosorCristalino: null })],
   ])('la excepción no se activa %s', (_, input) => {
-    expect(clasificar(input, config).alertas.map((a) => a.id)).not.toContain('excepcion-vitrectomia');
+    expect(clasificar(input, config).alertas.map((a) => a.id)).not.toContain('excepcion-vapp');
   });
 });
 
@@ -252,12 +310,19 @@ describe('Configurabilidad', () => {
     expect(diagnostico(input, cfg)).toBe('I');
   });
 
-  it('convertir el WTW del Tipo I en criterio de apoyo clasifica un MAR sin microcórnea', () => {
+  it('subir el mínimo a 6 de 6 exige todos los criterios (un MAR sin microcórnea pasa a zona gris)', () => {
     const input = tipoI({ wtw: 11.5 });
-    expect(diagnostico(input)).toBe('zona_gris');
+    expect(diagnostico(input)).toBe('I');
     const cfg = configClon();
-    cfg.tipos[0].criterios[5] = { nivel: 'apoyo', campo: 'wtw', op: '<', valor: 11.0 };
-    expect(diagnostico(input, cfg)).toBe('I');
+    cfg.minimoCriterios = 6;
+    expect(diagnostico(input, cfg)).toBe('zona_gris');
+  });
+
+  it('convertir el WTW del Tipo I en criterio mayor lo hace obligatorio', () => {
+    const input = tipoI({ wtw: 11.5 });
+    const cfg = configClon();
+    cfg.tipos[0].criterios[5] = { nivel: 'mayor', campo: 'wtw', op: '<', valor: 11.0 };
+    expect(diagnostico(input, cfg)).toBe('zona_gris');
   });
 
   it('cambiar el operador de CA del MAR a ≤ 2.5 incluye 2.5 exactos', () => {
