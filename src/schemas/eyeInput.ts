@@ -7,6 +7,7 @@ export const RANGOS = {
   acd: { min: 0.5, max: 5.0, unidad: 'mm' },
   grosorCristalino: { min: 2.0, max: 7.0, unidad: 'mm' },
   wtw: { min: 8.0, max: 14.0, unidad: 'mm' },
+  grosorEscleral: { min: 0.3, max: 4.0, unidad: 'mm' },
 } as const;
 
 function numero(nombre: string, { min, max, unidad }: { min: number; max: number; unidad: string }) {
@@ -40,6 +41,8 @@ export const eyeInputSchema = z.object({
     .min(1, 'Seleccione al menos una opción del ángulo'),
   wtw: numero('WTW', RANGOS.wtw),
   malformaciones: siNo('Indique si hay malformaciones anatómicas'),
+  /** Opcional (ecografía B): vacío = no medido. */
+  grosorEscleral: numero('Grosor escleral', RANGOS.grosorEscleral).nullable().optional(),
 }) satisfies z.ZodType<EyeInput, z.ZodTypeDef, unknown>;
 
 export type EyeInputForm = z.input<typeof eyeInputSchema>;

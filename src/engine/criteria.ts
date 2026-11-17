@@ -17,6 +17,7 @@ export const NOMBRE_CAMPO: Record<CampoNumerico | CampoEnum | CampoBooleano, str
   grosorCristalino: 'Cristalino (LT)',
   wtw: 'WTW',
   indiceLTAL: 'Índice LT/AL',
+  grosorEscleral: 'Grosor escleral',
   angulo: 'Ángulo',
   malformaciones: 'Malformaciones anatómicas',
 };

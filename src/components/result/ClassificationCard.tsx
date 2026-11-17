@@ -43,7 +43,9 @@ export function DiagnosticoHero({ evaluacion, onVerAlertas }: { evaluacion: Eval
           </h2>
         )}
         <p className="mt-2 text-xs opacity-90">
-          {tipo
+          {tipo?.asignadoPor
+            ? `Asignado por ${tipo.asignadoPor.charAt(0).toLowerCase()}${tipo.asignadoPor.slice(1)} · criterios de la tabla ${tipo.mayores.cumplidos}/${tipo.mayores.total} mayores`
+            : tipo
             ? `Cumple ${tipo.mayores.cumplidos}/${tipo.mayores.total} criterios mayores${textoApoyo(tipo)}`
             : `Ningún tipo cumple sus criterios mayores. Más cercanos: ${c.masCercanos.map((t) => `Tipo ${t.romano}`).join(' y ')}. No se fuerza un diagnóstico.`}
         </p>

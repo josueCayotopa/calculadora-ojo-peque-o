@@ -163,6 +163,27 @@ describe('Tipo V — Nanoftalmos', () => {
   });
 });
 
+describe('Grosor escleral > 1.6 mm → nanoftalmos (asignación directa)', () => {
+  it('> 1.6 asigna V aunque los criterios sean de otro tipo', () => {
+    const r = clasificar(tipoI({ grosorEscleral: 1.8 }), config);
+    expect(r.tipo?.id).toBe('V');
+    expect(r.tipo?.asignadoPor).toMatch(/1\.6/);
+    expect(r.tambienCumplen.map((t) => t.id)).toContain('I');
+  });
+  it('saca de la zona gris', () => {
+    expect(diagnostico(tipoV({ acd: 2.3, grosorEscleral: 1.7 }))).toBe('V');
+  });
+  it('1.6 exacto o menor no cambia la clasificación', () => {
+    expect(diagnostico(tipoI({ grosorEscleral: 1.6 }))).toBe('I');
+    expect(diagnostico(tipoI({ grosorEscleral: 1.0 }))).toBe('I');
+  });
+  it('sin dato se clasifica por los criterios', () => {
+    const r = clasificar(tipoV(), config);
+    expect(r.tipo?.id).toBe('V');
+    expect(r.tipo?.asignadoPor).toBeNull();
+  });
+});
+
 describe('Orden de evaluación V → IV → III → II → I', () => {
   it('un nanoftalmos (LA < 20) no se superpone con el MS (LA ≥ 20)', () => {
     const r = clasificar(tipoV(), config);
@@ -286,7 +307,7 @@ describe('Alertas clínicas', () => {
 
   it('la excepción no reemplaza la técnica del Tipo I', () => {
     const r = clasificar(tipoI(), config);
-    expect(r.tipo?.tecnica).toEqual(['Rexis con cistótomo', 'Stop and Chop', 'IP quirúrgica', 'Goniosinequiálisis si el cierre es sinequial']);
+    expect(r.tipo?.tecnica).toEqual(['Rexis con cistótomo', 'Stop and Chop', 'IP quirúrgica (preventivo)', 'Goniosinequiálisis si el cierre es sinequial']);
     expect(r.tipo?.tecnicaPorExcepcion).toBeNull();
     expect(r.alertas.map((a) => a.id)).not.toContain('excepcion-vapp');
   });

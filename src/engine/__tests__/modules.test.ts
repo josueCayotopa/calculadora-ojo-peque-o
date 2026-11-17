@@ -54,11 +54,11 @@ describe('Recomendación de LIO / piggyback', () => {
 describe('Checklist preoperatorio', () => {
   const textos = (input: EyeInput) => checklistPreoperatorio(input, clasificar(input, config), config).map((i) => i.texto);
 
-  it('I: manitol, rexis con cistótomo, IP quirúrgica y sin vitrectomía', () => {
+  it('I: manitol, rexis con cistótomo, IP quirúrgica (preventivo) y sin vitrectomía', () => {
     const t = textos(tipoI());
     expect(t.some((x) => x.startsWith('Manitol'))).toBe(true);
     expect(t.some((x) => x.includes('cistótomo'))).toBe(true);
-    expect(t.some((x) => x.includes('IP quirúrgica'))).toBe(true);
+    expect(t.some((x) => x.includes('IP quirúrgica (preventivo)'))).toBe(true);
     expect(t.some((x) => /VAPP|trocar/.test(x))).toBe(false);
   });
 
@@ -75,10 +75,10 @@ describe('Checklist preoperatorio', () => {
     expect(t.some((x) => x.includes('pesado'))).toBe(true);
   });
 
-  it('IV: VAPP en seco e IP quirúrgica', () => {
+  it('IV: VAPP en seco e IP quirúrgica (preventivo)', () => {
     const t = textos(tipoIV());
     expect(t.some((x) => x.includes('VAPP en seco 5–10 s'))).toBe(true);
-    expect(t.some((x) => x.includes('IP quirúrgica'))).toBe(true);
+    expect(t.some((x) => x.includes('IP quirúrgica (preventivo)'))).toBe(true);
   });
 
   it('V: VAPP, goniosinequiálisis e IZHV', () => {

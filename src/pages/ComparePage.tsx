@@ -53,6 +53,7 @@ const FILAS: Fila[] = [
   { label: 'Índice LT/AL', valor: (e) => indiceLTAL(e.entrada)?.toFixed(3) ?? '—' },
   { label: 'Malformaciones', valor: (e) => siNo('malformaciones', e.entrada.malformaciones) },
   { label: 'WTW', valor: (e) => mm(e.entrada.wtw), dif: (a, b) => delta(a.entrada.wtw, b.entrada.wtw) },
+  { label: 'Grosor escleral', valor: (e) => mm(e.entrada.grosorEscleral), dif: (a, b) => delta(a.entrada.grosorEscleral, b.entrada.grosorEscleral) },
 ];
 
 export function ComparePage() {

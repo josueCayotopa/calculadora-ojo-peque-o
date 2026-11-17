@@ -194,6 +194,16 @@ export function EvaluationPage() {
               { value: true, label: 'Sí (colobomas y disgenesias)' },
             ]}
           />
+          <NumberField
+            label="Grosor escleral"
+            unidad="mm"
+            placeholder="Ej. 1.2"
+            hint="> 1.6 = nanoftalmos"
+            ayuda="Grosor escleral / retinocoroideoescleral posterior (ecografía B). Si es mayor de 1.6 mm se asigna Tipo V (nanoftalmos)."
+            opcional
+            registro={register('grosorEscleral', num)}
+            error={errors.grosorEscleral}
+          />
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3">

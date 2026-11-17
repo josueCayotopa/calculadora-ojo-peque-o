@@ -23,6 +23,8 @@ import type {
  *    los rangos se superponen) y se asigna el PRIMERO que cumple todos sus
  *    criterios MAYORES.
  * 3. Los criterios de APOYO no deciden el tipo: dan el % de concordancia.
+ * 0. Antes, si se cumple una `asignacionDirecta` (grosor escleral > 1.6 mm), ese tipo
+ *    se asigna sin importar los demás criterios.
  * 4. Si ningún tipo cumple sus mayores → "zona gris": se muestran los N tipos
  *    más cercanos y sus criterios mayores en conflicto. Nunca se fuerza.
  */
@@ -50,6 +52,7 @@ export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoCl
       totales,
       minimo,
       cumpleMayores: mayores.total > 0 && mayores.cumplidos === mayores.total && totales.cumplidos >= minimo,
+      asignadoPor: null,
       preoperatorio: tipo.preoperatorio,
       tecnica: tipo.tecnica,
       tecnicaPorExcepcion: null,
@@ -59,8 +62,13 @@ export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoCl
   });
 
   const porOrden = [...evaluados].sort((a, b) => (orden.get(a.id) ?? 99) - (orden.get(b.id) ?? 99));
-  const conMayores = porOrden.filter((t) => t.cumpleMayores);
-  const tipo = conMayores[0] ?? null;
+  // Asignación directa (p. ej. grosor escleral > 1.6 mm → nanoftalmos): decide antes que los criterios.
+  const directa = (config.asignacionDirecta ?? []).find((a) => evaluarCriterio(a.criterio, input).cumple);
+  const tipoDirecto = directa ? (evaluados.find((t) => t.id === directa.tipo) ?? null) : null;
+  if (tipoDirecto && directa) tipoDirecto.asignadoPor = directa.motivo;
+
+  const conMayores = porOrden.filter((t) => t.cumpleMayores && t !== tipoDirecto);
+  const tipo = tipoDirecto ?? conMayores[0] ?? null;
 
   const fraccionMayores = (t: TipoEvaluado) => (t.mayores.total ? t.mayores.cumplidos / t.mayores.total : 0);
   const ranking = [...evaluados].sort(
@@ -95,7 +103,7 @@ export function clasificar(input: EyeInput, config: ClinicalConfig): ResultadoCl
   return {
     estado: tipo ? 'clasificado' : 'zona_gris',
     tipo,
-    tambienCumplen: conMayores.slice(1),
+    tambienCumplen: tipoDirecto ? conMayores : conMayores.slice(1),
     masCercanos,
     ranking,
     conflictos,

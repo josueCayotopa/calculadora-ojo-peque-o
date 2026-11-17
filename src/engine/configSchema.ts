@@ -7,7 +7,7 @@ import type { ClinicalConfig, Criterio } from './types';
  * de forma explícita en lugar de clasificar con reglas corruptas.
  */
 
-const campoNumerico = z.enum(['longitudAxial', 'acd', 'grosorCristalino', 'wtw', 'indiceLTAL']);
+const campoNumerico = z.enum(['longitudAxial', 'acd', 'grosorCristalino', 'wtw', 'indiceLTAL', 'grosorEscleral']);
 const campoEnum = z.enum(['angulo']);
 const campoBooleano = z.enum(['malformaciones']);
 
@@ -96,6 +96,9 @@ export const configSchema = z
           }),
       )
       .min(1),
+    asignacionDirecta: z
+      .array(z.object({ tipo: z.string().min(1), criterio: criterioSchema, motivo: z.string().min(1) }).strict())
+      .optional(),
     alertasClinicas: z.array(
       z
         .object({
@@ -153,6 +156,7 @@ export const configSchema = z
       ...cfg.ordenEvaluacion,
       ...cfg.checklistPreoperatorio.flatMap((i) => (i.tipos === 'todos' ? [] : i.tipos)),
       ...cfg.alertasClinicas.flatMap((a) => a.exceptoTipos ?? []),
+      ...(cfg.asignacionDirecta ?? []).map((a) => a.tipo),
     ];
     for (const r of refs) {
       if (!ids.has(r)) ctx.addIssue({ code: 'custom', message: `Referencia a tipo inexistente: ${r}` });

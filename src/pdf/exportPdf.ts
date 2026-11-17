@@ -52,6 +52,7 @@ function datosIngresados(e: EyeInput): [string, string][] {
     ['Índice LT/AL (calculado)', indiceLTAL(e)?.toFixed(3) ?? 'Sin dato'],
     ['Malformaciones anatómicas', siNo('malformaciones', e.malformaciones)],
     ['WTW', `${formatNumero(e.wtw)} mm`],
+    ['Grosor escleral (ecografía B)', e.grosorEscleral != null ? `${formatNumero(e.grosorEscleral)} mm` : 'No medido'],
   ];
 }
 
@@ -148,7 +149,7 @@ export async function exportarPdf(evaluaciones: EvaluacionCompleta[]): Promise<v
     c.alertas.forEach((a) => parrafo(`${a.titulo}: ${a.mensaje}`, { color: [153, 27, 27] }));
     for (const tipo of c.masCercanos) {
       parrafo(
-        `Tipo ${tipo.romano} · ${nombreTipo(tipo)}: mayores ${tipo.mayores.cumplidos}/${tipo.mayores.total}, total ${tipo.totales.cumplidos}/${tipo.totales.total} (mínimo ${tipo.minimo})`,
+        `Tipo ${tipo.romano} · ${nombreTipo(tipo)}${tipo.asignadoPor ? ` (asignado por ${tipo.asignadoPor})` : ''}: mayores ${tipo.mayores.cumplidos}/${tipo.mayores.total}, total ${tipo.totales.cumplidos}/${tipo.totales.total} (mínimo ${tipo.minimo})`,
         { color: GRIS },
       );
       tabla(

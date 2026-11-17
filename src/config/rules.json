@@ -1,5 +1,5 @@
 {
-  "version": "3.1.0",
+  "version": "3.2.0",
   "fechaRevision": "2026-11-16",
   "toleranciaLimiteMm": 0.05,
   "toleranciaLimiteIndice": 0.005,
@@ -68,7 +68,7 @@
       "tecnica": [
         "Rexis con cistótomo",
         "Stop and Chop",
-        "IP quirúrgica",
+        "IP quirúrgica (preventivo)",
         "Goniosinequiálisis si el cierre es sinequial"
       ],
       "esquema": {
@@ -276,7 +276,7 @@
         "VAPP en seco 5–10 s",
         "Rexis con Utrata",
         "Facochop",
-        "IP quirúrgica"
+        "IP quirúrgica (preventivo)"
       ],
       "esquema": {
         "segmentoAnterior": "corto",
@@ -294,7 +294,7 @@
       "id": "V",
       "romano": "V",
       "nombre": "Nanoftalmos",
-      "descripcion": "Ojo corto con cámara anterior estrecha, ángulo cerrado y cristalino desproporcionado (LT/AL > 0.22). Confirmatorio: grosor escleral / retinocoroideoescleral posterior > 1.6 mm (ecografía B).",
+      "descripcion": "Ojo corto con cámara anterior estrecha, ángulo cerrado y cristalino desproporcionado (LT/AL > 0.22). Grosor escleral / retinocoroideoescleral posterior > 1.6 mm (ecografía B): se asigna Tipo V directamente.",
       "criterios": [
         {
           "nivel": "mayor",
@@ -358,6 +358,17 @@
         "plieguesRetina": false,
         "malformacion": false
       }
+    }
+  ],
+  "asignacionDirecta": [
+    {
+      "tipo": "V",
+      "criterio": {
+        "campo": "grosorEscleral",
+        "op": ">",
+        "valor": 1.6
+      },
+      "motivo": "Grosor escleral > 1.6 mm (ecografía B)"
     }
   ],
   "alertasClinicas": [
@@ -486,7 +497,7 @@
       ]
     },
     {
-      "texto": "IP quirúrgica",
+      "texto": "IP quirúrgica (preventivo)",
       "tipos": [
         "I",
         "IV"
@@ -571,6 +582,10 @@
       "definicion": "Desviación estándar. El «−2 DE» de la tabla se aplica como LA < 21 mm."
     },
     {
+      "termino": "Grosor escleral",
+      "definicion": "Grosor escleral / retinocoroideoescleral posterior medido por ecografía B. Dato opcional: si es > 1.6 mm se asigna nanoftalmos (Tipo V)."
+    },
+    {
       "termino": "UBM",
       "definicion": "Biomicroscopía ultrasónica."
     },
@@ -612,7 +627,7 @@
     },
     {
       "termino": "IP",
-      "definicion": "Iridectomía/iridotomía periférica, tal como figura en la presentación («IP quirúrgica»)."
+      "definicion": "Iridectomía/iridotomía periférica. La presentación la indica como «IP quirúrgica»; la app la muestra como «IP quirúrgica (preventivo)» (profiláctica)."
     },
     {
       "termino": "IZHV",
@@ -707,10 +722,11 @@
     "Tipo IV: la CA (≤ o > 2.5 mm) y el índice LT/AL son variables, así que no se evalúan.",
     "Excepción VAPP (vitrectomía anterior por pars plana): LA > 22.5 mm, CA < 2.0 mm y LT/AL > 0.22. Es una alerta; no reemplaza la técnica del tipo asignado. Un ojo con LT/AL > 0.22 incumple ese criterio menor del Tipo I, pero puede seguir siéndolo si cumple los demás (4 de 6).",
     "CA 2–2.5 mm en MS: Hoffman 2015 describe CA normal en el microftalmo simple.",
-    "Solo se ingresan las variables de la tabla (LA, CA, ángulo, LT para el índice LT/AL, malformaciones y WTW); el tratamiento es el del tipo, sin técnicas añadidas por otras variables.",
+    "Solo se ingresan las variables de la tabla (LA, CA, ángulo, LT para el índice LT/AL, malformaciones y WTW) y, opcionalmente, el grosor escleral; el tratamiento es el del tipo, sin técnicas añadidas por otras variables.",
+    "Grosor escleral (opcional, ecografía B): si es > 1.6 mm se asigna nanoftalmos (Tipo V) directamente, sin aplicar los criterios mayores ni la regla «4 de 6». En la literatura el corte más usado es > 1.7 mm del complejo retinocoroideoescleral (Wu 2004); 1.6 mm es el corte del autor.",
     "Los umbrales del semáforo de glaucoma maligno (LA, CA y ángulo; alto con los 3) y del aviso de piggyback, y las alertas clínicas, son propuestas de la app.",
     "El ángulo es criterio mayor en los 5 tipos: un microftalmo complejo (malformaciones) sin ángulo deformado queda en zona gris.",
-    "Técnicas por tipo según la diapositiva «Propuesta quirúrgica por tipo» de la presentación del autor. «IP quirúrgica» se muestra tal cual (se asume iridectomía periférica quirúrgica).",
+    "Técnicas por tipo según la diapositiva «Propuesta quirúrgica por tipo» de la presentación del autor. La «IP quirúrgica» de la diapositiva se muestra como «IP quirúrgica (preventivo)» por indicación del autor (se asume iridectomía periférica quirúrgica profiláctica).",
     "«VAPP» se expande como vitrectomía anterior por pars plana; la referencia 13 de la presentación la menciona como «VAPP central»: confirmar con el autor.",
     "El ángulo se ingresa marcando una o varias opciones: Shaffer 0–4 o «deformado» (Shaffer variable + anomalía estructural). El criterio se cumple si todas las opciones marcadas caben en el rango del tipo (Tipo I: 1–2; II: 3–4; III: 2–3; V: 0); en el Tipo IV basta con marcar «deformado». Shaffer 2 cumple el Tipo I y el III; Shaffer 3, el II y el III («a veces 3»)."
   ]

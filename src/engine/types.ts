@@ -25,6 +25,11 @@ export interface EyeInput {
   /** Una o varias opciones del ángulo (p. ej. Shaffer 1 y 2). */
   angulo: Angulo[];
   malformaciones: boolean;
+  /**
+   * Grosor escleral / retinocoroideoescleral posterior por ecografía B (mm). Opcional.
+   * No es un criterio de la tabla: es una condición de asignación directa (ver `asignacionDirecta`).
+   */
+  grosorEscleral?: number | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -32,7 +37,7 @@ export interface EyeInput {
 // ---------------------------------------------------------------------------
 
 /** `indiceLTAL` no se ingresa: se calcula como LT / LA (adimensional). */
-export type CampoNumerico = 'longitudAxial' | 'acd' | 'grosorCristalino' | 'wtw' | 'indiceLTAL';
+export type CampoNumerico = 'longitudAxial' | 'acd' | 'grosorCristalino' | 'wtw' | 'indiceLTAL' | 'grosorEscleral';
 export type CampoEnum = 'angulo';
 export type CampoBooleano = 'malformaciones';
 
@@ -153,6 +158,14 @@ export interface AlertaClinica {
   reemplazaTecnica?: string[];
 }
 
+/** Condición que, si se cumple, asigna el tipo directamente (sin la regla de criterios mayores ni «4 de 6»). */
+export interface AsignacionDirecta {
+  tipo: string;
+  criterio: Criterio;
+  /** Texto que explica la asignación (p. ej. «Grosor escleral > 1.6 mm»). */
+  motivo: string;
+}
+
 export interface Referencia {
   cita: string;
   url?: string;
@@ -172,6 +185,8 @@ export interface ClinicalConfig {
   /** Cuántos tipos cercanos mostrar en zona gris. */
   cercanosEnZonaGris: number;
   tipos: TipoClinico[];
+  /** Se revisan antes que los criterios: la primera que se cumple decide el tipo. */
+  asignacionDirecta?: AsignacionDirecta[];
   alertasClinicas: AlertaClinica[];
   glaucomaMaligno: {
     factores: Criterio[];
@@ -231,6 +246,8 @@ export interface TipoEvaluado {
   minimo: number;
   /** true si cumple todos sus criterios mayores y el mínimo de criterios totales (p. ej. 4 de 6). */
   cumpleMayores: boolean;
+  /** Motivo de la asignación directa (p. ej. grosor escleral), o null si se asignó por criterios. */
+  asignadoPor: string | null;
   preoperatorio: string[];
   tecnica: string[];
   /** Título de la alerta que reemplazó la técnica del tipo (excepción), o null. */
